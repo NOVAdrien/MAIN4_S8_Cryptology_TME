@@ -1,4 +1,7 @@
->>> inspecter chaîne de caractères
+### tome I : chaînes de caractères
+CHAÎNES DE CARACTERES
+======================
+
 Une chaine de caractère est une séquence de caractères.  La façon dont
 ces caractères sont représentés par des séquences de bits est decrite
 par un système d'encodage.  Il en existe de nombreux, et ils sont bien

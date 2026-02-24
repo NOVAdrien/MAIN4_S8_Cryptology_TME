@@ -100,6 +100,19 @@ légèrement différent, mais vous ne parvenez pas à mettre le doigt dessus.
 - un guide OpenSSL (tome V) : signature.
 - un guide OpenSSL (tome VI) : script d'exemple.
 - un extincteur
+- un mode d'emploi
+
+## Détails du mode d'emploi:
+C'est le guide d'utilisation du terminal d'administration système qui est 
+juste à côté.  Il fait 700 pages, donc vous sautez directement au chapitre 
+``Mise en route''.  En gros, il suffit d'appuyer sur le bouton et de se 
+laisser guide par l'interface utilisateur ultra-intuitive.  Les administrateurs
+sont néanmoins mis en garde face aux risques encourus et ils doivent avoir été
+soigneusement formés à l'utilisation des mécanismes de sécurité.  Pour éviter
+les risques, un mot de passe est demandé au boot.  Les bonnes pratiques de
+gestion des mots de passe sont rappelées : ne pas les mettre sur un post-it
+sous le clavier, etc.  En désespoir de cause, il est recommandé de chiffrer
+les mots de passe sur les post-it sous les clavier.  Ce serait mieux que rien.
 
 ## Détail des guides:
 
@@ -1438,11 +1451,420 @@ La pièce est toujours sombre et silencieuse.
 
 Le terminal s'est éteint en vous traitant de débutant.
 
+[Génération d'une clé publique]
+adrien@Star-Computer:/mnt/d/Documents/0Polytech Sorbonne/MAIN/MAIN4/S8/Cryptologie/TME/MAIN4_S8_Cryptology_TME$ openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:1024
+..............++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+................................................++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-----BEGIN PRIVATE KEY-----
+MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBALw6+iZHa1TnFfic
+Yrzcn/gzGP3t/UhRgd84jZSpse7sshtDEQibVOhGOefefcZjVxeqSlmDQQjwrmns
+fkoTCJdtFMmX+CZEYbthDTjC3g/6CbOD5T0IWXDw0137yJWFssMSjEekg5Qtents
+hlfFKkIXs4sUFPH7iEuCoYLp0ea3AgMBAAECgYBBY7+o8qCfwxOH5VQLxh0wjRe+
+hyG5MM+MK0pL/dOZa9LH07mkIsoRUuwk188bz0DfMMJZbFZ4c5wzofuRYiFWWO34
+N/niKbKQg5STIuj4T4SAVAzK7g9hcBTf+P9w1OoT662us4XQQ63DwfT0zgMsEPT0
+QfyWjG8mQNxzem4N4QJBAOLZtjmMIHTfOKwER4k+6COzs+0lgjsSJ47EglMOB8id
++Op933q/HIXTiV7vbPaEx92eBs2TnxwrBfjcD30JwucCQQDUatnpLRBlbwhyHmwT
+Sd1iCaxrY68H26ZygUemthpSmSjy9CWmikfCexZxYuRumPNLFdRB0WlCf3U8j0h2
+LROxAkEAgMAoGIlbcnmu5JKZN2AoyPqZSCNdwsEPCoylmxX/fPGL8Sr3x+bn/VyO
+Pv+MzG2YMkQagFsklwwkG5ZqhAEiSQJBALEvjCPH9lRWIPpoTAhu5d7gaNWPajIo
+05fSJP14C074+UJny3w2/pLIb7kXH6rtpIvuYoagcqgIf7eLYYtKIJECQQC3vmHE
+THeRgEyKJ8tQawal8FKSKEqm7nUd9MAH9LjAIRfjqMItYiLZCH5DPHNkG/uKHBXF
+D18wLCnyt8xHh83N
+-----END PRIVATE KEY-----
+
+[Stocker cette clé dans le fichier secret_key.md]
+adrien@Star-Computer:/mnt/d/Documents/0Polytech Sorbonne/MAIN/MAIN4/S8/Cryptologie/TME/MAIN4_S8_Cryptology_TME$ openssl pkey -in key.md -pubout >> secret_key.pem
+
+[Extraire la clé publique dans un autre fichier public_key.pem]
+adrien@Star-Computer:/mnt/d/Documents/0Polytech Sorbonne/MAIN/MAIN4/S8/Cryptologie/TME/MAIN4_S8_Cryptology_TME$ openssl pkey -in secret_key.pem -pubout -out public_key.pem
+
+[Contneu du fichier secret_key.md]
+-----BEGIN PRIVATE KEY-----
+MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBALw6+iZHa1TnFfic
+Yrzcn/gzGP3t/UhRgd84jZSpse7sshtDEQibVOhGOefefcZjVxeqSlmDQQjwrmns
+fkoTCJdtFMmX+CZEYbthDTjC3g/6CbOD5T0IWXDw0137yJWFssMSjEekg5Qtents
+hlfFKkIXs4sUFPH7iEuCoYLp0ea3AgMBAAECgYBBY7+o8qCfwxOH5VQLxh0wjRe+
+hyG5MM+MK0pL/dOZa9LH07mkIsoRUuwk188bz0DfMMJZbFZ4c5wzofuRYiFWWO34
+N/niKbKQg5STIuj4T4SAVAzK7g9hcBTf+P9w1OoT662us4XQQ63DwfT0zgMsEPT0
+QfyWjG8mQNxzem4N4QJBAOLZtjmMIHTfOKwER4k+6COzs+0lgjsSJ47EglMOB8id
++Op933q/HIXTiV7vbPaEx92eBs2TnxwrBfjcD30JwucCQQDUatnpLRBlbwhyHmwT
+Sd1iCaxrY68H26ZygUemthpSmSjy9CWmikfCexZxYuRumPNLFdRB0WlCf3U8j0h2
+LROxAkEAgMAoGIlbcnmu5JKZN2AoyPqZSCNdwsEPCoylmxX/fPGL8Sr3x+bn/VyO
+Pv+MzG2YMkQagFsklwwkG5ZqhAEiSQJBALEvjCPH9lRWIPpoTAhu5d7gaNWPajIo
+05fSJP14C074+UJny3w2/pLIb7kXH6rtpIvuYoagcqgIf7eLYYtKIJECQQC3vmHE
+THeRgEyKJ8tQawal8FKSKEqm7nUd9MAH9LjAIRfjqMItYiLZCH5DPHNkG/uKHBXF
+D18wLCnyt8xHh83N
+-----END PRIVATE KEY-----
+
+[Contenu du fichier public_key.md]
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8OvomR2tU5xX4nGK83J/4Mxj9
+7f1IUYHfOI2UqbHu7LIbQxEIm1ToRjnn3n3GY1cXqkpZg0EI8K5p7H5KEwiXbRTJ
+l/gmRGG7YQ04wt4P+gmzg+U9CFlw8NNd+8iVhbLDEoxHpIOULXp7bIZXxSpCF7OL
+FBTx+4hLgqGC6dHmtwIDAQAB
+-----END PUBLIC KEY-----
+
+[Aller au local de service 3]
+>>> ouvrir terminal
+                                               UGLIX v4.0 beta                                                                   
+                                                                 (Service terminal)           
+
+                    Active user: AdrienPanguel
+
+                                                                      Main menu                      
+                                                                      ---------                                                                      
+
+
+
+                    1. Manage ID card
+                    2. Public Key Infrastructure
+                    3. Locksmith Tools
+                    4. Exit
+
+[Entrer "1. Manage ID card"]
+                                                                   UGLIX v4.0 beta
+                                                                 (Service terminal)               
+
+                    Active user: AdrienPanguel
+
+                    ⢀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡀     
+                    ⣿⡟⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⢻⣿     
+                    ⣿⡟⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿     
+                    ⣿⡇⣿⣿⣿⣿⠿⠻⢿⣿⣿⣿⡇⢸⣿⣟⣛⣛⣛⣛⣛⣛⣛⣛⣿⣿     username: AdrienPanguel
+                    ⣿⡇⣿⣿⣿⠃⠀⠀⠀⢹⣿⣿⡇⢸⣿⣏⣉⣉⣉⣉⣉⣉⣿⣿⣿⣿     
+                    ⣿⡇⣿⣿⣿⡄⠀⠀⠀⣸⣿⣿⡇⢸⣿⣏⣉⣉⣿⣿⣉⣉⣉⣉⣿⣿     
+                    ⣿⡇⣿⣿⣿⠿⣦⣤⡾⠿⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿     
+                    ⣿⡇⣿⡿⠁⠀⠀⠀⠀⠀⠘⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿     
+                    ⣿⡇⡿⠁⠀⠀⠀⠀⠀⠀⠀⠸⡇⢸⣿⣿⣿⣿⣿⣤⣤⣤⣤⣤⣼⣿     Card data: NO
+                    ⣿⡇⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠃⢸⣿⣿⣿⣤⣤⣤⣤⣤⣤⣤⣼⣿     
+                    ⠻⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠟     
+
+
+                                                                    ID card menu
+                                                                    ------------                                                                     
+
+
+                    1. Download card data
+                    2. Upload card data
+                    3. Return to main menu
+
+[Sélectionner "1. Download card data"]
+                                                UGLIX v4.0 beta                                                                   
+                                                                 (Service terminal)                                                                  
+
+                    Active user: AdrienPanguel
+
+                                                                 ID Card management                                                                  
+                                                                 ------------------                                                                  
+
+
+                    ID card data: NONE
+
+[Sélectionner "2. Upload card data"]
+
+Upload your ID card data below.
+(If empty, your card data will be erased. CTRL+D to abort.)
+
+ID card data (one empty line to end):
+[Je dois écrire quelque chose à cet endroit-là]
+
+[Entrer "2. Public Key Infrastructure"]
+
+                                                                   UGLIX v4.0 beta            
+                                                                 (Service terminal)             
+
+                    Active user: AdrienPanguel
+                    public-key uploaded: NO
+
+                                                                      PKI menu                         
+                                                                      --------                                                                       
+
+
+
+                    0. Query public-key directory
+                    1. Upload public-key
+                    2. Upload signature
+                    3. Tutorial
+                    4. Submit Certificate Signature Request
+                    5. Return to main menu
+
+[Entrer "3. Tutorial"]
+
+
+                                                                   UGLIX v4.0 beta                       
+                                                                 (Service terminal)                             
+
+                    Active user: AdrienPanguel
+                                                                    PKI tutorial                                  
+                                                                    ------------                                                                     
+
+                    The PKI offers a public directory of public keys.
+                    Users can upload their own public keys.
+                    The PKI guarantees that keys belong to the correct users,
+                    because users are authenticated when they upload their keys.
+
+                    To complete the tutorial, take the following steps:
+                    1. Read the openssl documentation manual
+                    2. Fetch the public key of user "pki_tutorial"
+                    3. Encrypt the string "I got it!" with this public-key
+                    4. Submit the (hex-encoded) ciphertext below
+
+                    Ciphertext:                                                                                  
+[C'est pour infos, ce sont les étapes à suivre pour valider le tutoriel]
+
+[Puis, faire]:
+
+                                                                   UGLIX v4.0 beta                                                                   
+                                                                 (Service terminal)                                                                  
+
+                    Active user: AdrienPanguel
+
+                                                                Public-key directory                                                                 
+                                                                --------------------                                                                 
+
+
+
+                    Username:                   pki_tutorial
+
+                    Public key:                 
+                    -----BEGIN PUBLIC KEY-----
+                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAozZd9B4P23YJ21daS2AX
+                    K6rkHrs/3jF/M74WulpCmlN9aiI04Siv4WbTW6aH50B56hkLRjafuOk4Kxnv/wmv
+                    NqKKdkbIq44aHMi+N0cy3ho8DDdT5iqB6RZU+w18qqmqEfui8wnz9rCgDxUzTzbf
+                    mUmJt1MS4YRJtRNR9aQVwg5OhZYj35qqe05wcP/BfV8GxiLpJFT9t6ntn7tuiDzC
+                    M9AFi2BMhYj/lB2Fdfo7bX/PHLwefYEHQ9JFkMiTSaFfyFJ7EP0Y1K12iA/swUXX
+                    KWQWZkSCOVmkRlFCrD7ijX9OmJNpMapCT2RmklsKuPKz098wlxUP5AfQQ3Qkiics
+                    BQIDAQAB
+                    -----END PUBLIC KEY-----
+
+                    Signatures:                 NONE
+[C'est la public_key associée à pki_tutorial et qu'il faut chiffrer]
+
+[Copier-coller cette clée dans un fichier public_key.pem]
+
+[Exécuter dans le terminal la commande]:
+          printf "I got it!" > msg.txt
+
+[Exécuter la commande dans le terminal pour chiffrer le contenu du fichier msg.txt]:
+          openssl pkeyutl -encrypt -pubin -inkey public_key.pem -in msg.txt -out ct.bin
+
+[Afficher le ciphertext associé]:
+          xxd -p ct.bin | tr -d '\n'; echo
+
+[Retour de la commande]:
+55df8f73c2663597b98426d51f093244e362df0f37b38bb71d43f6e17c2435b9d687a663daad8296727ef61afeed735b4a9a180468151326889adb792d1c6d660521f289168a1db2bc26a095e96947461a900e76e7ddfaf2bcaa9ac336b9a5cade4bc262cbd178994b7a5e5194cb2300eabe804faa61466627f25844be746d383d491793df8888af52250f07f4d098a9450c8e82d6dae81484e2c1708ab13c404c92f00d25b71b1a529e0555fb7ed2afbf49254774aecd700c062dae5f892fd95c1c5e4970a90e25a0fc1c62d4d4a32b14911b2cbeb31de528f35ab9760b25e8062efd12b2405e1355968921bdea1fa082842f20be7bcb8f12f57307867b4f10
+
+[Retour du terminal]
+                                                               +--------------------+
+                                                               | TUTORIAL COMPLETED |
+                                                               +--------------------+
+
+[Tapper: 1. Upload public-key]
+
+[Retour de la commande]:
+Upload your public key below.
+It must be an RSA openssl public-key (>= 2048 bits) in PEM format.
+
+Public-key (one empty line to end):
+                                                                
+[Pour ça, il me faut une public_key]:
+
+[On crée une clé privée]:
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out my_private.pem
+
+[Contenu de my_private.pem]:
+-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCxUXBGiQ4bf77d
+RpamCfDNHV/3PzA87IooKjznWCdYl1/h8oZLNwTTWQdFYQvbUBpB379CgtmTIH63
+OjUEuvGh3un+GL7q8YMEUKuUT++sUQUX91/t5uGZWUGUsELdAQwlxOedgdOZBAdD
+pF6ZCZj08PBrOuFgwYBG4yqBvr14L6fC5uoguWkjxySK50g8bNFY7v/k9AC2T9tL
+ftYkpQviVY5+pBdWoYn1D5EvDIb7Aq/kFPITzVbirNxJ8dtDjHqGp4oEy3eLrfce
+ms4rVk3To866ufcBjAmHWzW/52BlhMUeKwcxKNcohddfPxpw9U7lTsj9jcD0pVXK
+Gdkcjue9AgMBAAECggEABAfbo0LUzwO3oTyMSqBxuJvpFUv6qvvehRy2rzSWCmHA
+hHiYnGeXBL3imC1lUVowCpzNMnQagYlsz/nzABVGzlzsmUHTPzB3v7acu92YT2S1
+Fq8hH12O9cctYjWig3cVYVtpP2+W0YThrGQ1YUmyUCkU8f8P5fzoD1R1ICdnk66J
+1+amcF5uE4L6OBbYqjMiVmh6KTOIPRyimAauKW8UJN3+aBofXw99yMmGt0B0SF1a
+L1iAyh1HXIqROkSl9NQeG9q6PtpXo7Rw4neDyWSHHUZdxf9xB7b8MoZ/9aYuCEoj
+DBBUcKmc/AQ/cgUBC3cjWJJg1Mh844dVzrGrD7URKQKBgQD30AOEAW0M6NugpRwC
+od6u9UcGb0Am14Mz3my9iwX7piy8Q9iQ8WGYCFVyheKRrpLf7hzVHiJg5JDHomzh
+Ym7UNKjZr2Ei5FqUYtaFQWcy8fCA5i0P5tNJBX+rwU+1T5DgLXLPenmOMjkQ/Ed1
+w4LviCmDvJR5+0U47D8dGhgGGQKBgQC3LS+5SjzybdyRgSuAiYjYBJL0fRn6UtBQ
+MGgc9l/FBVyKjjgBDvdeb/XKfzSbPfqbuujWyRA46aFBD4EoMchMaMq7k05SaVz+
+Tuw8up+rmwi+XdB5cWmtY11pD7Wqk1MUSnwSmOdzpGu2fQKLSxRScJFrB/Qiq342
+jUPmbsm7RQKBgQCArSSGMO9dGrSgT9uhikfE9Vux/aaEBLf+AOrZ6QxsRTdJcrlL
+WethNEKaOucQ2mMtn8ic6Q7U3RpIbxC2X5RI4CclEaoQoh5emovlmbZqf7JwXBTe
+Au+HJTHMD47CCNSjczYAggoISg/TwAujHKgqlLtpykwWouCo1BNZmykKUQKBgGuO
+uuEf+F2ZqNQ/dp3JJHNDbE7nTmOwUOVlJx0qhd2YYlhxXe0xLotjTn4S537oi8j5
+nVLRSRdCCA+93OcPJD/JoJE309uMRrCFAy49nxgStrWhPJKyx4yqNeVE9jUswLG/
+cs8wvWcn+p9zFBVahppJwvmH+BCLhlbd6CrcjtPJAoGAEb+ZEd6eUUEWOA7F/ZBg
+R3mXuNWES06STuUrVT+MDCbh0Pl9S5UXy3ECPZEW1yIcYkfKoinaX1eqJ3zz/RJC
+y0YNymQUrdHtFgBS7q1KB8EqJClnqExi9NKPrp3iMocWjenKwwTKQg2Y4iDjXAl/
+HEtJymRR5Y3PMfVINrpHq8Q=
+-----END PRIVATE KEY-----
+
+[On en extrait une clé publique]:
+          openssl pkey -in my_private.pem -pubout -out my_public.pem
+
+[Contenu de my_public.pem]:
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsVFwRokOG3++3UaWpgnw
+zR1f9z8wPOyKKCo851gnWJdf4fKGSzcE01kHRWEL21AaQd+/QoLZkyB+tzo1BLrx
+od7p/hi+6vGDBFCrlE/vrFEFF/df7ebhmVlBlLBC3QEMJcTnnYHTmQQHQ6RemQmY
+9PDwazrhYMGARuMqgb69eC+nwubqILlpI8ckiudIPGzRWO7/5PQAtk/bS37WJKUL
+4lWOfqQXVqGJ9Q+RLwyG+wKv5BTyE81W4qzcSfHbQ4x6hqeKBMt3i633HprOK1ZN
+06POurn3AYwJh1s1v+dgZYTFHisHMSjXKIXXXz8acPVO5U7I/Y3A9KVVyhnZHI7n
+vQIDAQAB
+-----END PUBLIC KEY-----
+[C'est cette clé qu'il faut coller dans la case plus haut !]
+
+                                                                   UGLIX v4.0 beta                                                                   
+                                                                 (Service terminal)                                                                  
+
+                    Active user: AdrienPanguel
+
+                                                                Public-key directory                                                                 
+                                                                --------------------                                                                 
+
+
+
+                    Username:                   AdrienPanguel
+
+                    Public key:                 
+                    -----BEGIN PUBLIC KEY-----
+                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsVFwRokOG3++3UaWpgnw
+                    zR1f9z8wPOyKKCo851gnWJdf4fKGSzcE01kHRWEL21AaQd+/QoLZkyB+tzo1BLrx
+                    od7p/hi+6vGDBFCrlE/vrFEFF/df7ebhmVlBlLBC3QEMJcTnnYHTmQQHQ6RemQmY
+                    9PDwazrhYMGARuMqgb69eC+nwubqILlpI8ckiudIPGzRWO7/5PQAtk/bS37WJKUL
+                    4lWOfqQXVqGJ9Q+RLwyG+wKv5BTyE81W4qzcSfHbQ4x6hqeKBMt3i633HprOK1ZN
+                    06POurn3AYwJh1s1v+dgZYTFHisHMSjXKIXXXz8acPVO5U7I/Y3A9KVVyhnZHI7n
+                    vQIDAQAB
+                    -----END PUBLIC KEY-----
+
+                    Signatures:                 NONE
+
+
+[2 FLAGSSSSSSS à déposer sur la plateforme]
+[security engine] pki.tutorial:52:1|8d3a204ece50cdea3d35d5c16bca71d7961841a01f1071dbafd6dc5a441da049
+[security engine] pki.upload:52:1|a75e2154fd95ebaefb63cb2d469d9d40062e3e32dce8c339b154f634d8f0eeb1
+
+[security engine - INFO] event log recovery complete
+[security engine - INFO] recovered security log entry:
+                             event: security engine process KILLED by unauthorized user
+                             subject: AdrienPanguel
+                             timestamp: 2026-02-01 13:20:53
+[security engine - INFO] knowledge base update
+                             subject: AdrienPanguel
+                             nature: threat
+                             level: high
+[security engine - INFO] new security objective
+                             subject: AdrienPanguel
+                             objective: locate
+[security engine - ERROR] sensor network offline (power down)
+[security engine - WARNING] target locator timeout (subject: AdrienPanguel)
+
+[Retourner à la salle électrique]
+[Besoin de la signature]
+
+[Entrer la commande]:
+printf "twerp reply visor ahead churl" > sign_challenge.txt
+
+[Encoder en binaire]:
+openssl dgst -sha256 -sign my_private.pem -out signature.bin sign_challenge.txt
+
+[Mettre en hexa]:
+xxd -p signature.bin | tr -d '\n'; echo
+
+[Retour de la clé publique de la signature]:
+0e1d8d191c8cb173e02432d4c150c9c903b2aed9e29e89398ce9f3e566156c1492874210ebae69c0941e9bebceafcb328b6c218646414488f43a50f581086755dabbcdf0e312540f934dec5f2613c2cba09e7085e4fd53a4d756bec9547f36d0337061003e57267db113d0dc44884b113205c9985e8692d6846d8081c9e49431eab4cb4cb8b25176e5e3f3243592c7491469e090301e71384b390495b7d855e9ec7e0d6e383607465d83f59ce484756d0c07a5ec4c0156d5a874f6d48cb32b9731aaa14310a61f3c769f2c5e40eceb12f1975073e77a6791ed5d71beb30960d92e2e55f870fdfcd32ad19fe1b08703305789f63c998c8935d261cbc69931a50a
+
+[Retourner dans le terminal de la salle électrique et rentrer cette clé publique de la signature]
+                                                    +-------------------------------------------+
+                                                    | VALID SIGNATURE --- AUTHORIZATION GRANTED |
+                                                    +-------------------------------------------+
+
+
+[FLAGGGGGGG]:
+[security engine] power.on:52:1|10405faceec8e4e858c1de99d079861bebece22f18a1dfbeaf38819bc16a4891
+
+[security engine - INFO] sensor network online
+[security engine - INFO] objective completed
+                             objective: locate
+                             subject: AdrienPanguel
+                             location:
+                               floor: SS
+[security engine - ALERT] security policy violation
+                                  subject: AdrienPanguel
+                                  policy: DEFAULT
+                                  rule: <Location floor="SS">
+                                  rule:    Require all denied
+                                  rule: </Location>
+                                  severity: ***CRITICAL***
+[security engine - INFO] knowledge base update
+                             subject: AdrienPanguel
+                             nature: threat
+                             level: ***CRITICAL***
+[security engine - INFO] now enforcing EMERGENCY security policy
+[security engine - INFO] new security objective
+                             subject: AdrienPanguel
+                             objective: eliminate
+[security engine - ALERT] activating anti-personnel drones
+                              target: AdrienPanguel
+                              max_output_level: lethal
+
+
+>>> conseil
+On y voit mieux maintenant.  Essayez de revenir sur vos pas à la recherche d'une sortie.
+
+>>> utiliser extincteur
+Votre chance de sortir vivant de l'inévitable confrontation avec
+la horde de drones tueurs est estimée à 5 %.
+(un tirage indépendant à lieu lors de chaque tentative).
+
+                    GO ?:                       GO                               
+
+Vous explosez la vitre.  En faisant bien attention de ne pas vous couper
+sur le verre restant, vous franchissez la porte et commencez à courir
+en essayant de bien vous rappeler la configuration des lieux décrite
+dans la simulation...
+
+Ooops, les drones vous ont eu.  Dommage !
+
+GAME OVER
+
+press any key.
+Durée de votre session : 1:10:49.449823
+Durée cumulée de vos 9 sessions : 5:55:44.246480
+Bye-bye.  Come back soon!
+Connection closed by foreign host.
+
+[Retour de la dernière séance]:
+>>> utiliser terminal
+
+Vous entendez un bruit électrique derrière vous.
+
+La machine bizarre qui se trouve au milieu de la pièce est maintenant sous tension !
+
+Vous ne reconnaissez plus la pièce où vous étiez.
+
+En fait, vous avez été téléporté ! Incroyable !
+
+Vous êtes dans une rotonde. Maintenant on distingue bien l'inscription sur le
+mur :  
+                                _ ____  
+                               / | ___| 
+                               | |___  \ 
+                               | |___) |
+                               |_|____/ 
+Trois portes conduisent au nord, au sud et à l'est.
+
+Ici se trouve une baie vitrée.
+Ici se trouve un ascenseur.
+
+[security engine - INFO] sensor network online
 
 
 
 
-                                                      
 
 
 
@@ -1454,7 +1876,6 @@ Le terminal s'est éteint en vous traitant de débutant.
 
 
 
-
-
-
-
+prendre extincteur et sortir dehors
+faible proba de survie
+jouer au pacman pour éviter de mourir

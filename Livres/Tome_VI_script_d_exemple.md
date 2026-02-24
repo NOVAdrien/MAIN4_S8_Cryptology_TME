@@ -1,4 +1,4 @@
->>> inspecter script d'exemple
+### tome VI : script d'exemple
 import subprocess
 
 # ce script suppose qu'il a affaire à OpenSSL v1.1.1

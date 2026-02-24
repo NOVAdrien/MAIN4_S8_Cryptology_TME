@@ -1,4 +1,4 @@
->>> inspecter tome III
+### tome III : génération d'une paire de clef
 GÉNÉRATION D'UNE PAIRE DE CLEFS
 ===============================
 
