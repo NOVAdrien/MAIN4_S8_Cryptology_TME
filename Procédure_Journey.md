@@ -205,12 +205,12 @@ Vous devrez aller au sud-est.
 
                     Signatures:                 NONE
 
-[Sauvegarder cette Public key dans un fichier ./Keys/PublicKeys/public_key_pki_tutorial.pem]
-[Il faut chiffrer le texte "I got it!" avec cette public_key_pki_tutorial avec les commandes suivantes]:
+[Sauvegarder cette Public key dans un fichier ./Keys/PublicKeys/pk_pki_tutorial.pem]
+[Il faut chiffrer le texte "I got it!" avec cette clé pk_pki_tutorial.pem avec les commandes suivantes]:
 
 printf "I got it!" > ./Texts/msg_pki_tutorial.txt
 
-openssl pkeyutl -encrypt -pubin -inkey ./Keys/PublicKeys/public_key_pki_tutorial.pem -in ./Texts/msg_pki_tutorial.txt -out ./Binary/msg_pki_tutorial.bin
+openssl pkeyutl -encrypt -pubin -inkey ./Keys/PublicKeys/pk_pki_tutorial.pem -in ./Texts/msg_pki_tutorial.txt -out ./Binary/msg_pki_tutorial.bin
 
 xxd -p ./Binary/msg_pki_tutorial.bin | tr -d '\n' > ./Hexa/msg_pki_tutorial.hex;
 
@@ -230,9 +230,9 @@ cat ./Hexa/msg_pki_tutorial.hex
 [Le tutoriel est terminé.]
 [Générer notre clé privée avec les commandes suivantes]:
 
-openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out ./Keys/PrivateKeys/my_private_key.pem
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out ./Keys/PrivateKeys/my_sk.pem
 
-[Contenu de ./Keys/PrivateKeys/my_private_key.pem]:
+[Contenu de ./Keys/PrivateKeys/my_sk.pem]:
 
 -----BEGIN PRIVATE KEY-----
 MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCxUXBGiQ4bf77d
@@ -265,9 +265,9 @@ HEtJymRR5Y3PMfVINrpHq8Q=
 
 [On en extrait notre clé publique avec la commande suivante]:
 
-openssl pkey -in ./Keys/PrivateKeys/my_private_key.pem -pubout -out ./Keys/PublicKeys/my_public_key.pem
+openssl pkey -in ./Keys/PrivateKeys/my_sk.pem -pubout -out ./Keys/PublicKeys/my_pk.pem
 
-[Contenu de ./Keys/PublicKeys/my_public_key.pem]:
+[Contenu de ./Keys/PublicKeys/my_pk.pem]:
 
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsVFwRokOG3++3UaWpgnw
@@ -287,11 +287,11 @@ vQIDAQAB
 ### FLAG 4: Signer un message avec ma clé privée
 
 [Retourner dans le local électrique]
-[Signer avec my_private_key le challenge donné "twerp reply visor ahead churl" avec les commandes suivantes]:
+[Signer avec my_sk.pem le challenge donné "twerp reply visor ahead churl" avec les commandes suivantes]:
 
 printf "twerp reply visor ahead churl" > ./Texts/sign_challenge1.txt
 
-openssl dgst -sha256 -sign ./Keys/PrivateKeys/my_private_key.pem -out ./Binary/sign_challenge1.bin ./Texts/sign_challenge1.txt
+openssl dgst -sha256 -sign ./Keys/PrivateKeys/my_sk.pem -out ./Binary/sign_challenge1.bin ./Texts/sign_challenge1.txt
 
 xxd -p ./Binary/sign_challenge1.bin | tr -d '\n' > ./Hexa/sign_challenge1.hex
 
@@ -400,7 +400,7 @@ NIVEAU SB
 [Aller au laboratoire]:
 >>> labo
 
-[Cette ouverture du temrinal n'est pas nécessaire, mais elle est rigolote car je peux communiquer avec d'autres gens ;)))]
+[Cette ouverture du terminal n'est pas nécessaire, mais elle est rigolote car je peux communiquer avec d'autres gens ;)))]
 >>> ouvrir terminal 
 
                                                                    UGLIX v4.0 beta
@@ -489,8 +489,8 @@ personnalisé pour se connecter ? Il y a écrit :
 [Noter le Plaintext "trees lever trims loxes filly" quelque part.]
 [Noter le CipherText associé à "U2FsdGVkX1+nH9rYtEFp/PADwdT/aLalA/NT7FkPp2Rs7orZEpe9WpbDEfapMOiG\n" quelque part.]
 
-[Sortir du labo]
-[Aller à la bibliothèque pour récupérer le Cambridge dictionnary pour trouver le mdp d'emmalyn87 qui est sa clé privée]
+[Sortir du labo.]
+[Aller à la bibliothèque pour récupérer le Cambridge dictionnary pour trouver le mdp d'emmalyn87 qui est sa clé privée.]
 
 [Plan de la bibliothèque]:
 >>> plan
@@ -590,9 +590,7 @@ FOUND PASSWORD: tautologically
 >>> conseil
 Essayez d'aller jeter un coup d'oeil dans le CICSU (sud-est).
 
-[En(fait, avant d'aller au CICSU, il faut passer par l'Atrium.]
-
-
+[En fait, avant d'aller au CICSU, il faut passer par l'Atrium.]
 
 >>> conseil lecteur
 Votre carte d'étudiant doit pouvoir être lue par ce lecteur.
@@ -604,35 +602,7 @@ Le micro-écran LCD affiche "SMART CARD CONTAINS NO DATA".
 >>> conseil
 Essayez d'aller faire un petit tour au bâtiment Atrium (est).
 
-[Aller à l'atrium]
->>> e
-Vous êtes dans une petite cour avec quelques arbres, un peu de mousse et
-quelques fougères.  Cette végétation, et le fait qu'on puisse voir le ciel 
-donne à cet endroit une ambiance apaisante.  Côté Ouest se trouve la grille
-en fer qui vous sépare du couloir.  Côté Est se trouve un grand bâtiment rouge.
-À travers les fenêtre vous voyez ce qui est manifestement une bibliothèque.  
-Côté Nord, il y a un mur rouge avec de grandes fenêtres qui donnent sur des 
-bureaux.  L'une d'entre elle est mal fermée et vous pourriez passer.
-Côté Sud, c'est pareil, mais le mur est gris.  Vous n'en êtes pas vraiment
-sûr, mais vous vous demandez s'il n'y avait pas un escalier métallique ici 
-avant, conduisant à l'étage du dessus.  Mais en tout cas il n'est plus là.
-En levant la tête, vous voyez la barre 54-64 au sud et la barre 54-53 au nord,
-mais pas moyen d'accéder à l'étage du dessus depuis cet endroit.
-
-Ici se trouve une serrure sans contact (NFC) sur la grille.
-
->>> conseil serrure
-Avez-vous lu le memento qui est dans la pièce à côté ?
-
->>> n
-Vous entrez dans un bureau partagé, peut-être celui des bibliothécaires.  Il
-y a  plusieurs ordinateurs, des livres, des paperasses, une cafetière, etc.
-Une porte donne sur un couloir attenant à la bibliothèque, mais elle est 
-obstinément fermée.
-
-Ici se trouve un terminal de service.
-Ici se trouve un memento pour les employés qui ont un bureau dans ce bâtiment.
-
+[Aller à l'atrium et lire le memento]:
 >>> lire memento
 1. Dans le cadre de notre campagne de communication intitulée
         "une sécurité maximale, mais avec la classe"
@@ -660,59 +630,81 @@ Ici se trouve un memento pour les employés qui ont un bureau dans ce bâtiment.
 4. Pour simplifier la gestion des clefs, les occupants du même bureau 
    ont des clefs publiques RSA qui ont le même modulo (N).
 
-[Exécuter le code test.py pour obtenir une clé privée contenant "+++Atrium+++]
+[Exécuter le code build_sk_pk_atrium.py pour obtenir une paire de clé publique/privée pk_atrium.pem/pk_atrium.pem dont la clé publique contient le chaîne "+++Atrium+++".]
 
-[Lancer le code CreateKeySkPk.py pour obtenir une paire de clé publique.privée dont la publique contient "+++Atrium+++"]
+[Clé publique pk_atrium.pem]:
 
-[Retourner à l'Atrium pour dévérouiller]
-[Attention, besoin de signer le challenge donné "scrap pions meted fella basks"]:
+-----BEGIN PUBLIC KEY-----
+MIIBSjANBgkqhkiG9w0BAQEFAAOCATcAMIIBMgKCAQEAylenaYAFrVc6xJEu9/lx
+xTdyfzDdfBPaXBctZlu5JzTlaDx3GKN9xC+O/vSp6vZAbBeXEQFNW106YygUfTDo
+3H+w3O9uTUUv88dWSSuXGW0wyaIeNy0IeBPlVDYerLSyKvGaFhO0AC+G8J1qJYzP
+lpE8qexI7ypnzoejfz8d9gcltCVYvqBQZStiISQTp+RpELE1AfDbswzeTbTZRsoT
+Pu/oQ4V1o9HhHGURsorctszBnxWRkNBSt0Jw8EsbBsI3kwQGBmqGtqmrMktKThdD
+41dXJ7g2Fg2Zc+2ePL7nIbHp6jsdnp8wEGXhdW2KN48hcPgxHS80Tu0bpfpTAxn+
+hwIrEkmtJZTDfOsLJ4TEzgvzis5AjiEafKqyQwioLo8QAAAA+++ATRIUM+++AQ==
+-----END PUBLIC KEY-----
 
-          printf "scrap pions meted fella basks" > sign_challenge_atrium.txt
-          openssl dgst -sha256 -sign sk_atrium.pem -out signature_atrium.bin sign_challenge_atrium.txt
-          xxd -p signature_atrium.bin | tr -d '\n'; echo
+[Clé privée sk_atrium.pem]:
 
-[Retour de la signature codée avec clé privée]:
-    9a5a62705c1a6db1055050840883cc4081d8231b2703b666132bef666c922d4c4f988c69a8c24a23e377ff60f1eb2bb862fed54496ad65717d1a76c025e1796004508fd67b6cf072bf70e3f89fbecd2882dc2cdc4706e5ff7c1bcb1ddab18dfb1580c1142a4c00dc5dcac3aa2766aa83c30e1dcf09bcae3103ebf0afd508151a3629cbc300c9fd00c1b8df1140fd7d2af504ddf9e78e274cb086034160c3bc6326dcdd0eb790c8e5c978219d179ba4a1d3f853416453ef2dc94e170b488147396d4baea29adcd8ed80f1e3b951c9405c52c9e4d2d4e6ce560c8115ae7b1b65ed3bc9f55d0977e4f303cf1729f7975adeee8bda619886c2935be728159a67c878
+-----BEGIN PRIVATE KEY-----
+MIIE5QIBADANBgkqhkiG9w0BAQEFAASCBM8wggTLAgEAAoIBAQDKV6dpgAWtVzrE
+kS73+XHFN3J/MN18E9pcFy1mW7knNOVoPHcYo33EL47+9Knq9kBsF5cRAU1bXTpj
+KBR9MOjcf7Dc725NRS/zx1ZJK5cZbTDJoh43LQh4E+VUNh6stLIq8ZoWE7QAL4bw
+nWoljM+WkTyp7EjvKmfOh6N/Px32ByW0JVi+oFBlK2IhJBOn5GkQsTUB8NuzDN5N
+tNlGyhM+7+hDhXWj0eEcZRGyity2zMGfFZGQ0FK3QnDwSxsGwjeTBAYGaoa2qasy
+S0pOF0PjV1cnuDYWDZlz7Z48vuchsenqOx2enzAQZeF1bYo3jyFw+DEdLzRO7Rul
++lMDGf6HAisSSa0llMN86wsnhMTOC/OKzkCOIRp8qrJDCKgujxAAAAD774BNEhQz
+774BAoIBAEsTPzD8IRIFX6jzwgVFJVhaINZbOrtg6i+CvYwfm6yQnL2XLnjk6FFb
+2VYssWbTdW2nyFpTTERc2Tn4rffjqRwTpISIvOVxfstIOGB5dPnR5/kFCD/v5aYu
+/IVUIdKJsp41pzcCSe1ufWMA8w7V5WONBVyfOqsprEw4ats8H9DT952B5IdSr1k1
+l5fXveVg6Hz/d4IJFn8G/RRzXZxBf4pDgyyK5b95AQl8/2tdP/f4epgNF2pQuGHh
+7ooGAA/9gTB6OnnQGOREIUd2El/jGMhm1gtHqyi0S3iyzJKOk0fqkghr08VkbeKZ
+KLmqlW/3I9Z/aRgnfODVEvkQBIkIi/UCgYEA1Hsl9oNGm63vgy1S5fZn2E15zczR
+sLf7vndzAz34BLZ07gVi7fO7hWoUdxx8POEr3spCwO8V0hoPW9VqLgMs5Cg28vcG
+/mHuEh81Xy4A6ZJ4DvUR3RCaHNFbY7qg11xZ8hquFsTffXpBgt4Bg4ASMne71kk1
+9mkMUrBEultGnqUCgYEA88jp73jYVtdUlvvPZYYaBj8oViDBDubjjIL8xXxd4Tpz
+FeQXBxdHrw+OjPq7G++RPp9+KsaNj0jFRb6ZvRGke6s0nvuQnxBAHsayShonoXKY
+jOpn5gam/+3QtW35c9QxNDDqsNxUEu3Y8JHauotqdqCyCTfuKS5X+/sqFjv07LsC
+gYAI8/tYNIqSbVOIpYH3Sxul8ChV+SAc7Gw37SvX0OvS0d5Nw4XpbLOmVBg5cewK
+SX8R630ZjjF/aAK9L1r7ahOYH0MXKqXDMiWQo3C2jjkRx8tSpyyZ4VcpwxRuH6/y
+PRnv60p5SYicSYA3b9YbpG61VcxYeNq+DFQlh/pqvkkuiQKBgQCu5lSRpEYI1Jop
+chyvfoKmJ+d6pRwG/71QNvkK1j8OVslARNAdOb339HezKUiSFw14USx4UeKI/zNe
+CbZETpvlJWrrxrBusbiLyoEoJxT9rP3ET4QjbEe73KEX78Vwz4ZbzFHn4FpDzGNs
+dw41HHPDd/oikTSiAtBhjUiqPNijLwKBgEcK/zqDMZbLd9z5Muw9vmO42Jw/npVU
+iCdWRjM9qzMhc5R985AgCTJ5q9MQ8d1fXkPUhUpVndsrfSEIXuY9SF3woi+EV/v/
+GRnNhynqJ2tXBI9ZESXuv7VvnpJiSyu/TDWuka7GOKWvoBy8e0z8M73VolPV8Hga
+bhKjQnE1MFEi
+-----END PRIVATE KEY-----
 
->>> carte
-        challenge: scrap pions meted fella basks
+[Ecrire cette clé publique pk_atrium.pem dans ma carte étudiante avec upload data.]
+[Attention, il faut signer le challenge donné "scrap pions meted fella basks" avec la clé privée sk_atrium.pem]:
 
-        signature:  9a5a62705c1a6db1055050840883cc4081d8231b2703b666132bef666c922d4c4f988c69a8c24a23e377ff60f1eb2bb862fed54496ad65717d1a76c025e1796004508fd67b6cf072bf70e3f89fbecd2882dc2cdc4706e5ff7c1bcb1ddab18dfb1580c1142a4c00dc5dcac3aa2766aa83c30e1dcf09bcae3103ebf0afd508151a3629cbc300c9fd00c1b8df1140fd7d2af504ddf9e78e274cb086034160c3bc6326dcdd0eb790c8e5c978219d179ba4a1d3f853416453ef2dc94e170b488147396d4baea29adcd8ed80f1e3b951c9405c52c9e4d2d4e6ce560c8115ae7b1b65ed3bc9f55d0977e4f303cf1729f7975adeee8bda619886c2935be728159a67c878
+printf "scrap pions meted fella basks" > ./Texts/sign_challenge_atrium.txt
 
-[security engine] rsa.keygen:52:1|2f5271e051f27f3fe91081d084796a47f4bb2af80b87e88f6197f7add482fe94    // 6ème flagggggg
+openssl dgst -sha256 -sign ./Keys/PrivateKeys/sk_atrium.pem -out ./Binary/sign_challenge_atrium.bin ./Texts/sign_challenge_atrium.txt
 
->>> conseil lecteur NFC
-Avez-vous lu la doc sur les certificats à la bibliothèque ?
+xxd -p ./Binary/sign_challenge_atrium.bin | tr -d '\n' > ./Hexa/sign_challenge_atrium.hex
 
->>> utiliser carte
-La porte ne s'ouvre pas. Une lumière rouge est allumée sur le lecteur de badge.
-Le micro-écran LCD affiche "DEVICE DOES NOT CONTAIN A CERTIFICATE".
+cat ./Hexa/sign_challenge_atrium.hex
 
-Une lumière verte s'allume sur le lecteur de badge.
-La porte vitrée se déverrouille et vous pénetrez à l'intérieur.
-(la prochaine fois, au lieu de refaire tout ce cirque, il suffira
-(d'utiliser le lecteur de badge et ça suffira).
+[Retour de ces commandes]:
 
-Vous êtes dans un petit espace gris et bétonné qui sépare le jardinet de
-l'intérieur du bâtiment.  Au nord et au sud, il est fermé par deux grilles
-métalliques, et le tout fait penser à une cellule de prison.  La personne
-qui fait le ménage par ici a pris l'habitude d'y laisser son petit charriot.
-Au nord, on peut accéder à un couloir turquoise.
+9a5a62705c1a6db1055050840883cc4081d8231b2703b666132bef666c922d4c4f988c69a8c24a23e377ff60f1eb2bb862fed54496ad65717d1a76c025e1796004508fd67b6cf072bf70e3f89fbecd2882dc2cdc4706e5ff7c1bcb1ddab18dfb1580c1142a4c00dc5dcac3aa2766aa83c30e1dcf09bcae3103ebf0afd508151a3629cbc300c9fd00c1b8df1140fd7d2af504ddf9e78e274cb086034160c3bc6326dcdd0eb790c8e5c978219d179ba4a1d3f853416453ef2dc94e170b488147396d4baea29adcd8ed80f1e3b951c9405c52c9e4d2d4e6ce560c8115ae7b1b65ed3bc9f55d0977e4f303cf1729f7975adeee8bda619886c2935be728159a67c878
 
-[Aller dans le CICSU]
+[Signer le challenge de l'atrium avec ce retour.]
 
-[Aller dans la bibliothèque et prendre le CHAP]:
+[security engine] rsa.keygen:52:1|2f5271e051f27f3fe91081d084796a47f4bb2af80b87e88f6197f7add482fe94      [SIXIEME FLAG !!!]
 
-[Lire le CHAP]
+### FLAG 7: Connexion CHAP
 
-[Idée: se reconnecter à tellnet]
-[identifiant = "AdrienPanguel"]
-[mdp = "__CHAP__"]
-[Retour terminal]:
+>>> conseil catalogue
+Vous pouvez vous connecter avec le protocole à clef publique pour accéder à encore plus de livres.
+
+[Aller dans la bibliothèque lire le livre sur le CHAP "Protocole CHAP (Challenge Handshake Authentication Protocol)".]
+[Il faut se déconnecter, et entrer comme id = "AdrienPanguel" et mdp = "__CHAP__".]:
 
                                                       UGLIX v4.0 beta
                                            (Experimental Device Control Terminal)
-
 
                                                          CHAP login
                                                          ----------
@@ -721,50 +713,37 @@ Au nord, on peut accéder à un couloir turquoise.
 
         response:
 
-[Lancer le code tests_encrypt_decrypt.py en mettant:
-          ciphertext = "U2FsdGVkX1/1fiiNcyBYc7VR1+96SdtC2p0tzT+edb8ghJQ68RA2VRQkrH0H5e2j"
-          password = [Mon mdp de connexion a tellnet]]:
+[Il faut déchiffrer ce challenge avec mon mot de passe de connextion à tellnet.]
+[Lancer le code decrypt_ciphertext_challenge_CHAP.py en mettant:
+- ciphertext = "U2FsdGVkX1/1fiiNcyBYc7VR1+96SdtC2p0tzT+edb8ghJQ68RA2VRQkrH0H5e2j"
+- password = <Mon mdp de connexion à tellnet> avec la commande]:
 
-          python3 tests_encrypt_decrypt.py 
-          'U2FsdGVkX1/1fiiNcyBYc7VR1+96SdtC2p0tzT+edb8ghJQ68RA2VRQkrH0H5e2j'
-          64
-          Decrypted plaintext:
-          amply troll morph buffs manta       // C'est le plaintext à entrer comme signature
+python3 decrypt_ciphertext_challenge_CHAP.py
 
-[Entrer la signature]
+[Retour de la commande]:
 
+Decrypted plaintext:
+amply troll morph buffs manta
+
+[Entrer ce Plaintext.]
                                                     +------------------+
                                                     | Successful login |
                                                     +------------------+
 
-[security engine] chap.login:52:1|879e8a07b5658f7995eec82d86342dcf245d013441a1b4346d03e5171f7e894a    // 7ème flaaaaag
+[security engine] chap.login:52:1|879e8a07b5658f7995eec82d86342dcf245d013441a1b4346d03e5171f7e894a    [SEPTIEME FLAG !!!]
 
->>> w
-Vous êtes dans une espèce de sas qui donne sur le foyer de l'auditorium.
-Mais vous en êtes séparée par une porte vitrée qui est fermée.  À travers la
-vitre, vous voyez que le foyer est complètement vide.  Sur le mur, une grande
-banderole annonce : ``bienvenue à la fête des 25 ans de l'ISIR''.
+### FLAG 8: Connexion PK
 
-Ici se trouve un lecteur NFC sur le mur.
-
->>> carte
-La porte ne s'ouvre pas. Une lumière rouge est allumée sur le lecteur de badge.
-Le micro-écran LCD affiche "DEVICE DOES NOT CONTAIN A CERTIFICATE".
-
-[Aller à la bibliothèque pour lire la doc sur spécification avec clé publique]
+[ATTENTION, VOIR SI IL FAUT FAIRE CHAP ET PK AVEC UN CODE OU JUSTE AVEC LES COMMANDE DU TYPE OPENSSL, XXD, ...]
 
 >>> conseil catalogue
 Vous pouvez vous connecter avec le protocole à clef publique pour accéder à encore plus de livres.
 
-[Lire Spécification de l'authentification à clef publique]
-
-[Se reconnecter à nouveau]
-[identifiant = "AdrienPanguel"]
-[mdp = "__PK__"]
+[Aller dans la bibliothèque et lire le livre "Spécification de l'authentification à clef publique"]
+[Il faut se déconnecter, et entrer comme id = "AdrienPanguel" et mdp = "__PK__".]:
 
                                                                 UGLIX v4.0 beta
                                                      (Experimental Device Control Terminal)
-
 
                                                                     PK login
                                                                     --------
@@ -773,18 +752,20 @@ Vous pouvez vous connecter avec le protocole à clef publique pour accéder à e
 
         signature:
 
-[Chiffrer avec signature (la clé privée double avec la publique du début)]:
-          printf "fader scrub chins divvy amass" > sign_challenge_publique.txt
-          openssl dgst -sha256 -sign my_private.pem -out signature_publique.bin sign_challenge_publique.txt
-          xxd -p signature_publique.bin | tr -d '\n'; echo
+[Il faut signer ce challenge avec ma clé privée my_sk.pem avec les commandes suivantes]:
 
-[Retour du mdp chiffré avec la signature]:
+printf "fader scrub chins divvy amass" > ./Texts/sign_challenge_PK.txt
+
+openssl dgst -sha256 -sign ./Keys/PrivateKeys/my_sk.pem -out ./Binary/sign_challenge_PK.bin ./Texts/sign_challenge_PK.txt
+
+xxd -p ./Binary/sign_challenge_PK.bin | tr -d '\n' > ./Hexa/sign_challenge_PK.hex
+
+[Retour de la commande]:
+
 170fb097747f0d90053858038ab6c9d82e3b7aebf7dcdcab80f72bb0b34d31b59f1c1059a2dfad84a8acde9b80b087a2cb4e836f00b4d3e7af16c2666bddfefc6ffb4d1df66cc266b2ecaa759dd97e57dc2dbc179f55653a282c8a46bace49fc588d1c34694dbe4ec0bf412ff68b202e139f30cebf37f27e1ce75d3f8f20baa9b98b7ae3806c945a45e8169bfe4bf38e8af4401d004ed8b8db49716725e025e0f645e2bbebfc0097cae79592bcee016e44ed5510308aedffcdcdd8fddac22783355cd585c8b5cf5d805baf91c2a963fb76439c02307e51306f0b7845f6447a90b4c22261e3561dcf78bb9baacf3af3fc168dfb78e80b362584aa3d403ff3b95a
-
 
                                                                 UGLIX v4.0 beta
                                                      (Experimental Device Control Terminal)
-
 
                                                                     PK login
                                                                     --------
@@ -792,12 +773,22 @@ Vous pouvez vous connecter avec le protocole à clef publique pour accéder à e
         challenge: fader scrub chins divvy amass
 
         signature:  170fb097747f0d90053858038ab6c9d82e3b7aebf7dcdcab80f72bb0b34d31b59f1c1059a2dfad84a8acde9b80b087a2cb4e836f00b4d3e7af16c2666bddfefc6ffb4d1df66cc266b2ecaa759dd97e57dc2dbc179f55653a282c8a46bace49fc588d1c34694dbe4ec0bf412ff68b202e139f30cebf37f27e1ce75d3f8f20baa9b98b7ae3806c945a45e8169bfe4bf38e8af4401d004ed8b8db49716725e025e0f645e2bbebfc0097cae79592bcee016e44ed5510308aedffcdcdd8fddac22783355cd585c8b5cf5d805baf91c2a963fb76439c02307e51306f0b7845f6447a90b4c22261e3561dcf78bb9baacf3af3fc168dfb78e80b362584aa3d403ff3b95a
-
                                                               +------------------+
                                                               | Successful login |
                                                               +------------------+
 
-[security engine] pk.login:52:1|464830fac0d902b1e193a8045a68fef6bdd8222a7e32cf7163a2912ed63eb867    // 8ème flagggggg
+[security engine] pk.login:52:1|464830fac0d902b1e193a8045a68fef6bdd8222a7e32cf7163a2912ed63eb867        [HUITIEME FLAG !!!]
+
+### FLAG 9: Certificat
+
+>>> conseil lecteur NFC
+Avez-vous lu la doc sur les certificats à la bibliothèque ?
+
+>>> carte
+La porte ne s'ouvre pas. Une lumière rouge est allumée sur le lecteur de badge.
+Le micro-écran LCD affiche "DEVICE DOES NOT CONTAIN A CERTIFICATE".
+
+[Aller à la bibliothèque pour lire la doc sur spécification avec clé publique]
 
 [Besoin d'un certificat pour badger correctement au CICSU: le CSR qu'on va créer avec notre clé privée d'Atrium est envoyé au système qui nous retourne le certificat]
 
@@ -805,7 +796,7 @@ Vous pouvez vous connecter avec le protocole à clef publique pour accéder à e
           openssl req -new -key sk_atrium.pem -batch -subj '/CN=AdrienPanguel' -out adrien.csr.pem
 
 [Le contenu de la demande de CERTIFICATE est dans adrien.csr.pem, le copier]
-[Aller au temrinal de l'atrium, coller le ocntneu précédent pour la CERTIFICATE REQUEST]
+[Aller au temrinal de l'atrium, coller le contenu précédent pour la CERTIFICATE REQUEST]
 
 [Revenir au CICSV et badger]:
 >>> carte
@@ -1075,7 +1066,19 @@ Ici se trouve une spécification du journal des évènements de sécurité (part
 Elle est écrite sur le coin d'une enveloppe.  Elle dit :
                     firmware update key: 35ba26a3b0297f0d
 
+[Peut-être utile pour la suite...]
 
+[Aller dans le couloir jaune de l'Atrium.]
+>>> conseil digicode
+Le panneau en liège montre un message chiffré par les deux clefs publiques.
+Ce serait sûrement utile de le déchiffrer.  Mais cette fois, aucune clef
+secrète n'est opportunément disponible.
+
+[On cherche un Plaintext qui a été chiffré par ymolina et jillian47 à partir de leur clé publique respective.]
+[Comme elles ont signé le même message, on peut le retrouver.]
+[Lire le panonceau et le panneau]:
+>>> lire panonceau
+Salle RC-25 (équipe SÉCU) : ymolina et jillian47
 
 >>> lire panneau
 Il y a des affiches annonçant des colloques de sécurité informatique,
@@ -1085,32 +1088,20 @@ locaux.  L'un d'entre eux dit notamment :
     MESSAGE IMPORTANT POUR LES UTILISATEURS DE LA SALLE RC-25
     ---------------------------------------------------------
 
-    - ymolina: 3003469a3e8e7efb1e1c3c9011910e0368fd0233b327f34d685d34456fed30f120b7e9056b0af0c0b21c6563e364ee1bc4ded82ef0e35d6231453ae70a329dd31fb21df9d09c75a8677dfaea504260042eece4663ba2f4f7fdcf44a74b36d338bb5e4c525a8d4553153f00ba732285db6c2f3d3f81b9c8f758d7b040f191b6fe5b0f431e8677da5d31b916d7d698353eff389a58f6e64af17aa86bc328ed3c52420a7b2500133e86d1a44bee1ea4ac8b0cdfe24eb9f3f7e2333a9ac36ddee83a2ea38417b1363fbb0973fc9ee1f008101f73e5da85c109d267f3f87807e8a151ab151f34af0db59dc06c0b62acc1ddf41bfab996a468dc466fa5f1d848b955ad
-    - jillian47: 52e6a9083f24008cfb7fa3c80fae6bbcaf30165e72fadc0787bb7ce79582134dee51902b4cffc74608e6da9903737c5843dc8d2a8a09c4d29763e02c954a84e06d8d16f019959c64c5578aed978c6df1993092364cc33463d92a4f24312d0c9418d111c4d8225a005c80e7bed639c96d5b260037ace61436ab25e31dfa4118b909e387458140a5fed838ac8872c09cd177905c999e76f1b2f5738cac08ed798270dec991616375775422d6728b4bed8374094a475a40ed58aaa03e26c58a5c368f1666603632c2767d2dab617e67bc54ff7f4c605fe8593c5e865d1bc0150278059115d8ff9d0468a4b15f44e8486930e0a459ac4531650b90a18ed11bef34aa
+    - ymolina: 73abb97126b99496e5146a51ef470c81a1ad2c72f6542c1081306c1bffc8a3fafdfbdec88eaaa9aa43d7a523d68d9e7b84ec317f46163e87ad263721c64b0f5cdeb7da2948a0de56a15200ea36a825b014c2723fe7f789be108294a1e3dd319b512dd284a21583336666eae21d5da7648c71e98dfc75dd3eefdbf790a7334cdbc741cc0d6a3128b23d6bb2981baff723cbb5f7d22816961cc13e4bec22ea22b018cedf8ae8ab3ba93a5a63f7c10ed3536e01b7e05405d3e35b9e5bb14deed8e65bc4919df7613324321dc2de11bd4663879c93f653d2f2db06bdbe512834a00bbae6aef0bff14790a4a56a955a2fcca1e5de36ec281012da04db89f82f2aa420
+    - jillian47: 3ecf827250c63d9086bc1b008c4b3a306b5ae0380168537841f878f947022b61b8252f91309558577466c0d81fc93b6d755eb2a0128ddd74dadf0df86e8b548687fc8f889103a79400cc982214329eaf0d2182dc05380f84dd2033979cbd1e195c04137bc76cabc82b1fd25303a0d1eca9ae1a3ace40cab284692fb4b91af78e79a88b28fa834a27d7a8abab524be72429cd8a46bf5b4e46e86cc78d16fd12c5ef027bed9e2719dec9bdfd43ab7315792d726e82c50981833cfa9741abf8611982a2f31ea0bd1043b1f5514c2f42dde4c2e8a996a6d2450d19c5c9672d7abbda5cf2515038ce46450deb9bf01f0914ffb918c4f93bb6347de4517c4d4f8aa5d9
 
+[Ce sont les 2 Ciphertext de ymolina et jillian47.]
+[Il faut maintenant récupérer les clés publiques de ymolina et jillian47]:
 
-
->>> lire panonceau
-Salle RC-25 (équipe SÉCU) : ymolina et jillian47
-
-
-
-
-
-
-                                                 UGLIX v4.0 beta                                                  
-                                                (Service terminal)                                                
-
+                                                 UGLIX v4.0 beta
+                                                (Service terminal)
                     Active user: AdrienPanguel
-
-                                               Public-key directory                                               
-                                               --------------------                                               
-
-
-
+                                               Public-key directory
+                                               --------------------
                     Username:                   ymolina
 
-                    Public key:                 
+                    Public key:
                     -----BEGIN PUBLIC KEY-----
                     MIIBPTANBgkqhkiG9w0BAQEFAAOCASoAMIIBJQKCAQEArGseb911v/OWCUFFgM3G
                     1IJN9DaXLnbNt/wB/Y+OSIIdhuHc0fXMr8F9gZalkUc+KKyh9Ha+R6DD4OngiPik
@@ -1123,21 +1114,11 @@ Salle RC-25 (équipe SÉCU) : ymolina et jillian47
 
                     Signatures:                 NONE
 
-
-
-
-
-
-                                                                   UGLIX v4.0 beta                                                                   
-                                                                 (Service terminal)                                                                  
-
+                                                                   UGLIX v4.0 beta
+                                                                 (Service terminal)
                     Active user: AdrienPanguel
-
-                                                                Public-key directory                                                                 
-                                                                --------------------                                                                 
-
-
-
+                                                                Public-key directory
+                                                                --------------------
                     Username:                   jillian47
 
                     Public key:                 
@@ -1152,3 +1133,390 @@ Salle RC-25 (équipe SÉCU) : ymolina et jillian47
                     -----END PUBLIC KEY-----
 
                     Signatures:                 NONE
+
+[Il faut maintenant trouver le Plaintext associé en utilisant pour chacun de ces Ciphertext la clé publique de l'utilisateur avec la commande suivante]:
+
+python3 decrypt_ciphertexts_public_keys.py
+
+[Retour de la commande]:
+
+n_bits = 2048
+
+e1 = 828359798324333931577948685265643428373743765785527264890313655277318017
+e2 = 113487104378672737569216731145184897498857894859115860585438651495477121
+
+DIGICODE = c4b844a35ba8ecb20d40026a7c8903d0
+
+[Entrer ce code stocké dans le fichier ./Texts/digicode.txt dans le digicode du couloir jaune]:
+>>> digicode
+                0 1 2 3
+                4 5 6 7
+                8 9 A B
+                C D E F
+
+        CODE: :        c4b844a35ba8ecb20d40026a7c8903d0
+
+Le verrou se désengage.
+
+Vous êtes dans la salle de travail de l'équipe des responsable de la sécurité
+informatique.  Un vieux carton de pizza traîne dans un coin.  Il n'y a pas de
+fenêtres.
+
+Ici se trouve une spécification du journal des évènements de sécurité (partie II).
+Ici se trouve un terminal d'administration du security engine.
+[security engine] rsa.shared:52:1|6a2190aa0779831e8f3a87a922a01c3c05bc55fe94f22b99b6cf9c8b22d2a148      [TREIZIEME FLAG !!!]
+
+
+
+
+                                                                   UGLIX v4.0 beta                                                                   
+                                                        (Security Engine Monitoring Console)                                                         
+
+                    Active user: AdrienPanguel
+
+                                                                      Main menu                                                                      
+                                                                      ---------                                                                      
+
+
+
+                    1. Monitor active threats
+                    2. Exit
+
+
+
+
+                                                            +--------------------------+
+                                                            | new information acquired |
+                                                            +--------------------------+
+
+
+
+
+                                                                   UGLIX v4.0 beta                                                                   
+                                                        (Security Engine Monitoring Console)                                                         
+
+                    subject: AdrienPanguel
+                    nature: threat
+                    level: medium
+                    objective: monitor
+
+
+
+                    First name    : Adrien
+                    Last name     : Panguel
+                    Email         : Adrien.Panguel@etu.sorbonne-universite.fr
+                    Status        : student
+                    Program       : MAIN4
+
+                    Website access: ALLOWED 
+
+
+
+                    subject: AdrienPanguel
+                    nature: threat
+                    level: medium
+                    objective: monitor
+
+
+
+                    First name    : Adrien
+                    Last name     : Panguel
+                    Email         : Adrien.Panguel@etu.sorbonne-universite.fr
+                    Status        : student
+                    Program       : MAIN4
+
+                    Website access: DENIED
+
+
+Related security events
+=======================
+
+Entry in security log                                                                             subject           date
+------------------------------------------------------------------------------------------------  ----------------  -------------------
+pki.tutorial:52:1|8d3a204ece50cdea3d35d5c16bca71d7961841a01f1071dbafd6dc5a441da049                AdrienPanguel     2026-02-02 15:57:35
+pki.upload:52:1|a75e2154fd95ebaefb63cb2d469d9d40062e3e32dce8c339b154f634d8f0eeb1                  AdrienPanguel     2026-02-02 16:05:25
+power.on:52:1|10405faceec8e4e858c1de99d079861bebece22f18a1dfbeaf38819bc16a4891                    AdrienPanguel     2026-02-02 16:46:00
+dict.atk:52:1|8afef7978c20be4f9e3061892df1b4cc4bb0b4ab9b9456110cfd18f1f907ebff                    AdrienPanguel     2026-11-11 16:57:17
+rsa.keygen:52:1|2f5271e051f27f3fe91081d084796a47f4bb2af80b87e88f6197f7add482fe94                  AdrienPanguel     2026-12-12 13:26:35
+chap.login:52:1|879e8a07b5658f7995eec82d86342dcf245d013441a1b4346d03e5171f7e894a                  AdrienPanguel     2026-12-12 13:59:01
+pk.login:52:1|464830fac0d902b1e193a8045a68fef6bdd8222a7e32cf7163a2912ed63eb867                    AdrienPanguel     2026-12-12 14:36:55
+pki.cert:52:1|8fe700cd09c6930261a71d3f75981625b83f3bcd5391b161e280bbbfd4078350                    AdrienPanguel     2026-12-12 15:22:57
+hybrid:52:1|ba7c7348d96337ca34e197eea20f768c094e604ceb34844d6e9759d3bf0de937                      AdrienPanguel     2026-16-16 17:05:44
+register:52:1|b644c1e209b41a83e9ed72be2f7878f8eb9c34fde9a06f0e9701f5448840e16a                    AdrienPanguel     2026-18-18 10:04:08
+web.of.trust:52:1|f314e4db3ff276736a12d4109325c66c5aab06318dce9fb8eea4ddfa36b2adb5                AdrienPanguel     2026-23-23 15:52:26
+rsa.reduction:52:1|4ddb32dbdce721e235de3062ab0c652671c08fd6a26524eb8359b2c9472971a3               AdrienPanguel     2026-23-23 17:34:34
+rsa.shared:52:1|6a2190aa0779831e8f3a87a922a01c3c05bc55fe94f22b99b6cf9c8b22d2a148                  AdrienPanguel     2026-24-24 20:04:17
+
+[press any key]
+
+
+
+
+
+
+[Retour au labo salle RC-19]:
+>>> conseil terminal
+Si on résume la spec, on trouve que : 
+1. une graîne de 16 bits est générée, puis
+2. une clef de 128 bits (secrète) et un IV de 128 bits (connu) en sont déduits.
+Une attaque par "force brute" (en fait, recherche exhaustive) est donc possible.
+
+>>> conseil terminal
+La stratégie consiste à essayer toutes les graînes possibles, calculer la clef,
+calculer l'IV, vérifier si l'IV est le bon (le cas échéant la clef est bonne 
+aussi), puis déchiffrer et profiter.
+
+>>> conseil terminal
+On peut déchiffrer avec OpenSSL en connaissant la clef et l'IV en allant lire
+le bon mode d'emploi à la bibliothèque. 
+
+>>> conseil terminal
+Il n'y a que 65536 grâines possibles, donc ça prendra un temps infime.
+
+>>> conseil terminal
+16 bits, ça fait 2 "bytes", donc en python ça s'écrit ``bytes([a, b])'' avec
+0 <= a < 256 et 0 <= b < 256.
+
+>>> conseil terminal
+C'est tout !
+
+[Avant ça, j'ai récupéré les livres "spécification des enclaves sécurisées Uglix Secure Vault (tm)" et "tome VII : chiffrement avec clef et IV explicites" à la bibliothèque.]
+[Lire le texte ""spécification des enclaves sécurisées Uglix Secure Vault (tm)".]
+[Aller au labo dans la salle RC-19]:
+>>> RC-19
+Vous êtes dans un petit bureau de chercheur.  Il y a une machine a café et un petit 
+canapé.  C'est très cosy !
+
+Ici se trouve un terminal défectueux.
+
+>>> terminal
+
+                                                                   UGLIX v4.0 beta
+                                                              (LPNHE Research Terminal)
+                    Active user: AdrienPanguel
+
+ы└ы┬ь╠ы┼ы┘ ь╔ы┼ь╗ьЁы┬ы┘ь╖ы└ы┘ь╥ь╖ь╗ь╧ы┤ы┬ ь╗ь╗ьЁь╖ь╥ь╘ ы├ь╣ ь╢ы┐ы└ы┼ (ь╗ы┘ь╧ы├ы┴
+ьёы├ ь╖ы└ь╨ь╖ы┼ь╘ ы┤ы┼ ь╖ы└ь╢ы┐ы└ ы┬ы└ы┼ьЁ ь╖ы└ы┘ь╜ь╙ы┬ы┴) ы┬ы┼ы▐ьЁь╙ь╝ь╞ы┘ ы│ы┼
+ь╣ы├ь╖ь╧ь╖ь╙ ь╖ы└ы┘ь╥ь╖ь╗ь╧ ы┬ь╞ы┬ь╠ ь╖ы└ы├ь╢ь╠. ы┐ь╖ы├ ы└ы┬ь╠ы┼ы┘ ь╔ы┼ь╗ьЁы┬ы┘ 
+ы┬ы└ь╖ы┼ь╡ь╖ы└ ь╖ь╖ы▀ ьы└ы┘ь╧ыы└ы└ы├ь╣ ь╖ы└ь╢ы┐ы└ы┼ ы┘ы├ь╟ ь╖ы└ы┌ь╠ы├ ь╖ы└ь╝ь╖ы┘
+ьЁ ь╧ь╢ь╠ ь╧ы├ь╞ы┘ь╖ ы┌ь╖ы┘ь╙ ы┘ь╥ь╗ь╧ь╘ ы┘ь╛ы┤ы┬ы└ь╘ ь╗ь╠ь╣ ы┘ь╛ы┘ы┬ь╧ь╘ ы┘ы├ ь
+╖ы└ьёь╜ь╠ы│ ь╗ь╢ы┐ы└ ь╧ь╢ы┬ь╖ь╕ы┼ ьёь╝ь╟ь╙ы┤ь╖ ы┘ы├ ы├ь╣ь▄ ы└ь╙ы┐ы┬ы▒ы├ ы┐ь╙ы┼ы▒
+ь╗ ь╗ы┘ь╚ь╖ь╗ь╘ ь╞ы└ы┼ы└ ьёы┬ ы┘ь╠ь╛ь╧ ь╢ы┐ы└ы┼ ы└ы┤ь╟ы┤ ь╖ы└ьёь╜ь╠ы│. ь╝ы┘ьЁь╘ 
+ы┌ь╠ы┬ы├ ы┘ы├ ь╖ы└ь╡ы┘ы├ ы└ы┘ ь╙ы┌ь╤ы┼ ь╧ы└ы┴ ы┤ь╟ь╖ ь╖ы└ы├ь╣ь▄ ь╗ы└ ь╖ы├ы┤ ь╜ь╙
+ы┴ ь╣ь╖ь╠ ы┘ьЁь╙ь╝ь╞ы┘ь╖ы▀ ы┬ь╗ь╢ы┐ы└ы┤ ь╖ы└ьёь╣ы└ы┼ ы│ы┼ ь╖ы└ь╥ь╗ь╖ь╧ь╘ ы┬ь╖ы└ь
+╙ы├ь╤ы┼ь╞ ь╖ы└ь╔ы└ы┐ь╙ь╠ы┬ы├ы┼. ь╖ы├ь╙ь╢ь╠ ь╗ь╢ы┐ы└ ы┐ь╗ы┼ь╠ ы│ы┼ ьЁь╙ы┼ы├ы┼ы▒ь╖
+ь╙ ы┤ь╟ь╖ ь╖ы└ы┌ь╠ы├ ы┘ь╧ ь╔ь╣ь╞ь╖ь╠ ь╠ы┌ь╖ь╕ы┌ "ы└ы┼ь╙ь╠ь╖ьЁы┼ь╙"ь╖ы└ы┘ь╥ь╖ь╗ь╖
+ы└ь╗ы└ь╖ьЁь╙ы┼ы┐ы┼ь╘ ь╙ь╜ы┬ы┼ ы┘ы┌ь╖ь╥ь╧ ы┘ы├ ы┤ь╟ь╖ ь╖ы└ы├ь╣ь▄ ы┬ь╧ь╖ь╞ ы└ы┼ы├ь
+╙ь╢ь╠ ы┘ь╠ь╘ ьёь╝ь╠ы┴ ы┘ь╓ь╝ь╠ь╖ы▌ ы┘ь╧ ь╦ы┤ы┬ь╠ ь╗ь╠ь╖ы┘ь╛ ь╖ы└ы├ь╢ь╠ ь╖ы└ь╔ы└ы
+┐ь╙ь╠ыь╚ы┬ы├ы┼ ь╚ы└ "ьёы└ы┘ь╞ы┬ьЁ ь╗ь╖ы┼ь╛ ь╖ы┼┼ь╖ь╠ ы┐ь╠"ы┬ы▒ы├ы┬ь╖ы└ь╧ь╖ь╞ь╙ы┼
+ь╜ы┬ь╙ ьёы┼ь╤ь╖ы▀ ь╧ы└ы┴ ы├ь╖ы▌ Ёь╝ ы┘ы├ ы├ь╣ ы└ы┬ь╠ы┼ы┘ ь╔ы┼ь╗ьЁы┬ы┘
+
+*** Process received signal ***
+[UGLIX:04968] Signal: Segmentation fault (11)
+[UGLIX:04968] Signal code: Address not mapped (1)
+[UGLIX:04968] Failing at address: 0xb)
+
+Dumping core... 
+[Uglix Secure Vault Enclave]
+
+IV = 96c2089c5c89644420794597e1eba19b
+
+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
+
+[Noter le "IV" quelquepart et le long bloc64.]
+[Lancer le code key_expansion_seed.py pour identifier la bonne seed avec la commande]:
+
+python3 key_expansion_seed.py 
+
+[Retour de la commande + stocké dans ./Texts/key_expansion_seed.txt]:
+
+[+] Seed trouvée: 56607 (0xdd1f)
+[+] K  = 662d96351653d4242ed0ab569e78d9d1
+[+] IV = 96c2089c5c89644420794597e1eba19b
+[+] Plaintext plausible (UTF-8) :
+
+Cahier de manipulation
+======================
+
+09:00 Démarrage de l'accélérateur
+09:27 Puissance nominale
+09:45 Première tentative de broadcast à cette puissance
+      Envoi de "Hello world!"
+09:57 Réception depuis les coordonnées 9be4862c2ba03242774ab6ecd69a0d95 
+     de la chaine "Qui est là ? Il y a quelqu'un ?".
+10:23 Echange de plusieurs autres messages.  Apparemment notre interlocuteur 
+      est un être humain situé aux coordonnées 9be4862c2ba03242774ab6ecd69a0d95.
+10:45 Légère surtension dans la bobine #3.  Arrêt et inspection des dégats.
+14:12 Redémarrage de l'accélérateur
+14:58 Puissance maximale.  Tous les systèmes OK.
+15:03 Démarrage de la tentative de téléportation d'une brique de légo 
+      vers les coordonnées 9be4862c2ba03242774ab6ecd69a0d95.
+15:07 Explosion majeure dans la salle d'expérience.  stanley42 évacué par 
+      le SAMU (brulures superficielles)
+15:09 La brique de légo a disparu (vaporisée par l'explosion ?)
+16:20 Réunion d'urgence du conseil de labo.  Point sur les procédures de 
+      sécurité.  Les nouvelles expériences doivent être validées par le conseil.
+17:39 L'équipe de nettoyage constate la présence d'un objet non-identifié dans
+      la salle d'expérience.
+18:20 Réunion de débriefing de l'équipe expérimentale.  Personne ne reconnaît 
+      avoir déposé l'objet en question pour faire un canular.
+18:30 Nouveau mot de passe pour la salle d'expériences : 3f478ea5e21e3b82c68d2fc33ce50587
+18:45 Fin de la journée
+
+[Noter ce mot de passe en hexa "3f478ea5e21e3b82c68d2fc33ce50587" et l'entrer comme Code dans le digicode dans le sas sécurisé]:
+>>> sas
+                0 1 2 3
+                4 5 6 7
+                8 9 A B
+                C D E F
+
+        CODE: :         3f478ea5e21e3b82c68d2fc33ce50587 
+
+Le verrou se désengage.
+
+Vous êtes dans une grande salle avec du matériel expérimental partout.  Dans un coin, 
+vous voyez une porte qui donne sur une autre pièce marquée "téléporteur".  Vous en êtes 
+séparé par une épaisse paroix métallique avec une petite fenêtre.  Des indications vous 
+informent qu'un système de sécurité empêche l'activation du téléporteur si un être vivant 
+se trouve dans la pièce en question.
+
+Ici se trouve un panneau de contrôle.
+Ici se trouve un pied-de-biche.
+[security engine] secure.vault:52:1|b0839215cb365aed8c7c033ef9e056202b3d847a5cbbd9db7ac9c8f0ad851aff    [QUATORZIEME FLAG !!!]
+
+
+
+
+
+
+
+[Aller au CICSU]:
+>>> w
+Vous êtes dans une espèce de sas qui donne sur le foyer de l'auditorium.
+Mais vous en êtes séparée par une porte vitrée qui est fermée.  À travers la
+vitre, vous voyez que le foyer est complètement vide.  Sur le mur, une grande
+banderole annonce : ``bienvenue à la fête des 25 ans de l'ISIR''.
+
+Ici se trouve un lecteur NFC sur le mur.
+
+[security engine - INFO] current security objective
+                             policy: EMERGENCY
+                             subject: AdrienPanguel
+                             objective: monitor
+>>> serrure
+Il n'y a pas de SERRURE
+
+>>> lecteur nfc
+Vous refaites tout le tralala de la dernière fois.
+
+Vous êtes dans le foyer.  Une multitude de spots au plafond diffusent un
+éclairage agréable,  et un mur en imitation bois réchauffe un peu
+l'atmosphère.  Les murs de cette grande salle sont tapissés de posters qui
+vantent les travaux des chercheurs de l'Institut des Systèmes Intelligents
+et de la Robotique (ISIR).  Apparemment une fête a été organisée ici à
+l'occasion des 25 ans de ce laboratoire.  De nombreux objets qui servent à
+faire des  démonstrations techniques ont été amenés ici pour l'occasion.
+À côté du guichet d'acceuil, un escalier monte vers le niveau supérieur (et
+la lumière du jour) tandis que des portes battantes conduisent vers le grand
+auditorium.
+
+Ici se trouve un ascenseur.
+Ici se trouve une borne de mise à jour de firmware.
+Ici se trouve un BiblioDrone-NG.
+Ici se trouve un Robot gardien.
+
+>>> conseil
+Je n'ai pas de suggestion pour le moment.
+
+>>> conseilborne
+Il n'y a pas de CONSEILBORNE
+
+[security engine - WARNING] new security event
+                                subject: AdrienPanguel
+                                nature: unauthorized physical access
+                                location:
+                                  floor: SB
+                                  room-name: SB_CICSU_FOYER
+                                severity: medium
+>>> conseil borne
+Vous devrez trouver des "firmware update keys" ailleurs sur le campus.
+
+>>> voir Robot gardien
+Un drone de surveillance conçu et réalisé par les membres de l'ISIR.  Une
+petite affiche explique qu'il sert à s'assurer que ``tout se passe bien'' et
+qu'aucune personne n'aurait l'idée individualiste ``d'emprunter'' le matériel
+collectif sans en avoir l'autorisation expresse délivrée par le directeur
+de l'ISIR.  Il est actif ; ses capteurs scrutent vos moindres mouvements.
+Il est équipé d'un dispositif qui ressemble à un énorme Taser.
+
+>>> utiliser Robot gardien
+Vous vous approchez prudemment du robot gardien, et à votre grande surprise
+celui-ci entame poliment la conversation.  Vous lui expliquez que vous auriez
+vraiment besoin d'emprunter le BiblioDrone-NG.  Il répond : bien sûr, c'est tout
+naturel, seulement vous savez, le règlement...  Bref, il a faudrait que vous lui
+fournissiez une signature (réalisée par le directeur du labo) de la chaîne de
+caractères :
+
+        "I, the lab director, hereby grant AdrienPanguel permission to take the BiblioDrone-NG."
+
+Ensuite, bien sûr, vous pourrez l'emprunter.
+
+                    Signature:
+
+
+
+
+
+
+
+
+
+                                                      UGLIX v4.0 beta
+                                                 (Firmware Update Station)
+
+                    Active user: AdrienPanguel
+
+
+                    Firmware update key:        35ba26a3b0297f0d
+
+
+
+
+
+
+
+                               +------------------------------------------------------------+
+                               | Firmware updated. New command activated: ``#!item-debug''. |
+                               +------------------------------------------------------------+
+

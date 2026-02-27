@@ -7,7 +7,7 @@ TARGET = b"+++ATRIUM+++"
 print("On commence par decoder +++ATRIUM+++ en base64...")
 atrium_b64_dec = base64.b64decode(TARGET)
 
-# Ajout d'un octet pour éviter un exposant pair (idée)
+# Ajout d'un octet pour éviter un exposant pair
 atrium_b64_dec += b"\x01"
 print("Octets obtenus:", atrium_b64_dec)
 
@@ -16,11 +16,8 @@ atrium_int = int.from_bytes(atrium_b64_dec, byteorder="big") + (256 * 10**100)
 print("e =", atrium_int)
 
 # Dossier de sortie (attention aux espaces)
-out_dir = Path("Pieces") / "Niveau_SB" / "Atrium" / "Bureau SB"
-out_dir.mkdir(parents=True, exist_ok=True)
-
-sk_path = out_dir / "sk_atrium.pem"
-pk_path = out_dir / "pk_atrium.pem"
+sk_path = Path("./Keys/PrivateKeys/sk_atrium.pem")
+pk_path = Path("./Keys/PublicKeys/pk_atrium.pem")
 
 print("Génération de la clé privée avec OpenSSL...")
 cmd_keygen = [
@@ -59,3 +56,16 @@ if pub_run.returncode != 0:
 
 print("OK. Clé privée :", sk_path)
 print("OK. Clé publique:", pk_path)
+
+print("\nVérification de la présence de la chaîne dans la clé publique...")
+
+pem_text = pk_path.read_text()
+
+# Extraire uniquement la partie Base64 (sans les lignes -----BEGIN/END-----)
+lines = pem_text.splitlines()
+b64_data = "".join(line for line in lines if "-----" not in line)
+
+if TARGET.decode() in b64_data:
+    print("La chaîne +++ATRIUM+++ est bien présente dans le Base64 du PEM.")
+else:
+    print("La chaîne n'apparaît PAS dans le Base64 du PEM.")
