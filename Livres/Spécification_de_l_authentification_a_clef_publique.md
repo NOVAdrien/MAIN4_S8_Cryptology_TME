@@ -15,7 +15,7 @@ La signature, qui doit être encodée en hexadécimal comme d'habitude, est
 vérifiée avec la clef publique de l'utilisateur déposée dans la PKI.  Consulter
 le guide d'OpenSSL sur la signature pour plus de précisions.
 
-[Retourner bibiolthèque]
+[Retourner bibliothèque]
 
 >>> conseil catalogue
 Ce terminal est peut-être programmé en RML.

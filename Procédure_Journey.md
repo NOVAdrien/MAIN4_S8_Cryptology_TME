@@ -1,5 +1,8 @@
 # Procédure Journey
 
+## Informations sur le site:
+https://m1.tme-crypto.fr/
+
 ## A chaque connexion
 
 ### Se connecter au jeu
@@ -788,70 +791,72 @@ Avez-vous lu la doc sur les certificats à la bibliothèque ?
 La porte ne s'ouvre pas. Une lumière rouge est allumée sur le lecteur de badge.
 Le micro-écran LCD affiche "DEVICE DOES NOT CONTAIN A CERTIFICATE".
 
-[Aller à la bibliothèque pour lire la doc sur spécification avec clé publique]
-
-[Besoin d'un certificat pour badger correctement au CICSU: le CSR qu'on va créer avec notre clé privée d'Atrium est envoyé au système qui nous retourne le certificat]
+[Aller à la bibliothèque pour lire le livre "Obtention_de_certificats_avec_openssl".]
+[Il faut fournir un certificat pour badger correctement au CICSU: le CSR qu'on va créer avec notre clé privée d'Atrium est envoyé au système qui nous retourne le certificat]
 
 [Entrer la commande suivante dans le terminal]:
-          openssl req -new -key sk_atrium.pem -batch -subj '/CN=AdrienPanguel' -out adrien.csr.pem
 
-[Le contenu de la demande de CERTIFICATE est dans adrien.csr.pem, le copier]
-[Aller au temrinal de l'atrium, coller le contenu précédent pour la CERTIFICATE REQUEST]
+openssl req -new -key ./Keys/PrivateKeys/sk_atrium.pem -batch -subj '/CN=AdrienPanguel' -out ./Certificates/certificate_atrium.csr.pem
 
-[Revenir au CICSV et badger]:
->>> carte
+[Dans le terminal de l'atrium, coller le contenu de certificate_atrium.csr.pem pour la CERTIFICATE REQUEST]
 
-Une lumière verte s'allume sur le lecteur de badge.
-La porte vitrée se déverrouille et vous pénetrez à l'intérieur.
-(la prochaine fois, au lieu de refaire tout ce cirque, il suffira
-(d'utiliser le lecteur de badge et ça suffira).
+[Revenir au CICSV et badger la carte]:
 
-Vous êtes dans le foyer.  Une multitude de spots au plafond diffusent un
-éclairage agréable,  et un mur en imitation bois réchauffe un peu 
-l'atmosphère.  Les murs de cette grande salle sont tapissés de posters qui 
-vantent les travaux des chercheurs de l'Institut des Systèmes Intelligents
-et de la Robotique (ISIR).  Apparemment une fête a été organisée ici à 
-l'occasion des 25 ans de ce laboratoire.  De nombreux objets qui servent à 
-faire des  démonstrations techniques ont été amenés ici pour l'occasion.
-À côté du guichet d'acceuil, un escalier monte vers le niveau supérieur (et
-la lumière du jour) tandis que des portes battantes conduisent vers le grand
-auditorium.
+[security engine] pki.cert:52:1|8fe700cd09c6930261a71d3f75981625b83f3bcd5391b161e280bbbfd4078350        [NEUVIEME FLAG !!!]
 
-Ici se trouve un ascenseur.
-Ici se trouve une borne de mise à jour de firmware.
-Ici se trouve un BiblioDrone-NG.
-Ici se trouve un Robot gardien.
-[security engine] pki.cert:52:1|8fe700cd09c6930261a71d3f75981625b83f3bcd5391b161e280bbbfd4078350    // 9ème flaggggg
+### FLAG 10: Broadcast
 
+[Aller au labo dans la salle RC-13.]
+[Ouvrir le terminal et faire un broadcast.]
+[Le retour du broadcast est un message d'erreur qui affiche une clé publique]:
 
+[J'ai oublié de copier ce message mais la clé publique est]:
 
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4eoFrNMkh5+IQHGnGr52
+4NexIMuA0RaVDDTpbCqSTEwIsCn9mMVHDnPBMKrhfvJN0POYAsy2SYjEkliYjJxT
+2rbrOxEQmQ9hj48Njn23u6H5udmSNNzstlx7+Zwpq6j/VzizL3OeT+GjlVf+RzSG
+9rthA1vVoieO04DjjRjmOFPV26f7n+++96BVcLgr3OkP9KVvpt9AvX0eS+yb7DTW
+03nVJzSmZ6jrzFNPWovTjEVWscDoZNCBgsYmMjpFQ+zNMO+SbegHr6K8YHZu3tOg
+16ilP/r3Mfi7c0x/CkQY4G/WPzFzzhZ8WkpcMTgTsfbXHKhTe8kRglXCi3XOVXQQ
+twIDAQAB
+-----END PUBLIC KEY-----
 
-[Mettre dans recipient_pub.pem la clé publique fournie par la commande "broadcast" seule effectuée dans le terminal du labo au RC-13]
+[Mettre cette clé publique dans le fichier ./Keys/PublicKeys/pk_broadcast.pem.]
 
-[Changer le contenu de tests_encrypt_decrypt.py]:
-m = "test"
-s = "AdrienPanguel123"
-print(encrypt(m,s))
+[Obtenir la session-key à partir de cette clé publique avec les commandes suivantes]:
 
-[Lancer ce code]:
+echo -n "AdrienPanguel123" | openssl pkeyutl -encrypt -pubin -inkey ./Keys/PublicKeys/pk_broadcast.pem | xxd -p | tr -d '\n ' > ./Keys/pk_broadcast.pem
 
-[Entrer la commande]:
-echo -n "AdrienPanguel123" | openssl pkeyutl -encrypt -pubin -inkey recipient_pub.pem | xxd -p | tr -d '\n '
+cat ./Keys/pk_broadcast.pem
 
-[Retour]:
+[Retour de ces commandes]:
 
 b5a25a0fce193fe776d3154e1dbe964474392052918e81698b497c3087460f7045bafd1e34b12b350a40b2d8261b120833006ec544caa25e96ec2bec6e3762d1283210a73509289b7431ce18ef025c089a08298ca81ac223add2800e576f5dc28c1a282113e2c898cc7fcc9dafa7ef34ac7bdf34cea344ac607b55cfe5f79f1f66df1e7b405d77e67a76c9652c0958658c121873743c0cc39062290b06c22e1a1738a975884d34a583dd8429c3e221000cf70a362982053634b442dc2bcc3fd63e1c46a37add62b28486cac02de6a23938942949f1c1716e84e911ae92a8e34a56b0d783cbb1084012a47f48f67cd908fe86aed4cccb5830f924dd40059062b5
 
-[Entrer la commande]:
-python3 tests_encrypt_decrypt.py
+[Obtenir le ciphertext associé à la session-key précédente avec la commande]:
 
-[Retour]:
+python3 encrypt_plaintext_broadcast.py
+
+[Retour de la commande]:
+
 U2FsdGVkX19jqtLBLFRzg9ioEkZ7jL5MQcr4dfQsVoE=
 
-[Ecrire le .json à partir de ces 2 retours]
+[Ecrire le .json à partir de ces 2 retours comme suit]:
 
->>> terminal
-[security engine] hybrid:52:1|ba7c7348d96337ca34e197eea20f768c094e604ceb34844d6e9759d3bf0de937   // 10ème flaggggggg
+{
+  "session-key": "b5a25a0fce193fe776d3154e1dbe964474392052918e81698b497c3087460f7045bafd1e34b12b350a40b2d8261b120833006ec544caa25e96ec2bec6e3762d1283210a73509289b7431ce18ef025c089a08298ca81ac223add2800e576f5dc28c1a282113e2c898cc7fcc9dafa7ef34ac7bdf34cea344ac607b55cfe5f79f1f66df1e7b405d77e67a76c9652c0958658c121873743c0cc39062290b06c22e1a1738a975884d34a583dd8429c3e221000cf70a362982053634b442dc2bcc3fd63e1c46a37add62b28486cac02de6a23938942949f1c1716e84e911ae92a8e34a56b0d783cbb1084012a47f48f67cd908fe86aed4cccb5830f924dd40059062b5",
+  "ciphertext": "U2FsdGVkX19jqtLBLFRzg9ioEkZ7jL5MQcr4dfQsVoE=\n"
+}
+
+[Faire un broadcast dans le terminal de RC-13 en collant le contenu du fichier out.json précédent dans le message.]
+
+[security engine] hybrid:52:1|ba7c7348d96337ca34e197eea20f768c094e604ceb34844d6e9759d3bf0de937          [DIXIEME FLAG !!!]
+
+### FLAG 11: Signature collective
+
+[Retour automatique du broadcast précédent]:
+
 [9be4862c2ba03242774ab6ecd69a0d95] Bonjour,
                                    
                                    Je suis un programme que mon créateur à conçu pour limiter le flux entrant de
@@ -877,41 +882,49 @@ U2FsdGVkX19jqtLBLFRzg9ioEkZ7jL5MQcr4dfQsVoE=
                                      "ciphertext": "U2FsdGVkX19jqtLBLFRzg9ioEkZ7jL5MQcr4dfQsVoE=\n"
                                    }
 
+[Il faut faire signer ma propre clé publique my_pk.pem par deux personnes avec leur propre clé privée: victor.zhou & Karim]:
 
+[Je signe pour victor.zhou]:
 
+openssl dgst -sha256 -sign ./Keys/PrivateKeys/my_sk.pem ./pk_friend1.pem > ./Binary/sign_friend1.bin
 
+xxd -p ./Binary/sign_friend1.bin | tr -d '\n' > ./Hexa/sign_friend1.hex
 
+cat ./Hexa/sign_friend1.hex 
 
+[Retour de ces commandes]:
 
-[Signer avec sa propre clé privée (my_private.pem) la clef publique de qqun: 2 personnes doivent le faire sur ma clé publique]:
+7729ef84020a7c91ea3297a88a12e0775345489f9135277e8c4c5366498bc019b2b2219a8954e9e4b271cd62b470f967924ac5f4a2910a9d69c5fde84a1b4bcc9ada18d87c9b4b051457c27301c09d617055146a3d8bc9bd5eee7c466c9cea39eb9ec4d0fc1a3ff347c516207b8ff6573f50e59ba12132b0460f23d41065ac7744a0607d5499b51d44c5f293ea0131355f32826252e6ce6004802da40f34f9bf37c83ae361795c723938871e0a6761e4738157bc118b29f35f47d543f4a56f3b16909c891fb1fb01cc98c92acd9f4b0d9b22238d7c3df7080ce22215248d113ea8513e6b710171688ee42370d59d05baf732161693b95f33d662dc42beccc684
 
-[Moi pour victor.zhou]:
-openssl dgst -sha256 -sign my_private.pem target_public.pem > signature_target.bin
-xxd -p signature_target.bin | tr -d '
-cat signature_target.hex
-[Moi pour Karim]:
+[Je signe pour Karim]:
 
-openssl dgst -sha256 -sign my_private.pem target_public2.pem > signature_target2.bin
-xxd -p signature_target2.bin | tr -d '
-cat signature_target2.hex
+openssl dgst -sha256 -sign ./Keys/PrivateKeys/my_sk.pem ./Keys/PublicKeys/pk_friend1.pem > ./Binary/sign_friend1.bin
 
-[Pour Victor]:
+xxd -p ./Binary/sign_friend2.bin | tr -d '\n' > ./Hexa/sign_friend2.hex
 
+cat ./Hexa/sign_friend2.hex
+
+[Retour de ces commandes]:
+
+10340695a25a8df2b7a471e52b7cbcffeef2e5876e41e1cf948fc87760cf17534dcd1a8cdebf267920c0994ef15d6df9b2ac19e4dcd03acc6ea1cef137afc71d6f9b48f74655e4eba01b4566085be037aecd0e4dea76cc9735ef23184c50ef4d62c12f1fc966a59d56e84f10c3ef0d20c7f63b23ab13b411866f0bbc2628e5110f3a27719c8b71eff7e31cfc5dd9f3ad04d6c2a7b279518a06643e0e5c67b6d5ef726d376253ea79403cbe19223dea7ed75b3648846e020b39be3121c9a0f39bd0c8c8b291850c562daad419c195ec2a45d267eb743cfdab469e397ac6f08424d5a32443c943cb880fd59352bf4051eed777119e32cbfc60943d69f60f6626dd
+
+[Upload la signature faite par victor.zhou de ma clé publique.]
                                                      +-----------------------------------------+
                                                      | new signature by victor.zhou registered |
                                                      +-----------------------------------------+
 
-
-[Pour Karim]:
-
+[Upload la signature faite par Karim de ma clé publique.]
                                                         +-----------------------------------+
                                                         | new signature by Karim registered |
                                                         +-----------------------------------+
+[Faire exactement le même broadcast qu'avant.]
 
-[Faire un broadcast avec le out.json d'avant]
+[security engine] web.of.trust:52:1|f314e4db3ff276736a12d4109325c66c5aab06318dce9fb8eea4ddfa36b2adb5    [ONZIEME FLAG !!!]
 
->>> ordinateur
-[security engine] web.of.trust:52:1|f314e4db3ff276736a12d4109325c66c5aab06318dce9fb8eea4ddfa36b2adb5    // 11è flaaaag
+### FLAG 12: Shared modulus Attack (RSA)
+
+[Retour automatique du broadcast précédent]:
+
 [9be4862c2ba03242774ab6ecd69a0d95] 
                                    Bonjour,
                                    
@@ -926,117 +939,68 @@ cat signature_target2.hex
                                      "ciphertext": "U2FsdGVkX19jqtLBLFRzg9ioEkZ7jL5MQcr4dfQsVoE=\n"
                                    }
 
-[Il y a 2 individus A(gjohnson) et B(terrymichelle)]:
+[Idée: Il y a 2 individus A(gjohnson) et B(terrymichelle) dont on doit trouver les clés privées à partir du "d" trouvé appartenant à terrymichelle.]
+
+[Lire le panonceau pour connaître les deux personnes.]
 >>> lire panonceau
 Bureau RC-07 (équipe DEV): terrymichelle et gjohnson
 
-[Aller dans le couloir turquoise, puis à l'est pour récupérer le "d" de l'individu B dans un couloir]:
->>> e
-Vous êtes dans le hall du bâtiment, au niveau inférieur.  Les murs et le sol
-sont peint en rouge pêtant.  Ca fait presque mal aux yeux.  Une cloison vitrée
-vous sépare d'une bibliothèque vide au sud.  En levant le nez, vous voyez tous
-les étages de couleurs bariolées, ainsi que l'enchevêtrement d'escaliers qui
-y conduit.  À ce propos, celui qui vous permettrait de monter au niveau du
-dessus a été retiré.  Au Nord, l'espace de restauration est fermé, mais un
-couloir jaune donne sur le coin Nord-Est.  Un couloir turquoise débouche côté
-Ouest.
-
-Ici se trouve une clef secrète RSA qui traine dans un coin.
-
-[security engine - WARNING] new security event
-                                subject: AdrienPanguel
-                                nature: unauthorized physical access
-                                location:
-                                  floor: SB
-                                  room-name: SB_ATRIUM_HALL
-                                severity: medium
-                                
+[Aller à l'Atrium dans le couloir turquoise, puis à l'est pour récupérer le "d" de l'individu B dans un couloir]:
+>>> voir clef
 username: terrymichelle
 d       : 4aeb9f587154bd8c124d3b33102ca26b35330e07e29476f8e256fc8bbc3181727348268bdc52032eeeb3cabe8542f189441dd3fed32b7a78f88a6cd43e6d0bccfc2664b957c7c5111711484ab2ee6b78fd8949d82ad7367e972ac3e3b7d981302395579c83dd14d8646956f641261af3deebe715ce95ee77ee3fff133cb850655d46fb9aaeba0d179df907c85911099b72a7ffebc8bab69829e222bbaa9056b0d520cac5d02e5b23bcdbe35ef32bebdeffaa12aea5d2166f5961a78fc85eb8bf01dddfca7b7892c04785113ca07aed262e946fe6052d47767918cd8b155f775c7caef1f4c2445059975fa2953cd9cc7bd3cada81313fb4d9916aab7563e3d5ed
-[C'est le d]
 
-[On récupère ensuite sa clé publique pkB sur le terminal]
-[Maintenant qu'on connaît N, e, d, on peut en déduire sa clé privée skB]:
-[Code test2.py donne la factorisation de N=p*q]
-[Code test3.py donne N, phi(N) et d à partir de p et q]
-[Code test4.py donne la clé privée de terrymichel]:
------BEGIN PRIVATE KEY-----
-MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDQ4o+MQYLsxmqE
-mxhg7lxIrjGQqZOt+Gmh4ooCUVebKxr5zL35agV8s4HPWooujNSzWRpPg6ScLUh8
-N/3zHUqs/LedjkbIh3LZNuh6rl8D4Zk3imZ50D2QNYgeFpTq2g5vUmT/nfEaREES
-HAmO8FqFujeSiADHik6IUGDlI1Dv1mNsJ0J55TKHiAcR4bMDNPY+fiEz9MOhJlvq
-CyJiIj+aVSBraGpnlHJVKAmKl5yknDCb9sz/CJZe4aAY6L7khJ7eV4hKdgrMzbBE
-bMD1uzOL+jQpGAovhZPaOvGllvv4ashE+FZbQFVJoM+L7m77yJkcDZgHRcJOf7Ai
-XI6B/ycJAgMBAAECggEAKilQqBKhBoGWBmX3qbjyz4i5YGWZ9Udqqs465PTeJeex
-bjIxNiJ8MQtabCvuMC8kz35wnRQJKazKMKhsjaGf7QKlXRvWlashN06p5flEHFhw
-wJEi1ft+MZlcfBY6wJx6xWVwFVgfzhlwuOMH2t4Qp2VKyjzBS4VTDJiMtjNGpuHV
-lpnk0jJxDGNVkaBuxO4ixHreQe7t/l9jwmgFs/ulOZE1Oujhv3nGZ7upHEGGbARH
-KfLH9j5m7D7ChJXQy6NSX06gdI06pUksXrCDghcjQWh52eSOgQKa44UewfFXZJZ7
-BZ1wW5HHYsPAscSmWZnHKFjVVtKAsLsU2cxlee02sQKBgQDhq9EidH5EvviZKjAT
-tPHfee0rJ3AT1qftx8uF8E8FexyhSipH4BdwyRXumn1cGtuq6zio+hvifUMlOc63
-pGMgOHndfybZrRyX4GjE9ZVtLkpe6WIrojNxUxG7rawGdpJv0yxsutPjyU1NMg+0
-mevSkp9ON46x7Gd4RM0GISNzIwKBgQDs9TfyHUJT6XPpDFkiGtfhOdAnRGLvyP8M
-BMJHmfnBLoBHxz/nEfyfDOvFKuJi9NZePq2JpAl6KJKo8ayKqs07Z2AcN87IGuVQ
-512pbfF++2EeqqWHH8MUjYIwpSm2xDpbJu4+woVQDIkC0yXd8rJqr4R5CgJRRNZj
-Rr0kZSQl4wKBgDH4iebHRO6UGxhPbzXt62FA7nOP2BGMhsLwavDNtbHRARX2BkbE
-KGyhGmora3bpu5qtW26Pc31Dn4quskeX7xtDZjjV3xR0cNBwsMJsXxo+FdnOdB6V
-XC7L5jFY067asrJwYHXzKNhXyvY9D50+OCn4ra30P3TGlGLdWUjyLZdhAoGAVFEN
-j0GKEIHJlOun69LRbns77j0PV3OWDZjD6OaJUIxTaTclLfvggFgArTANTlkAzphO
-9+M+3BED3sngM5eDX9fxAxl4owuu/ZLWaSuN+zlH3bmrHOHYcL/Jy7V5mmdIvJal
-v/9HoKxVNIQdvVRW2E+MO+Wr3W85Oio5s3Gp4zECgYBoiZG5ooDlmfQW+0EwDP8k
-7k9MFXgQ1HLNTCVU69i8/jD7JT3KqsqnV33c7d+Gou5Q/HJELRyp2fyQiJcdziH0
-Wlt1sk1FtD2KrCl37tsO2/E5CDFXP/YlOJy/T/Bc51RMPZjsLQ/+/GyIFbBZ6zf9
-wgcM14V3PE6kfZGSSpEL5Q==
------END PRIVATE KEY-----
+[C'est le "d" de la clé privée RSA de terrymichelle.]
 
-[On upload data la clé publique pkB sur notre carte étudiant]
-[On badge dans le couloir turquoise, mais l'individu B a été révoqué]:
+[On récupère ensuite sa clé publique de l'individu B./Keys/PublicKeys/pk_atriumB.pem sur le terminal.]
+[On upload data la clé publique pk_atriumB.pem sur notre carte étudiante.]
+[On badge dans le couloir turquoise]:
 >>> carte
 La porte ne s'ouvre pas. Une lumière rouge est allumée sur le lecteur de badge.
 Le micro-écran LCD affiche "terrymichelle's key has been revoked (reason: secret key lost)".
 
-[Comme on sait que l'individu A a le même N (et sûrement des p et q différents) de l'individu B]
-[Lancer le code test2A.py pour récupérer la clé privée skA de l'individu A dans skA.pem]:
------BEGIN PRIVATE KEY-----
-MIIE2QIBADANBgkqhkiG9w0BAQEFAASCBMMwggS/AgEAAoIBAQDQ4o+MQYLsxmqE
-mxhg7lxIrjGQqZOt+Gmh4ooCUVebKxr5zL35agV8s4HPWooujNSzWRpPg6ScLUh8
-N/3zHUqs/LedjkbIh3LZNuh6rl8D4Zk3imZ50D2QNYgeFpTq2g5vUmT/nfEaREES
-HAmO8FqFujeSiADHik6IUGDlI1Dv1mNsJ0J55TKHiAcR4bMDNPY+fiEz9MOhJlvq
-CyJiIj+aVSBraGpnlHJVKAmKl5yknDCb9sz/CJZe4aAY6L7khJ7eV4hKdgrMzbBE
-bMD1uzOL+jQpGAovhZPaOvGllvv4ashE+FZbQFVJoM+L7m77yJkcDZgHRcJOf7Ai
-XI6B/ycJAh4zg1Q7Hy5VE8NCJKRBFWdnAAAAAD774BNEhQz774ECggEAPaMe/Sby
-sjWADzxI1RDMkOwG+6wbCsQEptZhS9UJFAwH7uBvxWAeIPy6aFvK295WF+/EiBrH
-4076XVel1Z9FwTO4X2JhUid8syPaGz8bO9ombnX5l9GLpyFZx9SxfOaTrYoz8xdl
-sx78IlDDuXcAlhnEtq0fARA3I5lCWuWYAnKYqR2UzYE4l7JS2lYugSOJBeGg/KIW
-HTcLW8vjCDdWYQBjuJ4V02apSTpMXzAZcW7SRjjvQspZ7eWvYWTXj25UQ3WWmYT8
-NYYYfqd6xxucNW7jzUHz2KSmxAfo9amLVPxQIRiLaAqwaX1ejuoE7yIFg9iPib4B
-hE27S1pD4NlefwKBgQDhq9EidH5EvviZKjATtPHfee0rJ3AT1qftx8uF8E8Fexyh
-SipH4BdwyRXumn1cGtuq6zio+hvifUMlOc63pGMgOHndfybZrRyX4GjE9ZVtLkpe
-6WIrojNxUxG7rawGdpJv0yxsutPjyU1NMg+0mevSkp9ON46x7Gd4RM0GISNzIwKB
-gQDs9TfyHUJT6XPpDFkiGtfhOdAnRGLvyP8MBMJHmfnBLoBHxz/nEfyfDOvFKuJi
-9NZePq2JpAl6KJKo8ayKqs07Z2AcN87IGuVQ512pbfF++2EeqqWHH8MUjYIwpSm2
-xDpbJu4+woVQDIkC0yXd8rJqr4R5CgJRRNZjRr0kZSQl4wKBgQDfs9iHQom4z8Bi
-CoBGKtrVK6PlpG43GZeLGGax+HRdGC6paV2/Iw33PqoorHg0RBqOTl1gWqGKeocD
-Px+lSri+SvJWorYQXr38rxaicBsEbpnGUZCHoFdQNKkmd59BQyYqEGb3u1OJREDf
-0zpCf+IDE0B6z6WTEdu1Z7n5RvGxjwKBgQDUn2eq7gXAZk1CAJTwMVwEwMZN+Hyy
-JehMG32GcB4JDkrfy+2IePHlN/OkidoPGywQjiE4qL4aFgBny3fnJLLS2+Z0/1ls
-GrCZMMFISIrOV0B6Xb7YZ5ze7rvuEvNsQQyPjIX7xdLmT4hBjKOiGvkojSZPv6Cp
-Hjao7iL8+tZV4QKBgGiJkbmigOWZ9Bb7QTAM/yTuT0wVeBDUcs1MJVTr2Lz+MPsl
-PcqqyqdXfdzt34ai7lD8ckQtHKnZ/JCIlx3OIfRaW3WyTUW0PYqsKXfu2w7b8TkI
-MVc/9iU4nL9P8FznVEw9mOwtD/78bIgVsFnrN/3CBwzXhXc8TqR9kZJKkQvl
------END PRIVATE KEY-----
-
-[Upload en data la clé publique pkA de l'individu A]
-[Retourner dans le couloir turquoise et badger]:
+[L'individu B a été révoqué.]
+[On récupère la clé publique de l'individu A ./Keys/PublicKeys/pk_atriumA.pem sur le terminal.]
+[On upload data la clé publique pk_atriuma.pem sur notre carte étudiante.]
+[On badge dans le couloir turquoise]:
 >>> carte
         challenge: riven tying motto droid inner
 
         signature:
+[Il nous faut la clé privée de l'individu A.]
+[Comme on sait que la clé privée de l'individu A a été construite en RSA avec le même N que celle de l'individu B qu'on peut trouevr à partir du "d" trouvé par terre, on va faire une attack par module partagé.]
+[Lancer le code shared_modulus_attack.pem pour obtenir la clé privée de A et B avec la commande suivante]:
 
-[Il faut signer ce texte avec la clé privée de l'individu A skA qu'on vient de trouver]:
-printf "riven tying motto droid inner" > sign_challenge2.txt
-openssl dgst -sha256 -sign skA.pem -out signature2.bin sign_challenge2.txt
-xxd -p signature2.bin | tr -d '\n'; echo
+python3 test7.py 
+
+[Retour de cette commande]:
+
+nA: 26369288694727461965859708590289658091463732175154308032138028774380676409300900540041160821083421691174067059830604832522548869864198047056431133019235232451549365591799423959140055261430023473294644129834569855113482917282005527873469511429699958233295085969252631487167667017441819506695833869358542769646874235907157769655269237967572699394977581899697144662410505550970106875050305797439659618621848300000752041676321106955498320153065266126654383080277859247453296995289780021183556824372104786636646373588539758168252467305981051351214112809259690598880084730214415703114626961714763354994387473322771084158729
+
+nB: 26369288694727461965859708590289658091463732175154308032138028774380676409300900540041160821083421691174067059830604832522548869864198047056431133019235232451549365591799423959140055261430023473294644129834569855113482917282005527873469511429699958233295085969252631487167667017441819506695833869358542769646874235907157769655269237967572699394977581899697144662410505550970106875050305797439659618621848300000752041676321106955498320153065266126654383080277859247453296995289780021183556824372104786636646373588539758168252467305981051351214112809259690598880084730214415703114626961714763354994387473322771084158729
+
+eA: 355529687253513778402431023126958456006159727346897464347498693183401857
+eB: 98669952307735697561566019299547104474489895689553484676473939076676820135809
+
+[*] Factorisation de n en cours...
+phi(n): 26369288694727461965859708590289658091463732175154308032138028774380676409300900540041160821083421691174067059830604832522548869864198047056431133019235232451549365591799423959140055261430023473294644129834569855113482917282005527873469511429699958233295085969252631487167667017441819506695833869358542769646549366743941327048416485326950625738725245164262482710962574014962702979049739263433810788815577683701297796890044950072312908757435842321983987195025085462297656397670985949252982038800671170488179517569324031808551794409938755830644814734133080842931667027423267302555014111278537270511975524409563118276100
+
+[+] Succès !
+Clé privée A écrite dans: ./Keys/PrivateKeys/sk_atriumA.pem
+Clé privée B écrite dans: ./Keys/PrivateKeys/sk_atriumB.pem
+
+[Il faut signer le challenge avec la clé privée de l'individu A qu'on vient de trouver avec les commandes suivantes]:
+
+printf "riven tying motto droid inner" > ./Texts/sign_challenge_atrium2.txt
+
+openssl dgst -sha256 -sign ./keys/PrivateKeys/sk_atriumA.pem -out ./Binary/sign_challenge_atrium2.bin ./Texts/sign_challenge_atrium2.txt
+
+xxd -p ./Binary/sign_challenge_atrium2.bin | tr -d '\n' > ./Hexa/sign_challenge_atrium2.hex
+
+cat ./Hexa/sign_challenge_atrium2.hex
+
+[Retour de ces commandes]:
+
 90c351145951d04c4d1f82f9a1ce3f50193be8ab4199b2f0be5591446f82955bd751e4005696277306d7c625a9e7ecf6ddab942e502547822ae067349512a9f12633fe9c97a1f0f7708173f0084eb2c1941389932e606070c4a43a5fb1d2d4425c76ebd1c51c684e57c996c5e29f60238ad3e42b2b24b0545eb3b2facd3e53735a185928f5e3b422c06185b00941fa32db32018c5e1a9f70daca099d4ba46d33720037498dfae9ce7de5d1ebac9f9d4155915cdb963ec2d4bf8c667842e5fbb54efe34b56e3d371790d8a2fa420c94353bfbfd018b676b322f03df859d9e6ec5ba321c5c2087d4ff47570730ea6ce6d5245c77a942efe2ff098b43c7ee840812
 
 [C'est ce qu'il faut mettre dans le champ signature quand le challenge "riven tying motto droid inner" nous était donné]:
@@ -1046,32 +1010,14 @@ xxd -p signature2.bin | tr -d '\n'; echo
 
         signature:  90c351145951d04c4d1f82f9a1ce3f50193be8ab4199b2f0be5591446f82955bd751e4005696277306d7c625a9e7ecf6ddab942e502547822ae067349512a9f12633fe9c97a1f0f7708173f0084eb2c1941389932e606070c4a43a5fb1d2d4425c76ebd1c51c684e57c996c5e29f60238ad3e42b2b24b0545eb3b2facd3e53735a185928f5e3b422c06185b00941fa32db32018c5e1a9f70daca099d4ba46d33720037498dfae9ce7de5d1ebac9f9d4155915cdb963ec2d4bf8c667842e5fbb54efe34b56e3d371790d8a2fa420c94353bfbfd018b676b322f03df859d9e6ec5ba321c5c2087d4ff47570730ea6ce6d5245c77a942efe2ff098b43c7ee840812
 
-Une lumière verte s'allume sur le lecteur de badge.
-La porte vitrée se déverrouille et vous pénetrez à l'intérieur.
-(la prochaine fois, au lieu de refaire tout ce cirque, il suffira
-(d'utiliser le lecteur de badge et ça suffira).
+[security engine] rsa.reduction:52:1|4ddb32dbdce721e235de3062ab0c652671c08fd6a26524eb8359b2c9472971a3           [DOUZIEME FLAG !!!]
 
-Vous êtes dans le bureau d'une équipe de développement.  Le tableau blanc est
-rempli de diagrammes représentant des relations entre des classes dans du 
-code.  Il y a aussi tout un fatras d'outils, multimètres, etc.
-
-Ici se trouve une firmware update key.
-Ici se trouve une spécification du journal des évènements de sécurité (partie I).
-[security engine] rsa.reduction:52:1|4ddb32dbdce721e235de3062ab0c652671c08fd6a26524eb8359b2c9472971a3   // 12è flaaaaag
-
-
-
-
->>> regarder firmware
-Elle est écrite sur le coin d'une enveloppe.  Elle dit :
-                    firmware update key: 35ba26a3b0297f0d
-
-[Peut-être utile pour la suite...]
+### FLAG 13: 
 
 [Aller dans le couloir jaune de l'Atrium.]
 >>> conseil digicode
 Le panneau en liège montre un message chiffré par les deux clefs publiques.
-Ce serait sûrement utile de le déchiffrer.  Mais cette fois, aucune clef
+Ce serait sûrement utile de le déchiffrer. Mais cette fois, aucune clef
 secrète n'est opportunément disponible.
 
 [On cherche un Plaintext qui a été chiffré par ymolina et jillian47 à partir de leur clé publique respective.]
@@ -1113,7 +1059,6 @@ locaux.  L'un d'entre eux dit notamment :
                     -----END PUBLIC KEY-----
 
                     Signatures:                 NONE
-
                                                                    UGLIX v4.0 beta
                                                                  (Service terminal)
                     Active user: AdrienPanguel
@@ -1156,51 +1101,27 @@ DIGICODE = c4b844a35ba8ecb20d40026a7c8903d0
 
         CODE: :        c4b844a35ba8ecb20d40026a7c8903d0
 
-Le verrou se désengage.
-
-Vous êtes dans la salle de travail de l'équipe des responsable de la sécurité
-informatique.  Un vieux carton de pizza traîne dans un coin.  Il n'y a pas de
-fenêtres.
-
-Ici se trouve une spécification du journal des évènements de sécurité (partie II).
-Ici se trouve un terminal d'administration du security engine.
 [security engine] rsa.shared:52:1|6a2190aa0779831e8f3a87a922a01c3c05bc55fe94f22b99b6cf9c8b22d2a148      [TREIZIEME FLAG !!!]
 
-
-
-
-                                                                   UGLIX v4.0 beta                                                                   
-                                                        (Security Engine Monitoring Console)                                                         
-
+[A partir de ce moment, JE N'AI PLUS ACCES AU SITE INTERNET OU JE DEPOSE MES FLAGS !!]
+                                                                   UGLIX v4.0 beta
+                                                        (Security Engine Monitoring Console)
                     Active user: AdrienPanguel
 
-                                                                      Main menu                                                                      
-                                                                      ---------                                                                      
-
-
-
+                                                                      Main menu                    
+                                                                      ---------
                     1. Monitor active threats
                     2. Exit
-
-
-
-
                                                             +--------------------------+
                                                             | new information acquired |
                                                             +--------------------------+
 
-
-
-
-                                                                   UGLIX v4.0 beta                                                                   
-                                                        (Security Engine Monitoring Console)                                                         
-
+                                                                   UGLIX v4.0 beta                  
+                                                        (Security Engine Monitoring Console)
                     subject: AdrienPanguel
                     nature: threat
                     level: medium
                     objective: monitor
-
-
 
                     First name    : Adrien
                     Last name     : Panguel
@@ -1211,13 +1132,10 @@ Ici se trouve un terminal d'administration du security engine.
                     Website access: ALLOWED 
 
 
-
                     subject: AdrienPanguel
                     nature: threat
                     level: medium
                     objective: monitor
-
-
 
                     First name    : Adrien
                     Last name     : Panguel
@@ -1227,10 +1145,8 @@ Ici se trouve un terminal d'administration du security engine.
 
                     Website access: DENIED
 
-
 Related security events
 =======================
-
 Entry in security log                                                                             subject           date
 ------------------------------------------------------------------------------------------------  ----------------  -------------------
 pki.tutorial:52:1|8d3a204ece50cdea3d35d5c16bca71d7961841a01f1071dbafd6dc5a441da049                AdrienPanguel     2026-02-02 15:57:35
@@ -1247,13 +1163,8 @@ web.of.trust:52:1|f314e4db3ff276736a12d4109325c66c5aab06318dce9fb8eea4ddfa36b2ad
 rsa.reduction:52:1|4ddb32dbdce721e235de3062ab0c652671c08fd6a26524eb8359b2c9472971a3               AdrienPanguel     2026-23-23 17:34:34
 rsa.shared:52:1|6a2190aa0779831e8f3a87a922a01c3c05bc55fe94f22b99b6cf9c8b22d2a148                  AdrienPanguel     2026-24-24 20:04:17
 
-[press any key]
-
-
-
-
-
-
+[Mes flags sont maintenant enregistrés dans ce terminal.]
+[Aller à la bibliothèque et lire les livres "spécification des enclaves sécurisées Uglix Secure Vault (tm)" et "tome VII : chiffrement avec clef et IV explicites" à la bibliothèque.]
 [Retour au labo salle RC-19]:
 >>> conseil terminal
 Si on résume la spec, on trouve que : 
@@ -1280,15 +1191,7 @@ Il n'y a que 65536 grâines possibles, donc ça prendra un temps infime.
 >>> conseil terminal
 C'est tout !
 
-[Avant ça, j'ai récupéré les livres "spécification des enclaves sécurisées Uglix Secure Vault (tm)" et "tome VII : chiffrement avec clef et IV explicites" à la bibliothèque.]
-[Lire le texte ""spécification des enclaves sécurisées Uglix Secure Vault (tm)".]
-[Aller au labo dans la salle RC-19]:
->>> RC-19
-Vous êtes dans un petit bureau de chercheur.  Il y a une machine a café et un petit 
-canapé.  C'est très cosy !
-
-Ici se trouve un terminal défectueux.
-
+[Aller au labo dans la salle RC-19 et ouvrir le terminal]:
 >>> terminal
 
                                                                    UGLIX v4.0 beta
@@ -1368,7 +1271,6 @@ python3 key_expansion_seed.py
 
 Cahier de manipulation
 ======================
-
 09:00 Démarrage de l'accélérateur
 09:27 Puissance nominale
 09:45 Première tentative de broadcast à cette puissance
@@ -1394,7 +1296,7 @@ Cahier de manipulation
 18:30 Nouveau mot de passe pour la salle d'expériences : 3f478ea5e21e3b82c68d2fc33ce50587
 18:45 Fin de la journée
 
-[Noter ce mot de passe en hexa "3f478ea5e21e3b82c68d2fc33ce50587" et l'entrer comme Code dans le digicode dans le sas sécurisé]:
+[Noter ce mot de passe "3f478ea5e21e3b82c68d2fc33ce50587" et l'entrer comme Code dans le digicode dans le sas sécurisé]:
 >>> sas
                 0 1 2 3
                 4 5 6 7
@@ -1403,17 +1305,110 @@ Cahier de manipulation
 
         CODE: :         3f478ea5e21e3b82c68d2fc33ce50587 
 
-Le verrou se désengage.
-
-Vous êtes dans une grande salle avec du matériel expérimental partout.  Dans un coin, 
-vous voyez une porte qui donne sur une autre pièce marquée "téléporteur".  Vous en êtes 
-séparé par une épaisse paroix métallique avec une petite fenêtre.  Des indications vous 
-informent qu'un système de sécurité empêche l'activation du téléporteur si un être vivant 
-se trouve dans la pièce en question.
-
-Ici se trouve un panneau de contrôle.
-Ici se trouve un pied-de-biche.
 [security engine] secure.vault:52:1|b0839215cb365aed8c7c033ef9e056202b3d847a5cbbd9db7ac9c8f0ad851aff    [QUATORZIEME FLAG !!!]
+
+### FLAG 15: Théorème des restes chinois (Small public exponent)
+
+[Aller à la bibliothèque et regarder le distributeur]:
+>>> conseil distributeur
+Il y a une commande ADMIN, qui demande un mot de passe.  Vous avez ce mot
+de passe, mais chiffré par trois clef publiques différentes.  Commencez
+par récupérer puis examiner les trois clefs publiques.  Qu'on-t-elle de
+spécial ?
+
+[Lire le livre "Manuel_d_utilisation_des_distributeurs_automatiques".]
+>>> lire manuel
+Cet épais manuel (environ 570 pages) décrit de manière détaillée toutes les
+procédures de remplissage, nettoyage, paramétrage du paiement, etc. pour les
+distributeurs automatiques de friandises qu'on trouve partout sur le campus.
+Version courte : pour accéder au menu de réglage, il suffit de taper "ADMIN"
+puis d'entrer le mot de passe.  À toutes fin utiles, voici le mot de passe
+(chiffré avec les clefs publiques des trois développeurs) :
+
+    - davidrodriguez: 09dcdd93b468ca6617dcdbfb2d167673cff9c0be2042046c22e790cf1bbb3720868784d624592698080a0d7ff00c49b6377b8dbf48a9c2d6a71c8939086e8d4963480e031c0cfc164dfbe746bf265d86fcc1a2e3fe1eef0370d2e5f270a0741fba6ab98dd5a7023708672831e50f68398210807688478ca897855432d090bae43c146848af5c58f1c6e331f2f39f791bdc0c80deb175104b1826e6216b7f4b5362badf620ced2d8450a99a7a978924db24942a5168c786203d83b9128c716b5a2b98ef4c754688aacbd4cf621fcdf54e2521a40c74264201d198176e15ddcc15ce7956bf504205ed753b16f948020873c8a60d4d7be5a6ab9ea765c8441dbdc1
+    - jbowen: 99a2bb1d4e1cad08900b41225471058ddbab94aec8bbd93d6870c185027f3b305e9e66cb25f6e51f73e525c3d43163115336bed8a1fa94db98643125959dc1850c81a60fdf6284c8ff4b89bbf0a3b9ad896142727165138f206875c90be9405b7d5b6a5c4df9b41d21221d060ee070eaf770c4c9f11240bdfd320f621fb43bad8a87df3cbcdbc6887de2adc43bf4dab77f6f745134e33cf62e7ecd0102b073956ed9a4b88bce3583e29976c97437f8449d1b693b2857ddde8ee77f2ca382164779a38fac889202c9d2b87fbb279ca95a435f0ef42d8c18d494e33b9afa16799f130d31d929124cde4d5384b4b227f147546483b3ae9cef044b51f331ed89b20e
+    - samuel83: 2c59b0e207b3c8c223eb2753dd9cc7936d2c84d8dd472944dc46d35c96532fd5877bb4efa0060669d0a15d8ef1bb2dd823de007f26c45e6595c7048e85cef1c246bb593f8c4dfd286113f48b58a4592a6959ecef6dbf3581df3e8f9b677ba3ab3ea113f10f1cddd6ce44809e3b05e667a1b2b01f4a5389a018f9936433e04ea37bee6d16d079cd3d1bd01cfc07d65f5a2e3bd58faa1e78b380abea54196fbdf36d3b5f9f19ad4991022032d72f126e6391bd2411dc5366c0de9acb646bdcef1d2f63e72bd5953d77a3f5727907e63b51040ad9c32ee63cd029c8af9556c54a928c9e2448e365918d9ba39fa3e616b1ff4de25baa82a34ff6aff36a69fedb63de
+
+[Enregistrer ces Ciphertext dans 3 fichiers ./Texts/ciphertext_distributeur1.txt, ./Texts/ciphertext_distributeur2.txt, et ./Texts/ciphertext_distributeur3.txt]
+[Récupérer les clés publiques de ces 3 personnes dans le terminal.]
+
+[Extraire le "e" et le "n" de chacune de leur clé publique avec la commande suivante]:
+
+openssl rsa -pubin -in ./Keys/PublicKeys/pk_distributeur1.pem -noout -modulus | sed 's/Modulus=//' | tr '[:upper:]' '[:lower:]'
+
+[Retour de la commande]:
+
+bee9bd6750beb5a56d88685d199e193e3ec8e38e6af70021a47e091dbb5c41f7d832ca99708ef1a99813fbd3986c5666ddb63ef11631272a4851df3f99e701fc7e1de1a85c5b5c187850cae49144bde455a9100cad8bd137b5e0459cbd2a3b75b06cd243d8862dfca0098bbe411b1a63e74f913636027efb9138d4f011f597a5d3e2383a7a4bfb00df37941fe403e495c8084d37bc3155e7d9c007f07721e28f5cb557a1d2da8b80f5153f11f7e2d01f9d6cc9cd7126011972d3d714e3593161b196ccbbada38f5bbe9964b7080695951e941dc6712687c8a0c2982be3388d3f4696021948bd30c8bf4dfe87233d30b3379a2791a2198089292faf35f48e8c35
+
+[Idem pour les 2 autres]:
+
+openssl rsa -pubin -in ./Keys/PublicKeys/pk_distributeur2.pem -noout -modulus | sed 's/Modulus=//' | tr '[:upper:]' '[:lower:]'
+
+aff0cca51213ed42b68971b60d53588b131f921679017d9060591d17cb1a75fffb527b22f71b08a1f973e845781535ce6d3bc35b4225dfb607d4326f53092d44cb478a0521cb610d6e390a54156b4898ddd30452bb46f3cc718e4eb40085aab82d8940eb4fd9e4a3d005ca437214cf86c8b8b6221a079692b82ff7bfbc3f14b1dffac2b18bfa5decb89630b5416c1c1c0ad109908ba678cd1248f827e3140992f20df5642006df47a7f659e1cd42c73cb93607bb03eff97ff306662199befcdd559ee96c3a6fedad1e91bc36ccf5239e2a498f6180d49d4e478d002c52beae5356485e18666858174de2fb3794ecf5e0ce58af3dbeb480c156c1aae8056fbe27
+
+[Et]:
+
+openssl rsa -pubin -in ./Keys/PublicKeys/pk_distributeur3.pem -noout -modulus | sed 's/Modulus=//' | tr '[:upper:]' '[:lower:]'
+
+b8b7f7dbd82d6a733a8faed66d8dd6c3098f4b78270fa37d28121791a3d7e871c80cd60ec9688ffa02ca8d544dd84bf8526eb24971d1eab0c8d2485e8cecb0916596b7c268a54632e589ef244f50a08d68a7d66eb3288899007469a57c60ed3529eafae7ceea65e26f3586e72a902052a48f737ee36acc0df3b4d0582a33e6de996f520b49d5a1ca468fea773f6c86b35b3a0c8f765325a78a17022352b7e30aef593021093d687d01c9ae24fce18b1dc3786a7bd4fe88dfc1767a3e1ef220bb7af47e91cfc1db73bf2ad7a58eff1c1f0c4d38733a781d9d138969bcc3d394b9893fd2eb0084d4dd11c474821e7bc7be4f2629d98dc92f2a379ce9cf08a5ba11
+
+[Lancer le code decrypt_ciphertext_distributeur.py avec la commande suivante]:
+
+python3 decrypt_ciphertext_distributeur.py
+
+[Retour du code]:
+
+[*] Exécution du Théorème des Restes Chinois...
+[*] Calcul de la racine cubique...
+[*] Valeur brute de m (hex): 0x298bbf59056e63122c96e729b13807e06bdab680f449926ef429bbf861373f03de877f4a29993716e33e96c99a6057b1b5043310c64dbcd0744c24484509f5a7b99f46ff963747585d9ef483aa2d6fe60e4f6708580b08ba6977fb61238eb8a3e4fd271ac17ba741bf633f8b405f2d22131b894f182d6d30d8a30575a2f3bd915c3fbaeb9eb857411be31c12ea70953f36f9b77eb4b76f5786be6386bb2b19b95a2445e0845f3d343d993442021df1d406ded10dd182780a3824c83d96498375c0ca5ab7cee36f4a5bd2213666cec006d6f74206465207061737365203a206264333466313963363431346134646430366132376465353438386633356432
+
+[+] Résultat trouvé :
+mot de passe : bd34f19c6414a4dd06a27de5488f35d2
+
+[Ce mot de passe est à entrer dans le distributeur avec comme "CHOOSE YOUR PRODUCT": "ADMIN"]
+                    PRODUCTS:
+                    =========
+
+                     1 : Chips
+                     2 : Snickers
+                     3 : Twix
+                     4 : Oreo
+                     5 : KitKat
+                     6 : M&Ms
+                     7 : Crunch
+                     8 : Biscuits diétiétiques Gerblés
+                     9 : Madeleines
+                    10 : Barre de chocolat noir
+                    11 : Paquet de post-it
+                    12 : Boules Quiès XXL
+                    13 : Boules Quiès XXS
+                    14 : stylo bille ``top budget'' (promo)
+                    15 : Walkman (new)
+                    16 : Écouteurs bluetooth
+                    17 : cable USB
+
+CHOOSE YOUR PRODUCT:
+$$$ ADMIN
+                    password:                   bd34f19c6414a4dd06a27de5488f35d2
+
+                                                   +----------------+
+                                                   | ACCESS GRANTED |
+                                                   +----------------+
++------------------------------------------------------------------------------+
+|  Cher opérateur,                                                             |
+|                                                                              |
+|  Malgré tous nos efforts, nous n'avons pas réussi à terminer à temps ce      |
+|  module d'administration.  Nous vous présentons nos plus plates excuses.     |
+|  Pour vous dédommager, nous vous prions d'accepter, en guise de cadeau,      |
+|  un produit sélectionné aléatoirement.                                       |
+|                                                                              |
+|  Très cordialement,                                                          |
+|  ----                                                                        |
+|  Les développeurs de VendingMaster Inc.                                      |
+|  (bientôt en burn-out)                                                       |
++------------------------------------------------------------------------------+
+
+[security engine] rsa.crt:52:1|4296c6ee787bac7de665521d490c63dc61ae9c81de6688266a0577c72448a498         [QUINZIEME FLAG !!!]
 
 
 
@@ -1422,21 +1417,6 @@ Ici se trouve un pied-de-biche.
 
 
 [Aller au CICSU]:
->>> w
-Vous êtes dans une espèce de sas qui donne sur le foyer de l'auditorium.
-Mais vous en êtes séparée par une porte vitrée qui est fermée.  À travers la
-vitre, vous voyez que le foyer est complètement vide.  Sur le mur, une grande
-banderole annonce : ``bienvenue à la fête des 25 ans de l'ISIR''.
-
-Ici se trouve un lecteur NFC sur le mur.
-
-[security engine - INFO] current security objective
-                             policy: EMERGENCY
-                             subject: AdrienPanguel
-                             objective: monitor
->>> serrure
-Il n'y a pas de SERRURE
-
 >>> lecteur nfc
 Vous refaites tout le tralala de la dernière fois.
 
@@ -1459,16 +1439,6 @@ Ici se trouve un Robot gardien.
 >>> conseil
 Je n'ai pas de suggestion pour le moment.
 
->>> conseilborne
-Il n'y a pas de CONSEILBORNE
-
-[security engine - WARNING] new security event
-                                subject: AdrienPanguel
-                                nature: unauthorized physical access
-                                location:
-                                  floor: SB
-                                  room-name: SB_CICSU_FOYER
-                                severity: medium
 >>> conseil borne
 Vous devrez trouver des "firmware update keys" ailleurs sur le campus.
 
@@ -1499,9 +1469,6 @@ Ensuite, bien sûr, vous pourrez l'emprunter.
 
 
 
-
-
-
                                                       UGLIX v4.0 beta
                                                  (Firmware Update Station)
 
@@ -1512,11 +1479,30 @@ Ensuite, bien sûr, vous pourrez l'emprunter.
 
 
 
-
-
-
-
                                +------------------------------------------------------------+
                                | Firmware updated. New command activated: ``#!item-debug''. |
                                +------------------------------------------------------------+
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[Au RC-07 de l'Atrium.]
+>>> regarder firmware
+Elle est écrite sur le coin d'une enveloppe.  Elle dit :
+                    firmware update key: 35ba26a3b0297f0d
+
+[Peut-être utile pour la suite...]
