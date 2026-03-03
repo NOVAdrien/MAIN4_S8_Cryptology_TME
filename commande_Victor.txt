@@ -1,0 +1,1028 @@
+openssl pkeyutl -encrypt -hexdump -pubin -inkey <fichier contenant la clef publique>
+
+
+openssl enc -d -base64 -aes-128-cbc -pbkdf2 -pass pass:"bar" -in foo
+
+
+
+[8c5f14846252ba59e60665ba122fc744] {"key":"gQ8b2vVi6Znln/ibYqUOQUORIOnH2RdZrmwSIR/apNyTuQXTdU9nnucydkOnQAW3Hw4cJnzw1PISrJZiFC+kBHO9YjsI2kGl6dbxsvLxZY1LPfxu0CnRxI6s3bYhKnM3fbDr+YWrnliNkif/EOk38ZTl3828zJ/DCQDEs9f1K7MLPXKmmWeyRIJzORt7q1b6aIXupxBTY939vTeTbf4rEw7P2ug7BP6Jfw3qGErH4BdcgRRjqpffm36fnXfa9C6K/rzNmcstx2b2e9rhEhhYVzqxQgbQ8DW1pkkSWh6qiHaiFB2z39HwsErvBEmIucoN9YtUKrpwWQL4JXY6H7QaAw==","message":"U2FsdGVkX18bmQ+Mkq3rcH8IU6Csa1Fgt67Iza8atoPbvQf+XP0enGQ3f311D5nL"}
+
+
+
+
+Seance 2:
+
+2EME ET 3EME FLAGS
+######################################
+
+Tutoriel : 
+read openssl manual : commande importante : openssl pkeyutl
+
+Public key associé au username pki_tutorial : 
+
+Username:                   pki_tutorial
+
+                    Public key:                 
+                    -----BEGIN PUBLIC KEY-----
+                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApJyzQZNCJtAGEbNniX0B
+                    I6mZ2UL2H4hjRxalHi/AZf56p/kHgB8fDC/jCwQhqmjm+yGrZHZyqQ8HS3n8Wd1Y
+                    nof/eSqPnIEmVQjiQ7XW6pJXsloIzDWs0IX6HigPcv+hGgsWPcNu4Eeco2rkVEeo
+                    g4rXFJixu9m5hlb1Y4cqY/8ZBmgqXP2hJD8QGOuE8p5wJukNbPHBjo3wXvz+Uvg6
+                    dEfRzHhgQOE0DXsFqnLTMxdYKXqakm3fCaQi5g7cwgQj/7p43mkQKZA/QxlVNf68
+                    UvB1OgxmazOzz8BZNtCYYR49FsR+heHNs5O0HAK1NiJxORiWBgqDVQPOuedaslYu
+                    HQIDAQAB
+                    -----END PUBLIC KEY-----
+
+commande pour encrypt "I got it" : 
+
+openssl pkeyutl -encrypt -pubin -inkey pki_tuto_key.pem -in message.txt -out ciphertext.bin
+
+commande pour transformer binaire en hexa:
+
+xxd -p ciphertext.bin
+
+TUTORIAL COMPLETED 
+
+commande Création de ma Key privée:
+
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out mykey.pem
+
+commande Création de ma Key Public :
+
+openssl pkey -in mykey.pem -pubout -out mykey_pub.pem
+
+2 FLAGS OBTENUS :
+pki.tutorial:30:1|a9017dd1036b07b18e73af98b1529771c91811442397c9fe4d1f1fe902e23f11
+pki.upload:30:1|7547383418ec1d454c1c0850c5f8d1a6cfd092e6894c894240c6a5f020b23042 
+
+#######################
+
+
+4EME FLAGS
+######################
+Signature avec ma Private Key :
+
+code signature.txt
+
+openssl dgst -sha256 -sign mykey.pem -out signature.bin signature.txt
+
+xxd -p signature.bin
+
+07c184badb4aa4a7768ee9290363dbe398357bed2cba569a9a4e285bb284
+b6445b37bc6c2f085ca323cb78a707facddc3f829dcb3efac5450936e9fc
+99aca168000dffee659aff99aa6587cc67146d094f7421c8cc77479b14aa
+a59ded578a1101edad60647f0348e9f3494c4fd6a7f7c272a6c9766672b4
+5e1e3c5a38e196cbf6c071deddd819b7b080a640b0ad2865b9dffdc4d5f7
+30170bbe9e2f5d78714728fea768477d49f1f6366fe518eb7351778e8517
+1e7e42e95d8065b040fda5e668c090f3702f7c9f7260e8f3966f87be402b
+bef6ecf0cea91819359fb76f7e2062384f3d06af6f3d59d317295c5205eb
+91d96bb15eedb71b5e4e13be5127cd89
+
+FLAG OBTENU :
+
+power.on:30:1|03ecd90fb423a497105537f8a27037bdb9ba26f58606f475d3a555a0d9b77fab
+
+##############################
+
+
+PACMAN
+####################
+
+Après le level 1 de pacman :
+
+*** Q
+[security engine - INFO] knowledge base update
+                             subject: victor.zhou
+                             nature: threat
+                             level: ***CRITICAL***
+[security engine - INFO] now enforcing EMERGENCY security policy
+[security engine - INFO] new security objective
+                             subject: victor.zhou
+                             objective: eliminate
+[security engine - ALERT] activating anti-personnel drones
+                              target: victor.zhou
+                              max_output_level: lethal
+[4a663b8705001c31ba3b67151f3d86f6] {"session-key": "51739f57c7877eb94fdbdd264530a11f1c9d1b540da0388cd41b84c0eaa639484be88730f893e07824fbaab449c26ee85d905d5e25dab9f40a3806262425f0af3c85938c9ae6e858098cc6913b4eb03a18fa53bcada6d43e34b37cf1335f74fe76888cd2f861203e1aba54d8ef2079a97101fcf5691f7bd286786546c30d5e338035c382ee0024adb5e3bc5b528ab74522ff4b7fa5438df2dfc1e50ef0a0dbc98e270b1827fde73fe4c2f4eaf66e1fdabcaf858cdb3d11499b23f2e38889e3de671e8d30b20b800242ac9d545f44e43fb5b5ba0a3a0d2a14feb1bad5feb63373c4887bbb5eacf4c72b18372a2079ad2cf20ea553b0d2b51cbaa45170dfd45883", "ciphertext": "U2FsdGVkX1+6GOpg9/VqaI2/lHYcYomiiyrLODBAf8U=\n"}
+
+
+
+####################
+
+5EME FLAGS
+##############
+
+Attaque par dictionnaire : 
+
+voir code python : attaqueDict.py
+
+voir post-it
+Un post-it rose collé sur la porte.  Il dit :
+        hayden95, combien de fois t'ai-je dit de ne pas choisir ton mot de passe
+        dans le Cambridge English Dictionary ? Tu n'apprends jamais rien !
+        Comment je suis censé faire respecter une politique de securité, moi, tu y penses ?
+        ---
+        L'administrateur système
+
+voir feuillet
+Une feuille A4, 80g/m².  Un utilisateur a imprimé dessus une trace du protocole 
+d'authentification CHAP.  Peut-être qu'il essayait de mettre au point un client
+personnalisé pour se connecter ? Il y a écrit :
+---> {"jsonrpc": "2.0", "method": "protagonist.CHAP-challenge", "params": {"world_id": "61f05309b558b78694689bb7c835678e", "username": "hayden95"}, "id": 777}
+<--- {"jsonrpc": "2.0", "result": "U2FsdGVkX1+Tx0aAdwR0GJnwL9dTzk39RcFmLJBunh64dqg232+R/rZIZitWE6ZJ\n", "id": 777}
+---> {"jsonrpc": "2.0", "method": "protagonist.CHAP-response", "params": {"world_id": "61f05309b558b78694689bb7c835678e", "response": "lunes pacer sixth verso debut"}, "id": 778}
+<--- {"jsonrpc": "2.0", "result": null, "id": 778}
+
+
+https://m1.tme-crypto.fr/words
+
+Dans le livre Cambridge Dictionnary, se trouve le site : https://m1.tme-crypto.fr/words qui contient une grande liste de mots.
+La clé se trouve dans cette liste et cette clé est le motdepasse. ----> Attaque par dictionnaire :
+Faire une bloucle sur la liste de mots et tester chaque mot comme clé :
+Décrypter le ciphertext en testant comme clé chaque mot de la liste. Dès que l'on obtient le plaintext, on a trouvé la bonne clé.
+
+utilisateur de l'ordi : hayden95
+mot de passe : modest (trouvé avec attaqueDict.py)
+
+FLAG OBTENU : [security engine] dict.atk:30:1|f9629f8371bac2fb7ec47e123094faf207f85a95d8dc3001b22f1e507f6f489c
+
+###############
+
+
+MESSAGE APRES LE DICT ATTACK
+##################
+
+[security engine] dict.atk:30:1|f9629f8371bac2fb7ec47e123094faf207f85a95d8dc3001b22f1e507f6f489c
+>>> 
+[d8d21a4e39a0904aeef06b6977a94e29] {"msg":"bonjour"}
+>>> utiliser ordinateur
+[9be4862c2ba03242774ab6ecd69a0d95] Bonjour,
+                                   
+                                   Je suis un programme que mon créateur a conçu pour limiter le flux entrant de
+                                   spam.  Conçu dans la philosophie UNIX, je ne fais qu'UNE chose, mais mais je la
+                                   fais bien : je laisse passer uniquement les messages qui respectent quelques
+                                   règles simples.
+                                   
+                                   La première de ces règles, que vous ne respectez pas, est de m'écrire avec la
+                                   technique du chiffrement hybride.  Si vous ne la connaissez pas, vous pouvez
+                                   consulter la littérature idoine à la bibliothèque.  Voici ce qui ne va pas :
+                                   - JSON parse error
+                                   
+                                   Ma clef publique est :
+                                   -----BEGIN PUBLIC KEY-----
+                                   MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5MAqvHEzpFm5gJEtdaVj
+                                   mK1AXnlsh77ruHCm69Y8+eS8zg3xW591bhnxqALm0Axp8HiyAUZQUg2qdq9PoEhN
+                                   +DCGXObKmuAgP4d8hGWGps59EpJtv9LaO/W8hDrZ+HUbfsTez+SMexusWZyq0cbN
+                                   lxvQBntFoG3NheBa51U20HfHV98+HoNSEctCAx7nGZ5iF2hopzileEhOjTMp4r/n
+                                   gRyKSXSElNiNQxqblXPqBro1VH/6xrJRrsjZLXV0yxWRApK8mdHcR1S528Iu52R1
+                                   1WYnTpw2znM0C/UXKldHWiM+aKZw30GK2pbZ5PnQk49TXFLT+/DQOibfn3lcOcME
+                                   wwIDAQAB
+                                   -----END PUBLIC KEY-----
+                                   
+                                   
+                                   Bien cordialement,
+                                   ---
+                                   e-secretary v0.4
+[61f05309b558b78694689bb7c835678e] bonsoir à tous
+>>> 
+[f145e17bfd45da4157e0db50914948ea] {
+                                    "session-key": "2b964dd81e5519f86b45c9d65af7eab4b5affc19e6c33f24d43c91602054dd465ec9ccb2c74d2442c56b6c900c98506a791aa18ab7c7c5bd640f223cd38ae619050a05ff19c8d421f09a98fe90f48525882d777830e4b2966518c61c5992076ab138fb3e9f527575ec2ce6481012ac47f250a01d10bd38747927d4dd82a0e5ee5af107b976e8fc4269512fcb6119cfbe904db7702080b84d88bae695787345d1b42b3ca4ec1b12101ce87b0a1315215e4025bb2a87ba4e9f481227da23f1ccdf1568d95ec435b6397d9ba213bcf605404a3bdedf7c13bb8d89d37ca09a76d0f3ad972c7d11e10b5bc5ad5102ded1f9865385610f0fee822e2fc3a550f26e0eab",
+                                    "ciphertext": "U2FsdGVkX1/WII5tzcTZn6t7RUAbSU0NCw5687nur4g=\n"
+                                   }
+[security engine - WARNING] new security event
+                                subject: victor.zhou
+                                nature: unauthorized terminal login
+                                location:
+                                  floor: SB
+                                  room-name: LPNHE_RC13
+                                  ip: 10.76.94.212
+                                severity: low
+[security engine - INFO] current security objective
+                             policy: EMERGENCY
+                             subject: victor.zhou
+                             objective: monitor
+>>> 
+
+
+##################
+
+
+ATRIUM 6EME FLAGS
+##########################
+
+ATRIUM :
+
+Lire memento :
+
+1. Dans le cadre de notre campagne de communication intitulée
+
+        "une sécurité maximale, mais avec la classe"
+
+   nous vous rappelons que tous les utilisateurs de ce bâtiment
+
+   doivent dorénavant avoir une clef publique RSA qui contient
+
+   la chaîne "+++ATRIUM+++".
+
+
+
+2. Cette chaîne promotionnelle doit se trouver à l'intérieur de la clef
+
+   publique ; en particulier, elle ne doit pas être ajoutée au bout d'une
+
+   clef pré-existante.  Autrement dit, ceci n'est pas autorisé :
+
+       -----BEGIN PUBLIC KEY-----
+
+       MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsHyqhsu3IxBYkCifvMrP
+
+       uM/uv0hfq0PHbCfrUxFYooWLm3M0rru5Q+9BKQXqBRLa9iO+Tgn8Sy9+ABz0EJVd
+
+       RRtatBkRj/UG3k+65UMxn5s47It+2sCXrX8TDmqPPtVa8Heo/5pqH1A/0LGj5YRo
+
+       8GT0/ITj40j3I+Kp/1a9qP6+5eAqvUHfpC/hro2OCBAOi4+Q8qB+Zrx3jCa1l4R4
+
+       0zQpvVf0nE+tjt7ZLBqlwKUnEWvVmFYJ3l/dikT9yG7s0UBOhAT8rZmwZVOluYeW
+
+       yuERSus5TJbN8V9XR8q1lk8o7WBxtpyJotf5l/cCdmVlL9cSaZhVx26cAEcZ496z
+
+       2QIDAQAB+++ATRIUM+++
+
+       -----END PUBLIC KEY-----
+
+
+
+3. Pour entrer dans le bâtiment ou dans les bureaux, il faut passer son
+
+   badge devant le lecteur NFC.  Le badge doit contenir la clef publique,
+
+   puis l'utilisateur doit réaliser une signature de manière interactive.
+
+
+
+4. Pour simplifier la gestion des clefs, les occupants du même bureau 
+
+   ont des clefs publiques RSA qui ont le même modulo (N).
+
+
+
+-> Générer une clé publique contenant +++ATRIUM+++ pour le lecteur nfc
+atrium.py
+
+-> Puis générer la clé privée atrium avec le bon exposant 
+atrium.py
+
+ou atrium2.py qui fais les deux 
+
+mettre la clé publique dans la carte étu
+puis utiliser la carte sur le lecteur
+puis signer avec la commande :
+
+
+printf '%s' 'rough throw yipes dotty rages' \
+| openssl dgst -sha256 -sign atrium_priv.pem \
+| xxd -p -c 1000000
+04609725d8c99ad790f5448a77b7084aeb79fe568352cf02422ec92691a590f71788a513009588c858c04a5103377c2e0fbc0a3989d00855da482f91a9fa2289095174d370c199e9ac7a55432560b8cd6bf506b77a7d6083127c59678eaaee0b7b51a6adbe756a79c754d1b9ecce3965e5dd5fcb5c5826f8f7a7ce39f3247a5098194ae93c3cc3855dc4174c280faaa5b8513a03ac37b145ae8eddb3504e9c4b02c15f9ade4244882541cbb6661b4650b4289830e080525f84ad44725693cf13134e16c5ef24cb7266cea59391cecf8c318b4f5364c0b74e7798b13f64e695abc878ed137c552ca6efe9164a932608908bf41d2a7ed7eacb1b0caf0877f3c99b
+04609725d8c99ad790f5448a77b7084aeb79fe568352cf02422ec92691a590f71788a513009588c858c04a5103377c2e0fbc0a3989d00855da482f91a9fa2289095174d370c199e9ac7a55432560b8cd6bf506b77a7d6083127c59678eaaee0b7b51a6adbe756a79c754d1b9ecce3965e5dd5fcb5c5826f8f7a7ce39f3247a5098194ae93c3cc3855dc4174c280faaa5b8513a03ac37b145ae8eddb3504e9c4b02c15f9ade4244882541cbb6661b4650b4289830e080525f84ad44725693cf13134e16c5ef24cb7266cea59391cecf8c318b4f5364c0b74e7798b13f64e695abc878ed137c552ca6efe9164a932608908bf41d2a7ed7eacb1b0caf0877f3c99b
+
+
+
+6eme FLAG OBTENU :
+
+rsa.keygen:30:1|6a0f0fd0f35185a544656832cbe1eb4bf1b4e2d7b5e1a7a0ebbac5038192b49b
+
+##########################
+
+
+
+7EME FLAGS Catalogue ----> LOGIN CHAP
+###########################
+
+CICSU 
+
+utiliser carte
+La porte ne s'ouvre pas. Une lumière rouge est allumée sur le lecteur de badge.
+Le micro-écran LCD affiche "DEVICE DOES NOT CONTAIN A CERTIFICATE".
+
+
+>>> conseil
+Si vous voulez de l'aide pour entrer dans les locaux, interrogez-moi à propos du lecteur NFC.
+
+>>> conseil lecteur nfc
+Votre carte d'étudiant doit pouvoir être lue par ce lecteur.
+
+>>> conseil lecteur nfc
+Avez-vous lu la doc sur les certificats à la bibliothèque ?
+
+>>> conseil lecteur nfc
+C'est tout !
+
+
+
+lire chap : 
+>>> lire chap
+Protocole CHAP (Challenge Handshake Authentication Protocol)
+============================================================
+
+La méthode traditionnelle pour s'authentifier consiste à révéler son mot de 
+passe.  Ceci pose évidemment un problème de sécurité sur un canal non-sécurisé.
+Il est possible de faire mieux grâce au protocole CHAP.
+
+Pour cela, il suffit d'entrer son nom d'utilisateur normalement mais d'indiquer 
+"__CHAP__" comme mot de passe.  L'utilisateur reçoit en échange un challenge
+chiffré.  Il doit le déchiffrer avec son mot de passe puis renvoyer le texte clair
+pour prouver son identité. 
+
+Les terminaux de l'université supportent l'authentification CHAP.  Le personnel et
+les étudiants sont encouragés à l'utiliser.
+
+Le chiffrement est effectué avec la méthode standard (OpenSSL, AES-128-CBC, 
+PBKDF2, Base64).  Consulter le guide d'OpenSSL sur le chiffrement pour plus de
+précisions.
+
+
+
+En me connectant avec le login : victor.zhou et le mot de passe : __CHAP__
+Cela me propose le challenge : 
+U2FsdGVkX1+UKAvOzAISGpNoSKUsSE988Xj8aS1yYcF9lArh3ti2P9RO916/yYMT
+
+et je dois le décrypter avec la clé qui est mon mot de passe : vz25022004
+
+en utilisant la focntion décrypter je décrypte et obtiens le plaintext.
+
+ou avec la commande suivante :
+echo "U2FsdGVkX1+UKAvOzAISGpNoSKUsSE988Xj8aS1yYcF9lArh3ti2P9RO916/yYMT" | openssl enc -aes-128-cbc -d -base64 -A -pbkdf2 -pass pass:vz25022004
+strum biome avant hence nuder
+
+
+7ème FLAG OBTENU : 
+chap.login:30:1|222ea10299f5a439210004f365f1dae9ad2d1e78c761406b3739214ffceb7308
+chap.login:30:1|222ea10299f5a439210004f365f1dae9ad2d1e78c761406b3739214ffceb7308
+
+###########################
+
+
+
+8EME FLAGS Catalogue -----> Login PK
+###########################
+
+lire identification à clef publique : 
+
+>>> lire clef
+PROTOCOLE D'IDENTIFICATION À CLEF PUBLIQUE
+==========================================
+
+Les utilisateurs qui ont déposé une clef publique dans la PKI peuvent
+s'identifier de manière encore plus sécurisée, sans utiliser leur mot de passe
+du tout.
+
+Pour cela, il suffit d'entrer son nom d'utilisateur normalement mais d'indiquer 
+"__PK__" comme mot de passe.  L'utilisateur reçoit en échange un challenge
+Il doit le signer (avec sa clef secrète) puis envoyer la signature pour prouver 
+son identité.
+
+La signature, qui doit être encodée en hexadécimal comme d'habitude, est
+vérifiée avec la clef publique de l'utilisateur déposée dans la PKI.  Consulter 
+le guide d'OpenSSL sur la signature pour plus de précisions.
+
+
+Il faut donc s'identifier comme suit :
+login : victor.zhou
+mot de passe : __PK__
+
+Puis il faut signer avec la clé privée associé à la clé public dans la PKI (mykey.pem)
+Signer avec le challenge et la commande :
+lulus glint conch track dungs
+
+printf '%s' 'lulus glint conch track dungs' \
+| openssl dgst -sha256 -sign mykey.pem \      
+| xxd -p -c 1000000
+
+2203c2b581cd93a4a8fa6008876baab2242be7118ae7095b8836f6dc4bc3c315f1d8486df580410e60ea3f106d169283f2f0ed0dedd66efd8da569e14beff84843c8c3409325ec3cb05c5f0df1c0e22940b174d4f72c787be567fca8d3dedfee0a3057ee32701b7f7c5ea2f6d6a37eee047b873468dae692d135884144d56d58b19384c729d9e420952192d45ef9cc933d641fb841f6b8425dce60d2dc1e56c78661810fca6afc3a26dd1c89b6ddf18c6de116cb343a478bd92edd953afddee1b9fbdbbe98899a975f7497e6aca32ef847f8017c093a2aa53045f126cfcedb5ae03371d79a93d06655c3c4bac865825166136c350d017fc4cc4953c3c444356e
+
+8ème FLAG OBTENU :
+
+pk.login:30:1|5cb898b35b2e63ea2b426f4d2e05a6b0c3362ae8f90965311c30267d73612476
+
+
+printf '%s' 'dames beats arums slunk cures' | openssl dgst -sha256 -sign mykey.pem | xxd -p -c 256
+858a83cf52d057a1671a7e3c61ab3a8cbbb33e7a6a448da15842e477969cc6536ed066882e15b93f62d23cd42c3ce1a97a0cb5dd9c6a687659eab39f6e7f817ab25b71a39daaa8816de5a3bb7474a1eaba7c40f31663beed1aa4255737a8f4f67340b4a917985786780d8131263ee58fecc50e010458570d6978d5b524532f72ad83c3e5b3e613080908538f37d91c9d367028c1a067f1278ee1e92955daf947c6a852f23a5203bb96f38c199a1977ea95a7528b0b9655f69f05d9476ba95ce84bf5ac4d244e9f18c98b3489a6adfdbab32f6f24ca32d61438f0e77c84c0fb916dd2ddf41e3c31da7674c0bcc44425ecbb98c24697f5df5aba84e91c6385549f
+
+
+###########################
+
+
+9eme FLAGS
+###########################
+Certificat:
+
+CSR (one empty line to end):
+-----BEGIN CERTIFICATE REQUEST-----
+MIICZTCCAU0CAQAwFjEUMBIGA1UEAwwLdmljdG9yLnpob3UwggEsMA0GCSqGSIb3
+DQEBAQUAA4IBGQAwggEUAoIBAQCgSgTQ1Yjt0htb5/9QKr3zOxsCvUprpiSr/C2K
+IMEk+pRriv08jy7jvC6KG2nJyH8B7cj7mVg+OMYZFDHs3+2j47O4RfrYkOVryBPk
+hEhF5CB5R9eEfmrRkkCllryvNtg1DptjoSX9S3SU1ZanR6nE75aRJzEH9BDhiJIa
+8jTgxwVTa9WrMZ0J76uAl95I1GIrq3e+cXPDuiUYgquGU4WBscbsYMbjeeEUP7ee
+GuXk2aOQo3PW1xr8dI48yIWOlOsbQzgXzmPetIan8xVYErpxMwWBHiz2W94PKReG
+VTWoadHR+bHUKCX3j9aOi0jgn7uLpdgQ7m7QEF9IAxQtv3pDAg0BAQH774BNEhQz
+774BoAAwDQYJKoZIhvcNAQELBQADggEBAJKO5miIF0DfxL9WtTKesyM1H/RbTLoZ
+iLItD2JmouB2ef6v4ycXmfkl8/6oa2HrlEhdRtvcWQX/QWz09beWLjgJeTDSqezF
++3p0/GgBHIkrQBBdxhn8d/7b+BBLVcTC5n8MytVLNFftNFGM24O31m260cclaDXu
+QE4PkQARXPqn77Yh1JUdkRbx9INKC3JM9YhJpmkT6wFE9U6F1hC9NDB7xRCTMwEO
+yWcGT3rAzQQYjrLwT34pSW6s467lvhi7cTccWjHgLIFyRrQLoiLSN1MpV6xsMyAc
+ZP6QkRbZJDyrrXoiuZ6M6jNNyLnDNZc8sad9qBkzfLObsYlML7ZzAXo=
+-----END CERTIFICATE REQUEST-----
+
+
+
+
+
+
+
+                    -----BEGIN CERTIFICATE-----
+                    MIICuDCCAaACFBDFUqsKMYN+ywXiqo++mjmMj490MA0GCSqGSIb3DQEBCwUAMBEx
+                    DzANBgNVBAMMBl9fQ0FfXzAeFw0yNjAyMTIxNTI1MzZaFw0yNzAyMTIxNTI1MzZa
+                    MBYxFDASBgNVBAMMC3ZpY3Rvci56aG91MIIBLDANBgkqhkiG9w0BAQEFAAOCARkA
+                    MIIBFAKCAQEAoEoE0NWI7dIbW+f/UCq98zsbAr1Ka6Ykq/wtiiDBJPqUa4r9PI8u
+                    47wuihtpych/Ae3I+5lYPjjGGRQx7N/to+OzuEX62JDla8gT5IRIReQgeUfXhH5q
+                    0ZJApZa8rzbYNQ6bY6El/Ut0lNWWp0epxO+WkScxB/QQ4YiSGvI04McFU2vVqzGd
+                    Ce+rgJfeSNRiK6t3vnFzw7olGIKrhlOFgbHG7GDG43nhFD+3nhrl5NmjkKNz1tca
+                    /HSOPMiFjpTrG0M4F85j3rSGp/MVWBK6cTMFgR4s9lveDykXhlU1qGnR0fmx1Cgl
+                    94/WjotI4J+7i6XYEO5u0BBfSAMULb96QwINAQEB+++ATRIUM+++ATANBgkqhkiG
+                    9w0BAQsFAAOCAQEAkrt0gec1AMX7stTAQWBTMl3KhvMdv+59lTFePDMmAbzYSzVY
+                    Iqqwzxbjy3NDoJ65WGQoIpm7IaLVmzgCPp+cx1HyKv4C/OQ2Rx1xOxMWN+vIqT54
+                    oP13wFfDGjmQdSGtICh5u+jSw3tUNGGmnVoXj3+ZcwA197Xt04jBq5o00SJY6OOM
+                    M9CYS5e+K4FafNmw33lRhZor1Kk69J1dAJdCfrZXF/qovumhloONhH1syUQXIZqk
+                    bKICaV4GImd9SO9284SqqvFB/6zQz94H6YbNREeiTa4JWQ/ibaNoL21bRRnUCGR8
+                    IAEN6592lEVzCMhpHLaSmu7Wo0NDP84Vs3mofw==
+                    -----END CERTIFICATE-----
+
+(the certificate has automatically been stored into your student ID card)
+
+[press any key]
+
+
+Pour badger au CICSU il faut en plus un certificat via un CSR dans la carte université.
+Il faut donc upload un CSR dans la carte avec la commande :
+
+openssl req -new -key atrium_priv.pem -batch -subj "/CN=victor.zhou"             
+-----BEGIN CERTIFICATE REQUEST-----
+MIICZTCCAU0CAQAwFjEUMBIGA1UEAwwLdmljdG9yLnpob3UwggEsMA0GCSqGSIb3
+DQEBAQUAA4IBGQAwggEUAoIBAQCgSgTQ1Yjt0htb5/9QKr3zOxsCvUprpiSr/C2K
+IMEk+pRriv08jy7jvC6KG2nJyH8B7cj7mVg+OMYZFDHs3+2j47O4RfrYkOVryBPk
+hEhF5CB5R9eEfmrRkkCllryvNtg1DptjoSX9S3SU1ZanR6nE75aRJzEH9BDhiJIa
+8jTgxwVTa9WrMZ0J76uAl95I1GIrq3e+cXPDuiUYgquGU4WBscbsYMbjeeEUP7ee
+GuXk2aOQo3PW1xr8dI48yIWOlOsbQzgXzmPetIan8xVYErpxMwWBHiz2W94PKReG
+VTWoadHR+bHUKCX3j9aOi0jgn7uLpdgQ7m7QEF9IAxQtv3pDAg0BAQH774BNEhQz
+774BoAAwDQYJKoZIhvcNAQELBQADggEBAJKO5miIF0DfxL9WtTKesyM1H/RbTLoZ
+iLItD2JmouB2ef6v4ycXmfkl8/6oa2HrlEhdRtvcWQX/QWz09beWLjgJeTDSqezF
++3p0/GgBHIkrQBBdxhn8d/7b+BBLVcTC5n8MytVLNFftNFGM24O31m260cclaDXu
+QE4PkQARXPqn77Yh1JUdkRbx9INKC3JM9YhJpmkT6wFE9U6F1hC9NDB7xRCTMwEO
+yWcGT3rAzQQYjrLwT34pSW6s467lvhi7cTccWjHgLIFyRrQLoiLSN1MpV6xsMyAc
+ZP6QkRbZJDyrrXoiuZ6M6jNNyLnDNZc8sad9qBkzfLObsYlML7ZzAXo=
+-----END CERTIFICATE REQUEST-----
+
+il faut upload ça dans la carte puis badger au CICSU :
+
+
+9ème FLAGS :
+
+pki.cert:30:1|c50d7d0dbfe4e77b70df51278b3772c68803125643c53e7c1db54f3f8e6abe87
+###########################
+
+
+10ème
+#########################
+
+
+
+Test 1 :
+Structure JSON
+{
+  "session-key": "3a299bb8b10ed3743833c9e7c3bc4181f736322a16b991f587d8fd5f954efd0f33fb58b93c9867a3396f108066a0c66f83c06b6633dc1d89b731eecf4da13893146588e297f35441e77961f7d01fbdc43f0bbd036fead88ebb43dba53f4ebd8cc4fdda87dce2b728714f12e69f199253a1f4336e612d7854c856d2d49d566dcec247c931a1c30a412708c93203c594662ed7445cb84121e273c3fc5d12213f8cc24444722ae7dcbf0d048055cc36c142cfd2a0916ef715dfa7b9eef7c28c5944de30fc25deed046205a3642ae7d0b3126674f0adc41cb1294bc1326cb89f436debf740ccaed27d902da1d963e49f9d5b0219e3c3236acd6581b7cec5cc0b8a41",
+  "ciphertext": "U2FsdGVkX1+LBN3DiDDEZY7qnbib7xzLbV1plwy2HHY=\n"
+}
+
+Test 2 :
+Structure JSON
+
+{
+   "session-key": "6652fc9dd25796354b120d21cf86238a4db0a1ef5f9048a547bc77c2c505b5e71833c100cdba238462e100e5924678f5ff0e9299e6b151d91f9f5def7017678400a56cf4466428eb937e73e6dd75696b68acc3ded4c225354946e167e12c02c6ddb40064ec09076c583212400040a140ee2f2215a13abd21d2396a5272670a3f32537ba301af150618cd6b6035a4f34b1da9fea19d01f61ed843bc1ad1c0c623c7ab5f0d94ae6fd19c80fdcc395565f43324c5867943c2eaf4ce721d9cf8371314435a9ccd57d1caaad713c5ced643042b11018841a989711a7f054cba49f91fe82d8295cd63b14103cd7c49f3bfea54f27aa21b3ef94cd076e92044a0d77378",
+   "ciphertext": "U2FsdGVkX18FNgCj3eZPSF+3pP5OsGE5waXRTMXTdc0=\n"
+}
+
+Test 3 :
+Structure JSON
+
+{
+   "session-key": "579545c8e1302e00713ecfd60899ef36b255e4b8e002f4f152d9490009bb257085ebfb937099d6ce94b0810e7bc3028af80950f8bab4c5e640199a24f90a947b4a9b9edd331051be7f69d952eda8ec102e0f1e9896e9586e5f4cd85145d0340679a42852f373c097baeb7ace79f6d0480a865c9716dbed18cdf9064c9509b276f3251086d11b1237d607f55af2b682d6b8c45deba778ae5bb86f3a5db2107c4085132a7ff59aeec275a4c032a5d6507d52e51f3bcc806c7bb8617e50d87f6d52f568348033b0207a523a09ba9ce1462d49bead5d4017f151c40e3ad95d5c973c60c6fee3ab9f631ce09f584686827f86848149ed51612cb9f758a38874a184df",
+   "ciphertext": "U2FsdGVkX18rNTP1ofj3q09eVYNctChHyyWV3VdMHk4=\n"
+}
+
+Test 4 :
+Structure JSON
+
+{
+   "session-key": "592252f60322afa60ee2c8d8bc0c14d53462d25b115ebddebbef1b52fe2341a017f8b7d6a8aa2c5817d7977b6e358afb2ac9477753182ad08852bd38c66df7ce75db79565d13c4bf50dc030b4f701cb4fa3d2e5ef30a19c6479616417c52cb7c4c26e22b35ddf1d1dc84aaa409308dd023ffd12a19af2bcb7087e58d0d26008bfa602cdb89c73a6b364d23038d5d56579ac3c75050dd79052ad18b291bc34d2db8b1d7df08271acb3c5bcc472c418b1acd4f1121175e87b82ff87d7ec14eed49fcb32ee0993d77cb58784963877439f57f5125f39a79cef953cf28ebe14c45c852a3ca7f9b1803bdc2d65f24afec040ce22af7510e811ba0affef9af155d6520",
+   "ciphertext": "U2FsdGVkX1+xOoWBoFZL+I5pDVFOSqV8BC9TvmulWjQ=\n"
+}
+
+CHIFFREMENT HYBRIDE : 
+
+Lire livre CHIFFREMENT HYBRIDE
+Le chiffrement hybride combine RSA (Asymétrique) pour protéger la clé et AES (Symétrique) pour chiffrer le message.
+- session-key : Clé temporaire (ex: VictorZhou123456) chiffrée avec la clé publique du destinataire. Format attendu : Hexadécimal pur.
+- ciphertext : Message (ex: "test") chiffré avec la clé temporaire en clair. Format attendu : Base64.
+
+Il faut chiffrer la clé temporaire (ici : VictorZhou123456) avec la clé public du destinataire (e-secretary) avec la commande:
+echo -n "VictorZhou123456" | openssl pkeyutl -encrypt -pubin -inkey broadcast_pub.pem | xxd -p | tr -d '\n '
+Sortie en hexadecimal
+
+Il faut ensuite chiffrer un plaintext (ex : "test") avec la clé temporaire utilisé préalablement avec la fonction encrypt de TME1_2.py
+Sortie en Base64 + "\n" à la fin du ciphertext.
+
+
+Mettre les deux sorties sous format JSON comme ci-dessous.
+
+
+
+
+Commande utilisé pour obtenir le champ session-key :
+echo -n "VictorZhou123456" | openssl pkeyutl -encrypt -pubin -inkey broadcast_pub.pem | xxd -p | tr -d '\n '
+
+Commande utilisé pour obtenir le champ cyphertext : 
+On a utlisé la focntion encrypt de TME1_2.py : 
+passphrase_session = "VictorZhou123456"
+message_clair = "test"
+resultat_chiffre = encrypt(message_clair, passphrase_session)
+print(resultat_chiffre)
+
+TEST QUI A REUSSI :
+
+{
+  "session-key": "4918401066aa9b05fd2c49b7c4069f84a0cd6c625321d3b9cb87c9321b7bb1efdff122da1d128c3042b2f21af8d6cd258befa52e35301e3121a2b1d71f33e7a6a17b2a8dc233a97b5b5203794427effc735a26df900376c3b7d91890370463d328e52a227fda4003bb2fd47904067fbefbb64e62b0213d59c66a6c865e32cffb55cde31d30d687608afa5e03df0b45fcc5d35cccf7183d2ff28f5330c987e12eb281aea562536e3e2ab15d92aadf76941816fb0c2949908e246d53a87083d734993c36721935f3061b69f357ec637ec48b7ec5c7ed54bd9edd35418be687611e22c6237585d94ea011c5d5b395dcef7f190ac0101a63060a1c23e09b36e153d3",
+  "ciphertext": "U2FsdGVkX18BkEAHX//woQTujCb1XTumS6ugWEKMW+Y=\n"
+}
+
+
+10ème FLAG : 
+hybrid:30:1|c7133a202d1530103de3b64e5401a3423a13051f8b76261eec1458511f2dff9a
+
+conseil obtenu :
+[9be4862c2ba03242774ab6ecd69a0d95] Bonjour,
+                                   
+                                   Je suis un programme que mon créateur à conçu pour limiter le flux entrant de
+                                   spam.  Conçu dans la philosophie UNIX, je ne fais qu'UNE chose, mais mais je la
+                                   fais bien : je laisse passer uniquement les messages qui respectent quelques
+                                   règles simples.
+                                   
+                                   La première de ces règles consiste à m'écrire avec la technique du chiffrement
+                                   hybride, ce que vous faites.  Je vous en remercie.
+                                   
+                                   Cependant, mon créateur aimerait avoir des garanties quant à l'identité de ses
+                                   correspondants. Par conséquent, il faudrait que vous ayiez une clef publique
+                                   signée par au moins deux autres utilisateurs enregistrés dans la PKI.
+                                   Encore une fois, si vous ne voyez pas de quoi je parle, retournez faire un tour
+                                   à la bibliothèque. Voici ce qui ne va pas :
+                                   - Votre clef publique n'a aucune signature
+                                   
+                                   Bien cordialement,
+                                   ---
+                                   e-secretary v0.4
+
+
+
+                                   
+#########################
+
+
+11ème FLAG
+################################
+Je dois faire signer ma public key "mykey_pub.pem" par deux utilisateur (ils doivent la signer avec leur clé privée): Karim et AdrienPanguel
+
+En échange, je leur ai signé respectivement leur clé public  avec ma clé privée avec les commandes suivantes :
+
+code adrien_pub_key.pem
+openssl dgst -sha256 -sign mykey.pem adrien_pub_key.pem > adrien_sign.bin
+xxd -p adrien_sign.bin | tr -d '\n' > adrien_sign.hex
+cat adrien_sign.hex 
+585b3ee9b604f02284292c5e9813cda42c4deb2dc88ca63c7a6e4c38fee33e8cca457204b73efe93a06d0fc2f6cae81b67fbd7d22e8a7a2018689b78743e629f86bf5e375e75487a54c44ff21e426b18367fc66f3ef8ed9a6995dc5cdc5eec05a2db396a36e5a7f7baba09a8c46791752adb32c8e838a4d52a5d6b93e14b7b053fef06b98d87b2fbccb37e3cbe96d32ef49d3331ae370d023e758cc6bb085fc6a8c1b07ea8b4152336f733382d8d9e40c095e23a87422ef646c870819d5c4ead60ddab9ea7735c4631b493a0879f045dfcfa7836707c06b16b4714962d48dc9b1e8932fef4e2032f2d11882fd50534cfee77b2972505672c6bba78e524072127
+
+
+code karim_pub_key.pem
+openssl dgst -sha256 -sign mykey.pem karim_pub_key.pem > karim_sign.bin
+xxd -p karim_sign.bin | tr -d '\n' > karim_sign.hex
+cat karim_sign.hex 
+609b5167169302c4f7f1f116c3176274f5f904d7b2a8d960ac8c77b66599c40544511b2cae705490111f0d16fff3ac93c4f44d1eeea70f2e981320bb47c6714db27ab53eaf4660d44234db601ccb3385b7c47d803e226ee426f585af33fe1e40d6539b2f194896696fd6d4d372cbfd090b16cb6489e7418b62e64ed9d6e2f200669211f3449a0b7fec9933aa78eef1db082d79b740fb36f1e23834a6c216f476ab6acca7897d8f8c4587a479f6f7bc60fcdf6602eb5c72b0b70138d7031fffd0dfc2a7a7b2619ade3797b428b6bbeae6a60d0ac3f377047e1615cf41aa96b99fdba6fb37d70b28fcf48f8a32767b73fecd634b442296c7eebe2a8768db45f518
+
+
+Puis ils doivent m'envoyer la signature (leur résultat) puis je dois entrer leur pseudo et le resultat qui m'on envoyé respectivement.
+
+Je dois broadcast à nouveau le JSON utilisé avant: 
+{
+  "session-key": "4918401066aa9b05fd2c49b7c4069f84a0cd6c625321d3b9cb87c9321b7bb1efdff122da1d128c3042b2f21af8d6cd258befa52e35301e3121a2b1d71f33e7a6a17b2a8dc233a97b5b5203794427effc735a26df900376c3b7d91890370463d328e52a227fda4003bb2fd47904067fbefbb64e62b0213d59c66a6c865e32cffb55cde31d30d687608afa5e03df0b45fcc5d35cccf7183d2ff28f5330c987e12eb281aea562536e3e2ab15d92aadf76941816fb0c2949908e246d53a87083d734993c36721935f3061b69f357ec637ec48b7ec5c7ed54bd9edd35418be687611e22c6237585d94ea011c5d5b395dcef7f190ac0101a63060a1c23e09b36e153d3",
+  "ciphertext": "U2FsdGVkX18BkEAHX//woQTujCb1XTumS6ugWEKMW+Y=\n"
+}
+
+ET j'obtiens le flag suivant :
+
+11ème FLAG :
+[security engine] web.of.trust:30:1|c14ddb1f629133a75d0a6d7e650ed5a91e582a09eb600bc64f9434b92fdb267c
+################################
+
+12ème FLAG
+###############################
+
+
+Bureau RC-07 (équipe DEV): lisamclaughlin et iwalker
+
+
+Username:                   iwalker
+
+                    Public key:                 
+-----BEGIN PUBLIC KEY-----
+MIIBQDANBgkqhkiG9w0BAQEFAAOCAS0AMIIBKAKCAQEAokbY4YEP/QCRVOzBpAGh
+5e8lzYiubAgXmSb1kNZTEvxJlEq6mxckfOKI7YXW2ITaE234X8SxzT5AcDqR38yT
+JGA3LQRXDaQ1mx+1Es/z1EA3aG4jgwpePayNY8ZetvKI+FKWDbR6ZnKJtCzDREoL
+70w12FTtzFg8c0KbAjJS5CoTr0CYudYFa2Zzc6OvpuudfVgW0FEW4Jm8VSjif3xI
+RNTwdAujVyRTE3X7u9fxH2sAW8A0I2NYqmT+s5OUY1F5BqiF9SOZQCg9+HIMJWfW
+qbetzs8/LaH1uinZK+C+u1kY67JXn/3C8dfZ58u+UWCWpqzZrlijRMM1QplQm6dn
+ZwIhAK9kDbun3kObsDlk0Y+UKqUAAAAAAAA+++ATRIUM+++B
+-----END PUBLIC KEY-----
+
+                    Signatures:                 NONE
+
+Username:                   lisamclaughlin
+
+                    Public key:                 
+-----BEGIN PUBLIC KEY-----
+MIIBQDANBgkqhkiG9w0BAQEFAAOCAS0AMIIBKAKCAQEAokbY4YEP/QCRVOzBpAGh
+5e8lzYiubAgXmSb1kNZTEvxJlEq6mxckfOKI7YXW2ITaE234X8SxzT5AcDqR38yT
+JGA3LQRXDaQ1mx+1Es/z1EA3aG4jgwpePayNY8ZetvKI+FKWDbR6ZnKJtCzDREoL
+70w12FTtzFg8c0KbAjJS5CoTr0CYudYFa2Zzc6OvpuudfVgW0FEW4Jm8VSjif3xI
+RNTwdAujVyRTE3X7u9fxH2sAW8A0I2NYqmT+s5OUY1F5BqiF9SOZQCg9+HIMJWfW
+qbetzs8/LaH1uinZK+C+u1kY67JXn/3C8dfZ58u+UWCWpqzZrlijRMM1QplQm6dn
+ZwIhAPMzVqBDo956L5dZF9Acq6EAAAAAAAA+++ATRIUM+++B
+-----END PUBLIC KEY-----
+
+                    Signatures:                 NONE
+
+>>> voir clef
+username: lisamclaughlin
+d       : 91b7ef6bf7e0e65c9926073e24ab605b44e2be66feef1af643183901bc3b0442ebc8d1b5b6e848b03eb48c92eb744737ef4dd1a1cd96b52691c0e0df8aa9334e55ded67786cd906a5ca30ef9f896b0d781503c6c3aad5b3c2b2cb1d758e451d1cf3cfd59006fe44c3428f118cbca8024248a0e84ad45c84b2892352b629e8a82d1176f6826212e1d356f68679defa79598385d2a7487cf1aba83f35d666a24a794cab147d2066bb0ddf8469ffef071ec23a432d463b49ce513da0f7cdb57b18b810cd5b0cfcc167f9911ac452522fd0570455af573ab7847b8d0bb93940ebcb77058a7763a4c045a9cd025ed90c6bf902dd6162e5efdea494ecc95ec4ea16f19
+
+
+
+Donc on peut trouver les public key de lisamclaughlin et de iwalker en allant dans le terminal. Je les ai mis dans lisa_pub_key.pem et dans iwalker_pub_key.pem
+
+Avec la commande :
+openssl rsa -pubin -in lisa_pub_key.pem -text -noout
+openssl rsa -pubin -in iwalker_pub_key.pem -text -noout
+
+On peut récupérer le n et le e des public key:
+openssl rsa -pubin -in lisa_pub_key.pem -text -noout
+Public-Key: (2048 bit)
+Modulus:
+    00:a2:46:d8:e1:81:0f:fd:00:91:54:ec:c1:a4:01:
+    a1:e5:ef:25:cd:88:ae:6c:08:17:99:26:f5:90:d6:
+    53:12:fc:49:94:4a:ba:9b:17:24:7c:e2:88:ed:85:
+    d6:d8:84:da:13:6d:f8:5f:c4:b1:cd:3e:40:70:3a:
+    91:df:cc:93:24:60:37:2d:04:57:0d:a4:35:9b:1f:
+    b5:12:cf:f3:d4:40:37:68:6e:23:83:0a:5e:3d:ac:
+    8d:63:c6:5e:b6:f2:88:f8:52:96:0d:b4:7a:66:72:
+    89:b4:2c:c3:44:4a:0b:ef:4c:35:d8:54:ed:cc:58:
+    3c:73:42:9b:02:32:52:e4:2a:13:af:40:98:b9:d6:
+    05:6b:66:73:73:a3:af:a6:eb:9d:7d:58:16:d0:51:
+    16:e0:99:bc:55:28:e2:7f:7c:48:44:d4:f0:74:0b:
+    a3:57:24:53:13:75:fb:bb:d7:f1:1f:6b:00:5b:c0:
+    34:23:63:58:aa:64:fe:b3:93:94:63:51:79:06:a8:
+    85:f5:23:99:40:28:3d:f8:72:0c:25:67:d6:a9:b7:
+    ad:ce:cf:3f:2d:a1:f5:ba:29:d9:2b:e0:be:bb:59:
+    18:eb:b2:57:9f:fd:c2:f1:d7:d9:e7:cb:be:51:60:
+    96:a6:ac:d9:ae:58:a3:44:c3:35:42:99:50:9b:a7:
+    67:67
+Exponent:
+    00:f3:33:56:a0:43:a3:de:7a:2f:97:59:17:d0:1c:
+    ab:a1:00:00:00:00:00:00:3e:fb:e0:13:44:85:0c:
+    fb:ef:81
+
+
+openssl rsa -pubin -in iwalker_pub_key.pem -text -noout
+Public-Key: (2048 bit)
+Modulus:
+    00:a2:46:d8:e1:81:0f:fd:00:91:54:ec:c1:a4:01:
+    a1:e5:ef:25:cd:88:ae:6c:08:17:99:26:f5:90:d6:
+    53:12:fc:49:94:4a:ba:9b:17:24:7c:e2:88:ed:85:
+    d6:d8:84:da:13:6d:f8:5f:c4:b1:cd:3e:40:70:3a:
+    91:df:cc:93:24:60:37:2d:04:57:0d:a4:35:9b:1f:
+    b5:12:cf:f3:d4:40:37:68:6e:23:83:0a:5e:3d:ac:
+    8d:63:c6:5e:b6:f2:88:f8:52:96:0d:b4:7a:66:72:
+    89:b4:2c:c3:44:4a:0b:ef:4c:35:d8:54:ed:cc:58:
+    3c:73:42:9b:02:32:52:e4:2a:13:af:40:98:b9:d6:
+    05:6b:66:73:73:a3:af:a6:eb:9d:7d:58:16:d0:51:
+    16:e0:99:bc:55:28:e2:7f:7c:48:44:d4:f0:74:0b:
+    a3:57:24:53:13:75:fb:bb:d7:f1:1f:6b:00:5b:c0:
+    34:23:63:58:aa:64:fe:b3:93:94:63:51:79:06:a8:
+    85:f5:23:99:40:28:3d:f8:72:0c:25:67:d6:a9:b7:
+    ad:ce:cf:3f:2d:a1:f5:ba:29:d9:2b:e0:be:bb:59:
+    18:eb:b2:57:9f:fd:c2:f1:d7:d9:e7:cb:be:51:60:
+    96:a6:ac:d9:ae:58:a3:44:c3:35:42:99:50:9b:a7:
+    67:67
+Exponent:
+    00:af:64:0d:bb:a7:de:43:9b:b0:39:64:d1:8f:94:
+    2a:a5:00:00:00:00:00:00:3e:fb:e0:13:44:85:0c:
+    fb:ef:81
+
+
+Pour lisamclaughlin, on a n,e et d donc on peut retrouver p et q donc on peut retrouver la clé privé de lisamclaughlin.
+
+Pour trouver p et q on utilise le code atrium_rc07.py (À REVISER !!!!!!!!!)
+
+
+Une fois que l'on a p et q, on utilise le code atrium_rc07_3.py pour pouvoir générer la clé privée de lisa : lisa_private.pem
+Une fois que l'on a p et q, on utilise le code atrium_rc07_2.py pour pouvoir générer la clé privée de iwalker : iwalker_private.pem
+
+code :
+atrium_rc07.py
+atrium_rc07_3.py
+atrium_rc07_2.py
+
+python atrium_rc07.py
+[*] Lisa's n bits: 2048
+[*] Lisa's e: 110002729276938056067837946409528502282451441100458425269027029103270136901505
+[+] Consistency check: OK (e and d match for this n)
+[*] Attempting factorization to find p and q...
+
+[!] SUCCESS! Modulus factored.
+p = 140426168929763536080607174072747586585066998353327183074913345897895040077338645571535223774235035398769781094779627949874790103121305121151762083520397750134506565163465329810284105490659884094440888953484415429794363169365243397386601576678695046922015726300599249375142964617420247977079467553294216969557
+q = 145881224365488070753372652558232682426099208103971726373921998329329643176451885470316598625547279059863302590477292648433777498285054304947600638797781144633834657238714300534262425950956191519677078274491110836464856067361033719888456134263556604891334353415468443226579817143686313191697611038591779942859
+
+phi = 20485541456428764239433612950596397328505269111462784754483131683271043485995082675784681847001086451510451637168914216500995006801040912059162972538774928737467186157625713351847386191336739325085393902262142434912076176417090546202105143279766439549299904298970580896075996721842394849063388272210382886096492964762765110525417306191092638596067144537500216049034780300365137658833638212697360276482928075719071530435517554242676322417572435082703171860841415496615960224886008851651312585152549440709118431372434833050807408013428438083653223469711621492109326967511321666833872256319504635138692347033703605631048
+
+
+python atrium_rc07_3.py
+[+] Clé privée de Lisa générée : lisa_private.pem
+
+
+
+python atrium_rc07_2.py
+
+[+] Clé privée de iwalker générée : iwalker_private.pem
+[*] Son exposant privé d est : 0x5978b1b602d40d8c7a7de62adc8aee8cf8f61bd5629f1ed23810eba129d14e37fde29390de45d933a53561ba3f7cfc81dc50b64b46aa1d3cfeea2a66ad51a947bb74fc50e56c381eaa1e5cfe90313e968d20a96a70fe8797d1f502fcd15b5838329159a7f4ffcd382578f5524e6e19a4440aa4cc11b86eb6d6181e46a8bfe3cc35af1fe2ffa06e15d35aaade3da3794e8af047f4d1f7d6a1cdfc2a0e6c65482aa1d1c28f8dfdd2ab60c878467d8776d3a4d65773fb45c479e33a89fc3f9857bce2671a4794966c9f2fd2889ea657ba1f0a280a0dc6c839ccbee0e7bcd83335221625de41d88743096be15c34ed579b4ca186cb4b9f17c832b559322a0e2164a1
+
+Une fois que l'on a les deux paire de clé :
+Mettre la clé publique de lisa dans la carte universitaire badger -> individu revoked
+Mettre la clé publique de iwalker dans la carte universitaire, puis badger -> authorisé -> signer le challenge avec la commande :
+
+echo -n "letup under renew teens waste" | openssl dgst -sha256 -sign iwalker_private.pem | xxd -p -c 512
+
+7e2941e809103a885990c21240ba57e6f5837c8d2e173e9d024ab9fdde18f94581839917e700f173cfc534046d7877b53b6c4c182134ae0b99804bff021369aae6e2314f4f792be5d311d12e4cd2ac8576376df8f114c3737216a9293f3074b3c9bd5ad6561b0ecec90d45330d91629421c02db549894abad919491244371da132223961620182625831a6e78cb4984ef45789a6592354ac5be26659815cd8c26eb8a54dbc1532cbd33e735a34a58c33fd04671f35f09c4d002b79e0eeca4d6b790cf33ec130ba87f5a6523e93006005a52eeb409595ed1ba2e0c3fa01682de7c24f234651fe03b961cc01a9b785415de3c85caf5cc2ea994e543a77530b92df
+
+###############################
+
+
+
+13 ÈME FLAG
+###############################
+
+voir panonceau
+Salle RC-25 (équipe SÉCU) : ortegacameron et jimmy46
+
+Username:                   ortegacameron
+
+Public key:                 
+-----BEGIN PUBLIC KEY-----
+MIIBPTANBgkqhkiG9w0BAQEFAAOCASoAMIIBJQKCAQEAidCbLLNfVxMSXb24YUw8
+NVbtpdt6zZV+BpjPXcwryjFMsO3S2v6IZF6bfOYU2T4lcepCEXQhYpe7uufQ7oc6
+KODme21+p1OgCINeffsjm9CQfnqAVyofGy6fFPATZ0a+01BRIMRsLGVgtI0XBoVq
+v4pgPXY5CFKLYWAhloOnKIVWaoqti7qXusRz7csdO1V7WGKqT4UoR18pdveRYa5i
++0x6xpSGrZiBOf9+FWs1fob/oDRRArtfqN+IJ27le+TgDm0iQH23jLp0oFo49hFv
+jGMTNmLzXRO6DUfS1tkiN4LGFIF5/DOL3YSyfMw6uKbkpRwL3MV8kPcm6xsWPSe5
+iwIeHt9fqQdxIabMh+X+6nBOOQAAAAA+++ATRIUM+++B
+-----END PUBLIC KEY-----
+
+                    Signatures:                 NONE
+
+[press any key]
+
+
+Username:                   jimmy46
+
+Public key:                 
+-----BEGIN PUBLIC KEY-----
+MIIBPTANBgkqhkiG9w0BAQEFAAOCASoAMIIBJQKCAQEAidCbLLNfVxMSXb24YUw8
+NVbtpdt6zZV+BpjPXcwryjFMsO3S2v6IZF6bfOYU2T4lcepCEXQhYpe7uufQ7oc6
+KODme21+p1OgCINeffsjm9CQfnqAVyofGy6fFPATZ0a+01BRIMRsLGVgtI0XBoVq
+v4pgPXY5CFKLYWAhloOnKIVWaoqti7qXusRz7csdO1V7WGKqT4UoR18pdveRYa5i
++0x6xpSGrZiBOf9+FWs1fob/oDRRArtfqN+IJ27le+TgDm0iQH23jLp0oFo49hFv
+jGMTNmLzXRO6DUfS1tkiN4LGFIF5/DOL3YSyfMw6uKbkpRwL3MV8kPcm6xsWPSe5
+iwIeK7QupAXIL7lDxV9YB/ixqwAAAAA+++ATRIUM+++B
+-----END PUBLIC KEY-----
+
+                    Signatures:                 NONE
+
+
+- ortegacameron: 7f3514340564a1bb542c454b353f3234a395ecba326c48074305187bc8acdfa716d47165c80d5bf2a4a7d768f0723f24fc2c70476e247bddd48a3aee660c5b4b0b8c37cedd25a477c9c12929fbce60e69f0b1395e38d31392cdd421c101a356bfb5815cb26e832abdb2d332a2843a1a50294a72c03168f68b57aacd0e41b50458499658345d769504c09a6324b4130b0c568a82598e729a7b7da0c5a9de48b9b0022237a6bb35d61888097a7a774265dc9d4942686a43ad0c8466feeb87e3d1d3c8c48eec3f221b74e30fdaa8cf83bec76298e368b7ce365173deb2ff6da8bd3cb4cb88b5a5f401c8d93ca5321cf6048e0a584403335414ce6071d151b8a2ee0
+- jimmy46: 63a40bafa40599b0f717b49aaeef3b94b2b880b543f2e4c37e29b6905161e6c6818e3fc93e368149bc65b02a753bdcb738792d9a34e4aa7c8a19a218814d9872e679d8df80b6768294f340efe94fb0687650affa687a99739206e11a76cb56fab4bbf3272a7731b6339fcf266f0e1c7326bb559e0fa59e0eaf01578ff05462649c3a11df83cc899b35f850a6abe2992851e6c859bff87865b1217dcbf2e3155e92e2439291ac5910c81c97d8d28dbc3f68acc72087d79b2c621b25a2c1f1892bc567cca7f7ba936aab7aeb4160b9965f0933498d896cebd182634bb8722e4262cb0f071f0bd9cd26a46193ed1bc84a00cf486087c469610dd50553cad9eb9c3d
+
+
+Le même message M a été chiffré deux fois respectivement par ortegacameron et sa public key (ortega_pub_key.pem) et par jimmy46
+et sa public key (jimmy_pub_key.pem). J'ai récupéré les public key de ortegacameron et jimmy46 en les demandant dans le terminal.
+
+Une fois les public key récupérées, il faut que je récupère le N et le E de ses deux public key pour voir si elles partagent le même
+N ou le même E pour pouvoir faire une attaque.
+Sortie : 
+openssl rsa -pubin -in ortega_pub_key.pem -text -noout
+Public-Key: (2048 bit)
+Modulus:
+    00:89:d0:9b:2c:b3:5f:57:13:12:5d:bd:b8:61:4c:
+    3c:35:56:ed:a5:db:7a:cd:95:7e:06:98:cf:5d:cc:
+    2b:ca:31:4c:b0:ed:d2:da:fe:88:64:5e:9b:7c:e6:
+    14:d9:3e:25:71:ea:42:11:74:21:62:97:bb:ba:e7:
+    d0:ee:87:3a:28:e0:e6:7b:6d:7e:a7:53:a0:08:83:
+    5e:7d:fb:23:9b:d0:90:7e:7a:80:57:2a:1f:1b:2e:
+    9f:14:f0:13:67:46:be:d3:50:51:20:c4:6c:2c:65:
+    60:b4:8d:17:06:85:6a:bf:8a:60:3d:76:39:08:52:
+    8b:61:60:21:96:83:a7:28:85:56:6a:8a:ad:8b:ba:
+    97:ba:c4:73:ed:cb:1d:3b:55:7b:58:62:aa:4f:85:
+    28:47:5f:29:76:f7:91:61:ae:62:fb:4c:7a:c6:94:
+    86:ad:98:81:39:ff:7e:15:6b:35:7e:86:ff:a0:34:
+    51:02:bb:5f:a8:df:88:27:6e:e5:7b:e4:e0:0e:6d:
+    22:40:7d:b7:8c:ba:74:a0:5a:38:f6:11:6f:8c:63:
+    13:36:62:f3:5d:13:ba:0d:47:d2:d6:d9:22:37:82:
+    c6:14:81:79:fc:33:8b:dd:84:b2:7c:cc:3a:b8:a6:
+    e4:a5:1c:0b:dc:c5:7c:90:f7:26:eb:1b:16:3d:27:
+    b9:8b
+Exponent:
+    1e:df:5f:a9:07:71:21:a6:cc:87:e5:fe:ea:70:4e:
+    39:00:00:00:00:3e:fb:e0:13:44:85:0c:fb:ef:81
+
+
+openssl rsa -pubin -in jimmy_pub_key.pem -text -noout
+Public-Key: (2048 bit)
+Modulus:
+    00:89:d0:9b:2c:b3:5f:57:13:12:5d:bd:b8:61:4c:
+    3c:35:56:ed:a5:db:7a:cd:95:7e:06:98:cf:5d:cc:
+    2b:ca:31:4c:b0:ed:d2:da:fe:88:64:5e:9b:7c:e6:
+    14:d9:3e:25:71:ea:42:11:74:21:62:97:bb:ba:e7:
+    d0:ee:87:3a:28:e0:e6:7b:6d:7e:a7:53:a0:08:83:
+    5e:7d:fb:23:9b:d0:90:7e:7a:80:57:2a:1f:1b:2e:
+    9f:14:f0:13:67:46:be:d3:50:51:20:c4:6c:2c:65:
+    60:b4:8d:17:06:85:6a:bf:8a:60:3d:76:39:08:52:
+    8b:61:60:21:96:83:a7:28:85:56:6a:8a:ad:8b:ba:
+    97:ba:c4:73:ed:cb:1d:3b:55:7b:58:62:aa:4f:85:
+    28:47:5f:29:76:f7:91:61:ae:62:fb:4c:7a:c6:94:
+    86:ad:98:81:39:ff:7e:15:6b:35:7e:86:ff:a0:34:
+    51:02:bb:5f:a8:df:88:27:6e:e5:7b:e4:e0:0e:6d:
+    22:40:7d:b7:8c:ba:74:a0:5a:38:f6:11:6f:8c:63:
+    13:36:62:f3:5d:13:ba:0d:47:d2:d6:d9:22:37:82:
+    c6:14:81:79:fc:33:8b:dd:84:b2:7c:cc:3a:b8:a6:
+    e4:a5:1c:0b:dc:c5:7c:90:f7:26:eb:1b:16:3d:27:
+    b9:8b
+Exponent:
+    2b:b4:2e:a4:05:c8:2f:b9:43:c5:5f:58:07:f8:b1:
+    ab:00:00:00:00:3e:fb:e0:13:44:85:0c:fb:ef:81
+
+
+On remarque que les deux public key partagent le même N mais des E (exposants) différents.
+Nous allons donc faire une Common Modulus Attack : 
+Puisque $e_1$ et $e_2$ sont premiers entre eux (généralement), on peut trouver deux entiers $u$ et $v$ (via l'algorithme d'Euclide étendu) tels que :
+$$u \cdot e_1 + v \cdot e_2 = 1$$
+Ensuite, on calcule :
+$$C_1^u \cdot C_2^v \pmod n = (M^{e_1})^u \cdot (M^{e_2})^v \pmod n = M^{u \cdot e_1 + v \cdot e_2} \pmod n = M^1 \pmod n$$
+
+Script python qui nous permet de faire l'attaque et de déchiffrer le message : atrium_rc25.py (À RÉVISER !!!!!!!)
+
+
+python atrium_rc25.py 
+MESSAGE DÉCHIFFRÉ : _+B{%34E1}daW#01 us}~-!cy
+                                             q 1lR
+VR;,O^]:U0EQ$},"D'y@5)}eR*:j,
+                             k)AAQ Nouveau digicode de la salle RC-25 : 14360af9e85ab1cd93a4ec00f9720d58
+
+Mettre le digicode.
+
+FLAG OBTENU :
+
+[security engine] rsa.shared:30:1|1853e4bb28d8f5275803dbf30070828d6f5f4e8dd9645abaa05360fc72ec1729
+###############################
+
+14ème FLAG
+################################
+
+
+>>> lire journal
+Les évènement notables du point de vue de la sécurité sont consignés dans un
+journal par un des composants du sécurity engine.  Ces évènements ont un
+nom court (par ex. "rsa.reduction") et contiennent un UID.  Ils sont signés
+numériquement par le security engine, avec un MAC.  Une partie des
+utilisateurs appellent cela un "flag", alors que c'est tout simplement une
+                           [--------REDACTED--------]
+Les utilisateurs autorisés reçoivent en direct une notification lorsqu'une
+nouvelle entrée est ajoutée au  journal.  Périodiquement, un algorithme
+est exécuté sur le journal pour détecter des séquences d'évènements
+                           [--------REDACTED--------]
+                           [--------REDACTED--------]
+                           [--------REDACTED--------]
+Le journal alimente entre autre la base de connaissances du security engine.
+C'est le contenu de cette dernière qui sert à rendre des jugements de 
+sécurité automatiquement.  L'algorithme qui est utilisé pour cela est décrit
+                           [--------REDACTED--------]
+
+
+>>> voir journal
+Le MAC qui accompagne chaque entrée du journal des évènements de sécurité 
+fait 256 bits.  Il se décompose en fait en 4 blocs de 64 bits chacun :
+- le premier (octets [0:8]) est obtenu en évaluant un véritable MAC. Celui-ci
+                           [--------REDACTED--------]
+- les 3 autres blocs contiennent des parts d'un secret partagé avec le 
+  système de partage de secret de Shamir.
+Plus précisément, si on note : 
+- p : le nombre 2**64 - 59 (qui est premier),
+- X : les bits [0:64] du MAC,
+- A : les bits [64:128] du MAC,
+- B : les bits [128:192] du MAC,
+- C : les bits [192:256] du MAC.
+Alors A == R(X) mod p, où R est un polynôme de degré 8 inconnu.
+Alors B == S(X) mod p, où S est un polynôme de degré 16 inconnu.
+Alors C == T(X) mod p, où T est un polynôme de degré 24 inconnu.
+Les coefficients constants de R, S et T sont des "firmware update keys", qui
+                           [--------REDACTED--------]
+Pour reconstituer ces coefficients, qui sont en fait R(0), S(0) et T(0), on
+                           [--------REDACTED--------]
+                           [--------REDACTED--------]
+
+
+>>> voir key
+Elle est écrite sur le coin d'une enveloppe.  Elle dit :
+                    firmware update key: 4ef5c2bb09318c8e
+
+
+ +------------------------------------------------------------+
+                                              | Firmware updated. New command activated: ``#!item-debug''. |
+                                              +------------------------------------------------------------+
+
+
+[debug] protagonist.username(world_id='9bf6ceb6e84e37f1a239debc5f181d0f')
+
+
+
+
+
+                                                                   +-------------------+
+                                                                   | Invalid signature |
+                                                                   +-------------------+
+[debug] protagonist.username(world_id='9bf6ceb6e84e37f1a239debc5f181d0f')
+>>> 
+[ITEM DEBUG]>>> 
+
+
+
+[ITEM DEBUG]>>> borne
+[debug] protagonist.username(world_id='9bf6ceb6e84e37f1a239debc5f181d0f')
+[debug] protagonist.username(world_id='9bf6ceb6e84e37f1a239debc5f181d0f')
+>>> 
+[ITEM DEBUG]>>> 
+
+
+[ITEM DEBUG]>>> map
+[debug] protagonist.location(world_id='9bf6ceb6e84e37f1a239debc5f181d0f')
+[debug] room.name(world_id='9bf6ceb6e84e37f1a239debc5f181d0f', room='dc9ffc3f9bae37f17c98884a3fc84adb')
+>>> 
+[ITEM DEBUG]>>> 
+
+
+DIRECTOR's PUBLIC-KEY:
+                    -----BEGIN PUBLIC KEY-----
+                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvtbNyPFC1hhUtr3cb56z
+                    a7v05dq3cgckAHgpPDhOtT1OOgsvJQ1t0RkkSJc7JQ1WNRchjJChLARH9bMd83QQ
+                    2KLiFXPA8FqKqZJBFHCAU7CIeNO1PM01ujUWwCw2ktBIrUbpi3++E6mbRnD8yW3V
+                    HnoEo9qTSTq1tbD/eud3CNdPjJZBElI/7VnBvclJv+okj/CjkoUwKwKSprjeI/mK
+                    kgE1zxtWYOFutP3bsktDEu9cWfSgKmff8rKKbRsMPjlCwXNvqkOpTwmV4EvabIc6
+                    HLr2aFQkGWq8YYXT5A/BzCdvrnLeBGXZdI5ut+FltigApT8sZ+RpPMkrN6nuS8RJ
+                    6QIDAQAB
+                    -----END PUBLIC KEY-----
+
+
+
+>>> lire manuel
+Cet épais manuel (environ 570 pages) décrit de manière détaillée toutes les
+procédures de remplissage, nettoyage, paramétrage du paiement, etc. pour les
+distributeurs automatiques de friandises qu'on trouve partout sur le campus.
+Version courte : pour accéder au menu de réglage, il suffit de taper "ADMIN"
+puis d'entrer le mot de passe.  À toutes fin utiles, voici le mot de passe
+(chiffré avec les clefs publiques des trois développeurs) :
+
+    - anorris: 75a24c70738e1f926afa9bd837336fb826538ab21a685fc6244dfbb40b3a279828e52bf12ac4edfc4a2e24fb8d0ec635f3b09b839d1aaf1e122495a3e40cd1ee96e51547edf0bb9ff0021d68ac16a11ffe62776afd213753d7e9f0246ca60e608a98ca2db82ab14eaaec1c9f7fb6c865a9ca3407b34516b321053bc9f2904b81a262ffd15032ef05aa3c2bf5808ecd972b0fc655b5002150f67c953278d5ba38b5b158b10a8e8bd277f5fe594d32d2d508e783f81071438528503555d7e7bfc7f760824feb706f5e2e54fe9526b301a3bc0f86356a9d4c8f168b69760435623e4142cf97ad1e32c225db937185746c2cef8de1be1ea63e90bb002881854453ac
+    - schneidermarc: 38f6f57c36c3ff2f304dd0fa1bf0c213e9440971cff004e7cf3b101d3284a7ff4485c2f6cc621d03e0e12888d8bb2ae2edc3d28117e65f82029160d08aa19e7bbe7d9197788f5281c20fb5861b1aa999eb2ccff391085734d60358488563b067f18caa4cc77fb37a5ec03216c7e62dcee4a93b8e4869fc07078682c1c844ef8c10f979989c05fe021fa8a0f274e4e5569f6afd6520dd141379ba8dee89470c123767d9238ff6e9c069845c9dde93a97a4c312c26cb3f6866124df55e5129d87a8c7c40c9337a34aa110e260b75dd2a291314474fc1ecc0b9842bdf154321495cf2c32f3d3c72e985dfbdedbe78be8d04e9db3294120414abb9169ad4c8337b4e
+    - vmcknight: 4d8a6d1e0b3a7d372c742ec0dc01e9916a0d1b36b0e4352c653524abed10b21332494065cbd3d10f90e760eed65396a704b1f97640c04407d8b7014c3d8eae27be263411eaa88f32e5f9017aadc308e1be112fd2d9651357ccd2c9524452e0cb0c256a19a1569f198edc6b2fe1bc3901a4abb5a29ee5f4ba24cba750baddec27fb96394a04ad9bbce651c79dac2faa16522de9cec85fbf528f9592a2a5ef7ace86596094a926610755e396344c30b5763d58825f84e8cc955ebf32740714bc17cf1c75f35d7096611a2c3aea6a5c650e89dd11806c37585d04a2e75e816236b233c04d731f69bc32a158bb60121a7d17a7ceb1debc61ec62b688cb93164f3d44
+
+
+aller à la bibliothèque
+
+
+
+python distrib.py
+C>Q{b_]eqI=fY=]+V(]r?gHt)jOejQ(z4i^&9b$Bq#-7{h)9W{ag+bT*Ni}1SvYf*m0no.XpT!V
+
+################################
+

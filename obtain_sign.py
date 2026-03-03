@@ -1,0 +1,17 @@
+# La signature brute renvoyée par le laptop
+S_blind_hex = "8b6821c407716ad36b6fec58af03b25a3e3d410614a920ba19d8a0c193479e4f4647bb725157afb463c3307d05a09b307db7ce75f80d00b79b4bae2b18f6623aea8c0f827840f8d7ff52a7663fc12e25afbf10761bd5c7b0064416a2609bda951741e432a4fea8ceed0d980941abdbd7e38baecb3cc2fdd3caf77c7c3386c6bd3b633dabb3ef035b928cdb5102f605cf48256475bbee6ab98cb46538eeefc3465ece9176222c4c430fbaba81c688c7e44735ae43039ca41f10848696fc8a212e850a1309e860369a314fc1c33939a9a6ac183576a375fc6df0ced4cfcbfa060c58a79e04f44505c650a9da57c46435b4b8275632b8086f17c30e960af20da490"
+S_blind = int(S_blind_hex, 16)
+
+# Modulus N du directeur
+N_hex = "bed6cdc8f142d61854b6bddc6f9eb36bbbf4e5dab77207240078293c384eb53d4e3a0b2f250d6dd1192448973b250d563517218c90a12c0447f5b31df37410d8a2e21573c0f05a8aa9924114708053b08878d3b53ccd35ba3516c02c3692d048ad46e98b7fbe13a99b4670fcc96dd51e7a04a3da93493ab5b5b0ff7ae77708d74f8c964112523fed59c1bdc949bfea248ff0a39285302b0292a6b8de23f98a920135cf1b5660e16eb4fddbb24b4312ef5c59f4a02a67dff2b28a6d1b0c3e3942c1736faa43a94f0995e04bda6c873a1cbaf6685424196abc6185d3e40fc1cc276fae72de0465d9748e6eb7e165b62800a53f2c67e4693cc92b37a9ee4bc449e9"
+N = int(N_hex, 16)
+
+# Le facteur d'aveuglement utilisé était x = 2
+x = 2
+
+# Calcul : S = S_blind * inverse_modulaire(x, N) mod N
+# pow(x, -1, N) calcule l'inverse modulaire directement en Python 3.8+
+S_final = (S_blind * pow(x, -1, N)) % N
+
+print(f"--- SIGNATURE À DONNER AU ROBOT ---")
+print(hex(S_final)[2:])

@@ -1410,47 +1410,109 @@ $$$ ADMIN
 
 [security engine] rsa.crt:52:1|4296c6ee787bac7de665521d490c63dc61ae9c81de6688266a0577c72448a498         [QUINZIEME FLAG !!!]
 
+### FLAG 16: RSA blinding
 
+[Aller à l'auditorium au CICSU]:
+>>> conseil laptop
+Pour commencer, pour obtenir une signature correcte (c.a.d. qui vérifie avec
+la clef publique en utilisant OpenSSL), il faut appliquer soi-même l'encodage
+PKCS#1 v1.5.  Ensuite, la programme va effectuer la dernière étape
+(l'élévation à la puissance d modulo N, où d est la clef secrète). La spec
+de la signature RSA PKCS#1 v1.5 se trouve à la bibliothèque.
 
+>>> conseil laptop
+Une bonne manière d'appréhender le problème, c'est de commencer par faire
+signer n'importe quoi puis de vérifier que les signatures sont valides.
 
+>>> conseil laptop
+Conseil général pour la mise au point : essayer d'abord avec une paire de
+clef qu'on a fabriquée soi-même et pour laquelle on connaît tout plutôt que
+d'utiliser le serveur comme une boite noire qui dit ``NON''.
 
+>>> conseil laptop
+Ensuite, pour faire signer ce qui nous intéresse, on peut exploiter la
+***malléabilité*** de RSA.
 
+>>> conseil laptop
+Concrètement :
+- on soumet (M * x**e) mod N, pour un x aléatoire.  Ceci "masque" M au serveur.
+- le serveur renvoie (M * x**e)**d == (M**d) * (x**ed) == x * M**d mod N.
+- il suffit d'éliminer le ``masque'' x (en multipliant par l'inverse de x
+  modulo N) et on obtient M**d mod N, c'est-à-dire la signature voulue.
 
-[Aller au CICSU]:
->>> lecteur nfc
-Vous refaites tout le tralala de la dernière fois.
+[Récupérer la clé pulique du directeur dans le laptop]:
+                                                           UGLIX v4.0 beta
+                                                        (Lab Director Proxy)
 
-Vous êtes dans le foyer.  Une multitude de spots au plafond diffusent un
-éclairage agréable,  et un mur en imitation bois réchauffe un peu
-l'atmosphère.  Les murs de cette grande salle sont tapissés de posters qui
-vantent les travaux des chercheurs de l'Institut des Systèmes Intelligents
-et de la Robotique (ISIR).  Apparemment une fête a été organisée ici à
-l'occasion des 25 ans de ce laboratoire.  De nombreux objets qui servent à
-faire des  démonstrations techniques ont été amenés ici pour l'occasion.
-À côté du guichet d'acceuil, un escalier monte vers le niveau supérieur (et
-la lumière du jour) tandis que des portes battantes conduisent vers le grand
-auditorium.
+                    Active user: AdrienPanguel
 
-Ici se trouve un ascenseur.
-Ici se trouve une borne de mise à jour de firmware.
-Ici se trouve un BiblioDrone-NG.
-Ici se trouve un Robot gardien.
+                    DIRECTOR's PUBLIC-KEY:
+                    -----BEGIN PUBLIC KEY-----
+                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvtbNyPFC1hhUtr3cb56z
+                    a7v05dq3cgckAHgpPDhOtT1OOgsvJQ1t0RkkSJc7JQ1WNRchjJChLARH9bMd83QQ
+                    2KLiFXPA8FqKqZJBFHCAU7CIeNO1PM01ujUWwCw2ktBIrUbpi3++E6mbRnD8yW3V
+                    HnoEo9qTSTq1tbD/eud3CNdPjJZBElI/7VnBvclJv+okj/CjkoUwKwKSprjeI/mK
+                    kgE1zxtWYOFutP3bsktDEu9cWfSgKmff8rKKbRsMPjlCwXNvqkOpTwmV4EvabIc6
+                    HLr2aFQkGWq8YYXT5A/BzCdvrnLeBGXZdI5ut+FltigApT8sZ+RpPMkrN6nuS8RJ
+                    6QIDAQAB
+                    -----END PUBLIC KEY-----
 
->>> conseil
-Je n'ai pas de suggestion pour le moment.
+                                                                Menu
+                                                                ----
+                    1. Lab Director Assistance Program
+                    2. Exit
 
->>> conseil borne
-Vous devrez trouver des "firmware update keys" ailleurs sur le campus.
+[Mettre cette clé publique dans ./Keys/PublicKeys/pk_director.pem.]
+[Récupérer le N de cette clé publique RSA dans le terminal avec la commande suivante]:
 
->>> voir Robot gardien
-Un drone de surveillance conçu et réalisé par les membres de l'ISIR.  Une
-petite affiche explique qu'il sert à s'assurer que ``tout se passe bien'' et
-qu'aucune personne n'aurait l'idée individualiste ``d'emprunter'' le matériel
-collectif sans en avoir l'autorisation expresse délivrée par le directeur
-de l'ISIR.  Il est actif ; ses capteurs scrutent vos moindres mouvements.
-Il est équipé d'un dispositif qui ressemble à un énorme Taser.
+openssl rsa -pubin -in pk.pem -noout 
+-modulus | sed 's/Modulus=//' | tr '[:upper:]' '[:lower:]'
 
->>> utiliser Robot gardien
+[Retour de la commande]:
+
+bed6cdc8f142d61854b6bddc6f9eb36bbbf4e5dab77207240078293c384eb53d4e3a0b2f250d6dd1192448973b250d563517218c90a12c0447f5b31df37410d8a2e21573c0f05a8aa9924114708053b08878d3b53ccd35ba3516c02c3692d048ad46e98b7fbe13a99b4670fcc96dd51e7a04a3da93493ab5b5b0ff7ae77708d74f8c964112523fed59c1bdc949bfea248ff0a39285302b0292a6b8de23f98a920135cf1b5660e16eb4fddbb24b4312ef5c59f4a02a67dff2b28a6d1b0c3e3942c1736faa43a94f0995e04bda6c873a1cbaf6685424196abc6185d3e40fc1cc276fae72de0465d9748e6eb7e165b62800a53f2c67e4693cc92b37a9ee4bc449e9
+
+[C'est le N de la clé publique du directeur à déposer dans ./Hexa/n_director.hex.]
+[Lancer le code RSA_blinding.py avec ce N.]:
+
+python3 RSA_blinding.py 
+
+[Retour de la commande + stocké dans ./Texts/rsa_blinding.txt]:
+
+--- DATA À ENVOYER AU DIRECTEUR ---
+b8172d5e5eae552d7aeb205a8dafb2dba370d55aad8322ba28c0529e821a1d75267e85917d22551116373fb48eb903b2e637ace79241e744e4340b10b830a506ea9ee8b6d14a20a9c9988542af3fd55559018774ebf7719b5f7be4ca867628442dacc6454a475dac1923895712e54c1c8ccd2dfaa15ff76c66355733c1bffeb47949cd7bad503e522b45dfd47633ff6811efd12f6270a9ec8607012019b48c1c60e90b925561dd31872677b26b271803c2ed1eda660d3d2f4bd5672f5efb30fbf05f741a370c50f85c16a30336dca26af82b63359ba84fe2ca9c846645c50aa5df7dbc6c6d9e09fc9bb0c758d740755a815a8768258fce76e6998e844f8960bf
+
+[Ouvrir le laptop et demander à faire signer ce blinding message.]
+>>> utiliser laptop
+                                                           UGLIX v4.0 beta
+                                                        (Lab Director Proxy)
+                    Active user: AdrienPanguel
+
+WARNING: - This prototype is INCOMPLETE.
+WARNING: - It does not fully implement RSA PKCS#1 v1.5.
+WARNING: - Here is what it actually does:
+WARNING:   - read the input as a hex-encoded number (big-endian)
+WARNING:   - run the IA decision algorithm on the input
+WARNING:   - raise it power d modulo N (d is the secret key)
+WARNING:   - print the result in hex (big-endian)
+WARNING: - This does not produce valid OpenSSL signatures
+WARNING:   out of the box because the padding is not applied
+
+YOU HAVE BEEN WARNED
+
+                    Data:                       b8172d5e5eae552d7aeb205a8dafb2dba370d55aad8322ba28c0529e821a1d75267e85917d22551116373fb48eb903b2e637ace79241e744e4340b10b830a506ea9ee8b6d14a20a9c9988542af3fd55559018774ebf7719b5f7be4ca867628442dacc6454a475dac1923895712e54c1c8ccd2dfaa15ff76c66355733c1bffeb47949cd7bad503e522b45dfd47633ff6811efd12f6270a9ec8607012019b48c1c60e90b925561dd31872677b26b271803c2ed1eda660d3d2f4bd5672f5efb30fbf05f741a370c50f85c16a30336dca26af82b63359ba84fe2ca9c846645c50aa5df7dbc6c6d9e09fc9bb0c758d740755a815a8768258fce76e6998e844f8960bf
+
+                    Checking data ...
+
+                    No problem detected
+
+                    Signature:
+                    8b6821c407716ad36b6fec58af03b25a3e3d410614a920ba19d8a0c193479e4f4647bb725157afb463c3307d05a09b307db7ce75f80d00b79b4bae2b18f6623aea8c0f827840f8d7ff52a7663fc12e25afbf10761bd5c7b0064416a2609bda951741e432a4fea8ceed0d980941abdbd7e38baecb3cc2fdd3caf77c7c3386c6bd3b633dabb3ef035b928cdb5102f605cf48256475bbee6ab98cb46538eeefc3465ece9176222c4c430fbaba81c688c7e44735ae43039ca41f10848696fc8a212e850a1309e860369a314fc1c33939a9a6ac183576a375fc6df0ced4cfcbfa060c58a79e04f44505c650a9da57c46435b4b8275632b8086f17c30e960af20da490
+[press any key]
+
+[Noter cette signature dans ./Texts/sign_rsa_blinding.txt.]
+[Retourner au Robot gardien et donner cette signature.]
+>>> Robot gardien
 Vous vous approchez prudemment du robot gardien, et à votre grande surprise
 celui-ci entame poliment la conversation.  Vous lui expliquez que vous auriez
 vraiment besoin d'emprunter le BiblioDrone-NG.  Il répond : bien sûr, c'est tout
@@ -1462,10 +1524,51 @@ caractères :
 
 Ensuite, bien sûr, vous pourrez l'emprunter.
 
-                    Signature:
+                    Signature:                  45b410e203b8b569b5b7f62c5781d92d1f1ea0830a54905d0cec5060c9a3cf27a323ddb928abd7da31e1983e82d04d983edbe73afc06805bcda5d7158c7b311d754607c13c207c6bffa953b31fe09712d7df883b0deae3d803220b51304ded4a8ba0f219527f54677686cc04a0d5edebf1c5d7659e617ee9e57bbe3e19c3635e9db19ed5d9f781adc9466da8817b02e7a412b23addf7355cc65a329c7777e1a32f6748bb1116262187dd5d40e34463f2239ad72181ce520f8842434b7e45109742850984f4301b4d18a7e0e19c9cd4d3560c1abb51bafe36f8676a67e5fd03062c53cf027a2282e32854ed2be2321ada5c13ab195c04378be1874b057906d248
+
+                                                          +--------------+
+                                                          | Acknowledged |
+                                                          +--------------+
+
+[security engine] rsa.malleable:52:1|420d66ffc695a390bcc41c89dd521f355bf8a1ce8bc62b0180671b53d2e891a8           [SEIXIEME FLAG !!!]
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[PEUT-ETRE UTIL EPOUR PLUS TARD]
+
+[Au RC-07 de l'Atrium.]
+>>> regarder firmware
+Elle est écrite sur le coin d'une enveloppe.  Elle dit :
+                    firmware update key: 35ba26a3b0297f0d
+
+[Peut-être utile pour la suite...]
 
 
 
@@ -1499,10 +1602,3 @@ Ensuite, bien sûr, vous pourrez l'emprunter.
 
 
 
-
-[Au RC-07 de l'Atrium.]
->>> regarder firmware
-Elle est écrite sur le coin d'une enveloppe.  Elle dit :
-                    firmware update key: 35ba26a3b0297f0d
-
-[Peut-être utile pour la suite...]
