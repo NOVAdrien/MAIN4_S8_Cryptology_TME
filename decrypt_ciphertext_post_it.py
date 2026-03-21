@@ -7,5 +7,6 @@ plaintext = decrypt(ciphertext, password)
 
 print("\nCiphertext:")
 print(ciphertext)
+
 print("\nDecrypted Plaintext:")
 print(plaintext, "\n")

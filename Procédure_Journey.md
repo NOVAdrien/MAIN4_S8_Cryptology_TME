@@ -39,7 +39,7 @@ telnet m1.tme-crypto.fr 1337
 
 ## Historique de l'aventure
 
-### FLAG 1: S'enregistrer sur le registre des participants porur sauvegarder sa progression
+### FLAG 1: S'enregistrer sur le registre des participants pour sauvegarder sa progression
 
 [Prendre le plan interactif au nord+est.]
 >>> prendre plan
@@ -1578,7 +1578,7 @@ Il manque 16 point(s) pour T(0)
 
 [Mtnt que nous avons 7 flags, récupérons la 3ème firmware key en lançant le code inteprolation2.py]:
 
-python3 test.py 
+python3 firmwares.py 
 
 [Retour de la commande]:
 

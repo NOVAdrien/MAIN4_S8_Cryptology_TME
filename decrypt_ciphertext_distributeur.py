@@ -30,7 +30,7 @@ def crt(c_list, n_list):
         result = (result + c_list[i] * Ni * inverse) % N_total
     return result
 
-# 3. Calcul de la racine cubique entière
+# 3. Calcul de la racine cubique entière par dichotomie
 def integer_cbrt(n):
     low = 0
     high = n
