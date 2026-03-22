@@ -71,7 +71,7 @@ Ici se trouve un guide OpenSSL (tome V) : signature.
 Ici se trouve un guide OpenSSL (tome VI) : script d'exemple.
 
 [Lire tous les livres et copier leur contenu dans le dossier ./Livres/ .]
-[A chaque nouvelle connexion, les tomes reviennent dans cette salle.]
+[A chaque nouvelle connexion, ces livres reviennent dans cette salle.]
 
 [Lancer le code decrypt_ciphertext_post_it.py pour décrypter le ciphertext trouvé précédemment sur le post-it avec la commande suivante.]:
 
@@ -108,9 +108,9 @@ breve falls ovate disks bwana
                     SUCCESS
                     - Created account ``AdrienPanguel'' (with full admin privileges)
 
-                                                                    Press any key                     
+                                                                    Press any key
 
-                                                                   UGLIX v4.0 beta                                                                   
+                                                                   UGLIX v4.0 beta
                                                               (main security terminal)
                     Active user: AdrienPanguel
                                                                System services status
@@ -131,7 +131,7 @@ breve falls ovate disks bwana
 >>> terminal
 [security engine] register:52:1|b644c1e209b41a83e9ed72be2f7878f8eb9c34fde9a06f0e9701f5448840e16a      [PREMIER FLAG !!!]
 
-### FLAG 2&3: Créer ma clé privée et ma clé publique
+### FLAG 2: Chiffrement symétrique
 
 >>> conseil
 Vous ne trouvez pas qu'il fait sombre ?  Essayez de remettre le courant.
@@ -140,7 +140,7 @@ Vous devrez aller au sud-est.
 [Aller au local de service 5.]
 [Ouvrir le terminal.]
 >>> terminal
-                                               UGLIX v4.0 beta
+                                                                   UGLIX v4.0 beta
                                                                  (Service terminal)
                     Active user: AdrienPanguel
                                                                       Main menu
@@ -209,7 +209,11 @@ Vous devrez aller au sud-est.
                     Signatures:                 NONE
 
 [Sauvegarder cette Public key dans un fichier ./Keys/PublicKeys/pk_pki_tutorial.pem]
-[Il faut chiffrer le texte "I got it!" avec cette clé pk_pki_tutorial.pem avec les commandes suivantes]:
+[Lancer le code sign_plaintext_with_pk.py pour chiffrer le texte "I got it!" avec cette clé pk_pki_tutorial.pem avec la commande suivante]:
+
+python3 encrypt_plaintext_with_pk.py
+
+[Ou bien exécuter les commandes suivantes dans le terminal directement]:
 
 printf "I got it!" > ./Texts/msg_pki_tutorial.txt
 
@@ -223,7 +227,7 @@ cat ./Hexa/msg_pki_tutorial.hex
 
 55df8f73c2663597b98426d51f093244e362df0f37b38bb71d43f6e17c2435b9d687a663daad8296727ef61afeed735b4a9a180468151326889adb792d1c6d660521f289168a1db2bc26a095e96947461a900e76e7ddfaf2bcaa9ac336b9a5cade4bc262cbd178994b7a5e5194cb2300eabe804faa61466627f25844be746d383d491793df8888af52250f07f4d098a9450c8e82d6dae81484e2c1708ab13c404c92f00d25b71b1a529e0555fb7ed2afbf49254774aecd700c062dae5f892fd95c1c5e4970a90e25a0fc1c62d4d4a32b14911b2cbeb31de528f35ab9760b25e8062efd12b2405e1355968921bdea1fa082842f20be7bcb8f12f57307867b4f10
 
-[Remarque: cette sortie sera toujours différente d'une fois sur l'autre, car le chiffrement ets probabiliste et non déterministe.]
+[Remarque: cette sortie sera toujours différente d'une fois sur l'autre, car le chiffrement est probabiliste et non déterministe.]
 [Copier-coller ce retour dans la case du "3. Tutorial" après "Ciphertex:"]
 
                                                                +--------------------+
@@ -231,66 +235,36 @@ cat ./Hexa/msg_pki_tutorial.hex
                                                                +--------------------+
 
 [Le tutoriel est terminé.]
-[Générer notre clé privée avec les commandes suivantes]:
+
+[security engine] pki.tutorial:52:1|8d3a204ece50cdea3d35d5c16bca71d7961841a01f1071dbafd6dc5a441da049      [DEUXIEME FLAG !!!]
+
+### FLAG 3: Générer ma paire de clé RSA publique/privée
+
+[ Lancer le code generate_pk_sk_rsa.py pour générer notre paire de clé RSA publique/privée avec la commande suivante]:
+
+python3 generate_pk_sk_rsa.py
+
+[Ou alors générer notre clé privée avec les commandes suivantes]:
 
 openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out ./Keys/PrivateKeys/my_sk.pem
 
-[Contenu de ./Keys/PrivateKeys/my_sk.pem]:
-
------BEGIN PRIVATE KEY-----
-MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCxUXBGiQ4bf77d
-RpamCfDNHV/3PzA87IooKjznWCdYl1/h8oZLNwTTWQdFYQvbUBpB379CgtmTIH63
-OjUEuvGh3un+GL7q8YMEUKuUT++sUQUX91/t5uGZWUGUsELdAQwlxOedgdOZBAdD
-pF6ZCZj08PBrOuFgwYBG4yqBvr14L6fC5uoguWkjxySK50g8bNFY7v/k9AC2T9tL
-ftYkpQviVY5+pBdWoYn1D5EvDIb7Aq/kFPITzVbirNxJ8dtDjHqGp4oEy3eLrfce
-ms4rVk3To866ufcBjAmHWzW/52BlhMUeKwcxKNcohddfPxpw9U7lTsj9jcD0pVXK
-Gdkcjue9AgMBAAECggEABAfbo0LUzwO3oTyMSqBxuJvpFUv6qvvehRy2rzSWCmHA
-hHiYnGeXBL3imC1lUVowCpzNMnQagYlsz/nzABVGzlzsmUHTPzB3v7acu92YT2S1
-Fq8hH12O9cctYjWig3cVYVtpP2+W0YThrGQ1YUmyUCkU8f8P5fzoD1R1ICdnk66J
-1+amcF5uE4L6OBbYqjMiVmh6KTOIPRyimAauKW8UJN3+aBofXw99yMmGt0B0SF1a
-L1iAyh1HXIqROkSl9NQeG9q6PtpXo7Rw4neDyWSHHUZdxf9xB7b8MoZ/9aYuCEoj
-DBBUcKmc/AQ/cgUBC3cjWJJg1Mh844dVzrGrD7URKQKBgQD30AOEAW0M6NugpRwC
-od6u9UcGb0Am14Mz3my9iwX7piy8Q9iQ8WGYCFVyheKRrpLf7hzVHiJg5JDHomzh
-Ym7UNKjZr2Ei5FqUYtaFQWcy8fCA5i0P5tNJBX+rwU+1T5DgLXLPenmOMjkQ/Ed1
-w4LviCmDvJR5+0U47D8dGhgGGQKBgQC3LS+5SjzybdyRgSuAiYjYBJL0fRn6UtBQ
-MGgc9l/FBVyKjjgBDvdeb/XKfzSbPfqbuujWyRA46aFBD4EoMchMaMq7k05SaVz+
-Tuw8up+rmwi+XdB5cWmtY11pD7Wqk1MUSnwSmOdzpGu2fQKLSxRScJFrB/Qiq342
-jUPmbsm7RQKBgQCArSSGMO9dGrSgT9uhikfE9Vux/aaEBLf+AOrZ6QxsRTdJcrlL
-WethNEKaOucQ2mMtn8ic6Q7U3RpIbxC2X5RI4CclEaoQoh5emovlmbZqf7JwXBTe
-Au+HJTHMD47CCNSjczYAggoISg/TwAujHKgqlLtpykwWouCo1BNZmykKUQKBgGuO
-uuEf+F2ZqNQ/dp3JJHNDbE7nTmOwUOVlJx0qhd2YYlhxXe0xLotjTn4S537oi8j5
-nVLRSRdCCA+93OcPJD/JoJE309uMRrCFAy49nxgStrWhPJKyx4yqNeVE9jUswLG/
-cs8wvWcn+p9zFBVahppJwvmH+BCLhlbd6CrcjtPJAoGAEb+ZEd6eUUEWOA7F/ZBg
-R3mXuNWES06STuUrVT+MDCbh0Pl9S5UXy3ECPZEW1yIcYkfKoinaX1eqJ3zz/RJC
-y0YNymQUrdHtFgBS7q1KB8EqJClnqExi9NKPrp3iMocWjenKwwTKQg2Y4iDjXAl/
-HEtJymRR5Y3PMfVINrpHq8Q=
------END PRIVATE KEY-----
-
-[On en extrait notre clé publique avec la commande suivante]:
+[Puis en extraire notre clé publique avec la commande suivante]:
 
 openssl pkey -in ./Keys/PrivateKeys/my_sk.pem -pubout -out ./Keys/PublicKeys/my_pk.pem
 
-[Contenu de ./Keys/PublicKeys/my_pk.pem]:
-
------BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsVFwRokOG3++3UaWpgnw
-zR1f9z8wPOyKKCo851gnWJdf4fKGSzcE01kHRWEL21AaQd+/QoLZkyB+tzo1BLrx
-od7p/hi+6vGDBFCrlE/vrFEFF/df7ebhmVlBlLBC3QEMJcTnnYHTmQQHQ6RemQmY
-9PDwazrhYMGARuMqgb69eC+nwubqILlpI8ckiudIPGzRWO7/5PQAtk/bS37WJKUL
-4lWOfqQXVqGJ9Q+RLwyG+wKv5BTyE81W4qzcSfHbQ4x6hqeKBMt3i633HprOK1ZN
-06POurn3AYwJh1s1v+dgZYTFHisHMSjXKIXXXz8acPVO5U7I/Y3A9KVVyhnZHI7n
-vQIDAQAB
------END PUBLIC KEY-----
-
 [En revenant à "1. Upload public-key", copier-coller cette clé publique]:
 
-[security engine] pki.tutorial:52:1|8d3a204ece50cdea3d35d5c16bca71d7961841a01f1071dbafd6dc5a441da049      [DEUXIEME FLAG !!!]
 [security engine] pki.upload:52:1|a75e2154fd95ebaefb63cb2d469d9d40062e3e32dce8c339b154f634d8f0eeb1        [TROISIEME FLAG !!!]
 
 ### FLAG 4: Signer un message avec ma clé privée
 
 [Retourner dans le local électrique]
-[Signer avec my_sk.pem le challenge donné "twerp reply visor ahead churl" avec les commandes suivantes]:
+
+[Lancer le code "sign_challenge_sk_rsa.py" pour signer le challenge donné avec ma clé privée avec la commande suivante]:
+
+python3 sign_challenge_sk_rsa.py
+
+[Ou bien, signer avec my_sk.pem le challenge donné "twerp reply visor ahead churl" avec les commandes suivantes]:
 
 printf "twerp reply visor ahead churl" > ./Texts/sign_challenge1.txt
 
@@ -376,7 +350,6 @@ Commencez par aller dans le labo qui est au nord-ouest.
 [Nouveau plan]:
 
 NIVEAU SB
-=========
 
           22 -------------- 32                    
            |  \             |
@@ -584,8 +557,8 @@ Testé 40000 mots
 FOUND PASSWORD: tautologically
 
 [Le mdp du compte de "emmalyn87" est "tautologically".]
-[Retourner au laboratoire dans la salle RC-13 pour dévérouiller l'ordinateur avec comme id "emmalyn87" et comme mdp "tautologically"]:
->>> utiliser ordinateur
+[Retourner au laboratoire dans la salle RC-13 pour dévérouiller l'ordinateur avec comme id "emmalyn87" et comme mdp "tautologically".]
+
 [security engine] dict.atk:52:1|8afef7978c20be4f9e3061892df1b4cc4bb0b4ab9b9456110cfd18f1f907ebff        [CINQUIEME FLAG !!!]
 
 ### FLAG 6: Générateur de clé RSA
@@ -755,7 +728,11 @@ Vous pouvez vous connecter avec le protocole à clef publique pour accéder à e
 
         signature:
 
-[Il faut signer ce challenge avec ma clé privée my_sk.pem avec les commandes suivantes]:
+[Lancer le code sign_challenge_PK_rsa.py pour signer le challenge avec ma clé privée avec la commande suivante]:
+
+python3 sign_challenge_PK_rsa.py
+
+[Ou bien signer ce challenge avec ma clé privée my_sk.pem avec les commandes suivantes]:
 
 printf "fader scrub chins divvy amass" > ./Texts/sign_challenge_PK.txt
 
@@ -804,7 +781,7 @@ openssl req -new -key ./Keys/PrivateKeys/sk_atrium.pem -batch -subj '/CN=AdrienP
 
 [security engine] pki.cert:52:1|8fe700cd09c6930261a71d3f75981625b83f3bcd5391b161e280bbbfd4078350        [NEUVIEME FLAG !!!]
 
-### FLAG 10: Broadcast
+### FLAG 10: Chiffrement hybride & Broadcast
 
 [Aller au labo dans la salle RC-13.]
 [Ouvrir le terminal et faire un broadcast.]
@@ -824,7 +801,11 @@ twIDAQAB
 
 [Mettre cette clé publique dans le fichier ./Keys/PublicKeys/pk_broadcast.pem.]
 
-[Obtenir la session-key à partir de cette clé publique avec les commandes suivantes]:
+[Lancer le code build_session_key.py pour obtenir la session_key à partir d'un message clair choisi "AdrienPanguel123" avec la commande]:
+
+python3 build_session_key.py
+
+[Ou bien obtenir la session-key à partir de cette clé publique avec les commandes suivantes]:
 
 echo -n "AdrienPanguel123" | openssl pkeyutl -encrypt -pubin -inkey ./Keys/PublicKeys/pk_broadcast.pem | xxd -p | tr -d '\n ' > ./Keys/pk_broadcast.pem
 
@@ -834,9 +815,9 @@ cat ./Keys/pk_broadcast.pem
 
 b5a25a0fce193fe776d3154e1dbe964474392052918e81698b497c3087460f7045bafd1e34b12b350a40b2d8261b120833006ec544caa25e96ec2bec6e3762d1283210a73509289b7431ce18ef025c089a08298ca81ac223add2800e576f5dc28c1a282113e2c898cc7fcc9dafa7ef34ac7bdf34cea344ac607b55cfe5f79f1f66df1e7b405d77e67a76c9652c0958658c121873743c0cc39062290b06c22e1a1738a975884d34a583dd8429c3e221000cf70a362982053634b442dc2bcc3fd63e1c46a37add62b28486cac02de6a23938942949f1c1716e84e911ae92a8e34a56b0d783cbb1084012a47f48f67cd908fe86aed4cccb5830f924dd40059062b5
 
-[Obtenir le ciphertext associé à la session-key précédente avec la commande]:
+[Puis lancer le code encrypt_ciphertext_session_key.py pour chiffrer un message clair choisi "test" avec le message clair "AdrienPanguel123" avec la commande suivante]:
 
-python3 encrypt_plaintext_broadcast.py
+python3 encrypt_ciphertext_session_key.py
 
 [Retour de la commande]:
 
@@ -884,7 +865,12 @@ U2FsdGVkX19jqtLBLFRzg9ioEkZ7jL5MQcr4dfQsVoE=
 
 [Il faut faire signer ma propre clé publique my_pk.pem par deux personnes avec leur propre clé privée: victor.zhou & Karim]:
 
-[Je signe pour victor.zhou]:
+[Lancer le code sign_friends.py pour signer la clé publique d'un collègue avec ma clé privée avec la commande suivante]:
+
+python3 sign_friends.py
+
+
+[Ou bien signer pour victor.zhou avec les commandes suivantes]:
 
 openssl dgst -sha256 -sign ./Keys/PrivateKeys/my_sk.pem ./Keys/PublicKeys/pk_friend1.pem > ./Binary/sign_friend1.bin
 
@@ -921,7 +907,7 @@ cat ./Hexa/sign_friend2.hex
 
 [security engine] web.of.trust:52:1|f314e4db3ff276736a12d4109325c66c5aab06318dce9fb8eea4ddfa36b2adb5    [ONZIEME FLAG !!!]
 
-### FLAG 12: Shared modulus Attack (RSA) (One Private Key)
+### FLAG 12: Shared modulus Attack (RSA) avec fuite de  Private Key
 
 [Retour automatique du broadcast précédent]:
 
@@ -1104,13 +1090,12 @@ DIGICODE = c4b844a35ba8ecb20d40026a7c8903d0
 
 [security engine] rsa.shared:52:1|6a2190aa0779831e8f3a87a922a01c3c05bc55fe94f22b99b6cf9c8b22d2a148      [TREIZIEME FLAG !!!]
 
-### FLAG 14: sécurisées Uglix Secure Vault
+### FLAG 14: Attaque par recherche exhaustive sur une seed trop petite
 
 [A partir de ce moment, JE N'AI PLUS ACCES AU SITE INTERNET OU JE DEPOSE MES FLAGS !!]
                                                                    UGLIX v4.0 beta
                                                         (Security Engine Monitoring Console)
                     Active user: AdrienPanguel
-
                                                                       Main menu                    
                                                                       ---------
                     1. Monitor active threats
@@ -1134,7 +1119,8 @@ DIGICODE = c4b844a35ba8ecb20d40026a7c8903d0
 
                     Website access: ALLOWED 
 
-
+                                                                   UGLIX v4.0 beta                  
+                                                        (Security Engine Monitoring Console)
                     subject: AdrienPanguel
                     nature: threat
                     level: medium
@@ -1149,7 +1135,6 @@ DIGICODE = c4b844a35ba8ecb20d40026a7c8903d0
                     Website access: DENIED
 
 Related security events
-=======================
 Entry in security log                                                                             subject           date
 ------------------------------------------------------------------------------------------------  ----------------  -------------------
 pki.tutorial:52:1|8d3a204ece50cdea3d35d5c16bca71d7961841a01f1071dbafd6dc5a441da049                AdrienPanguel     2026-02-02 15:57:35
@@ -1273,7 +1258,6 @@ python3 key_expansion_seed.py
 [+] Plaintext plausible (UTF-8) :
 
 Cahier de manipulation
-======================
 09:00 Démarrage de l'accélérateur
 09:27 Puissance nominale
 09:45 Première tentative de broadcast à cette puissance
@@ -1468,8 +1452,7 @@ Concrètement :
 [Mettre cette clé publique dans ./Keys/PublicKeys/pk_director.pem.]
 [Récupérer le N de cette clé publique RSA dans le terminal avec la commande suivante]:
 
-openssl rsa -pubin -in pk.pem -noout 
--modulus | sed 's/Modulus=//' | tr '[:upper:]' '[:lower:]'
+openssl rsa -pubin -in ./Keys/PublicKeys/pk_director.pem -noout -modulus | sed 's/Modulus=//' | tr '[:upper:]' '[:lower:]'
 
 [Retour de la commande]:
 
@@ -1478,11 +1461,12 @@ bed6cdc8f142d61854b6bddc6f9eb36bbbf4e5dab77207240078293c384eb53d4e3a0b2f250d6dd1
 [C'est le N de la clé publique du directeur à déposer dans ./Hexa/n_director.hex.]
 [Lancer le code RSA_blinding.py avec ce N.]:
 
-python3 RSA_blinding.py 
+python3 RSA_blinding.py
 
 [Retour de la commande + stocké dans ./Texts/rsa_blinding.txt]:
 
 --- DATA À ENVOYER AU DIRECTEUR ---
+
 b8172d5e5eae552d7aeb205a8dafb2dba370d55aad8322ba28c0529e821a1d75267e85917d22551116373fb48eb903b2e637ace79241e744e4340b10b830a506ea9ee8b6d14a20a9c9988542af3fd55559018774ebf7719b5f7be4ca867628442dacc6454a475dac1923895712e54c1c8ccd2dfaa15ff76c66355733c1bffeb47949cd7bad503e522b45dfd47633ff6811efd12f6270a9ec8607012019b48c1c60e90b925561dd31872677b26b271803c2ed1eda660d3d2f4bd5672f5efb30fbf05f741a370c50f85c16a30336dca26af82b63359ba84fe2ca9c846645c50aa5df7dbc6c6d9e09fc9bb0c758d740755a815a8768258fce76e6998e844f8960bf
 
 [Ouvrir le laptop et demander à faire signer ce blinding message.]
@@ -1556,13 +1540,11 @@ Il manque 16 point(s) pour T(0)
 [On retire le "0x" dans l'hexadécimal "0x2cca1231ebcfe35b" pour n'avoir que "2cca1231ebcfe35b".]
 [Aller au CICSU dans le foyer, sur la borne et entrer cette firmware-key.]
 
-
-                                                                                                             UGLIX v4.0 beta
-                                                                                                        (Firmware Update Station)
+                                                     UGLIX v4.0 beta
+                                                (Firmware Update Station)
                     Active user: AdrienPanguel
 
-                    Firmware update key:        2cca1231ebcfe35b
-                    
+                    Firmware update key:        2cca1231ebcfe35b                    
                                                  +------------------------------------------------------+
                                                  | Firmware updated. New command activated: ``#!sudo''. |
                                                  +------------------------------------------------------+

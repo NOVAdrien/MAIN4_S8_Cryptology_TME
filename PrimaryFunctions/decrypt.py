@@ -12,13 +12,14 @@ def decrypt(ciphertext, passphrase, cipher="aes-128-cbc", decode_utf8=True, stri
     - decode_utf8: si le résultat doit être converti en chaîne UTF-8 (True) ou en bytes (False)
     - strict: si True, lève OpensslError en cas d’échec ; sinon renvoie None
     """
-    args = [
-        "openssl", "enc",                   # Sous-commande OpenSSL pour le chiffrement/déchiffrement symétrique
-        "-d", f"-{cipher}",                 # Mode de déchiffrement et choix du chiffrement
-        "-base64",                          # L’entrée est fournie en base64
-        "-pbkdf2",                          # Utiliser PBKDF2 pour dériver la clé à partir de la passphrase
-        "-pass", f"pass:{passphrase}",      # Transmet la passphrase à OpenSSL
-        "-A"                                # Traiter le base64 comme une seule ligne, pour éviter des problèmes avec les retours à la ligne
+
+    cmd = [
+        "openssl", "enc",                # Commande OpenSSL pour le chiffrement/déchiffrement symétrique
+        "-d", f"-{cipher}",              # Mode de déchiffrement et choix du chiffrement
+        "-base64",                       # L’entrée est fournie en base64
+        "-pbkdf2",                       # Utiliser la fonction de dérivation de clé PBKDF2 pour dériver la clé à partir de la passphrase
+        "-pass", f"pass:{passphrase}",   # Transmet la passphrase à OpenSSL
+        "-A"                             # Traiter le base64 comme une seule ligne
     ]
 
     # Conversion du ciphertext de chaîne str en octets avec l'encodage UTF-8
@@ -27,7 +28,7 @@ def decrypt(ciphertext, passphrase, cipher="aes-128-cbc", decode_utf8=True, stri
 
     # Lancer la commande OpenSSL
     result = subprocess.run(
-        args,
+        cmd,
         input=ciphertext,
         stdout=subprocess.PIPE,     # Capture la sortie standard dans result.stdout
         stderr=subprocess.PIPE      # Capture la sortie d’erreur dans result.stderr

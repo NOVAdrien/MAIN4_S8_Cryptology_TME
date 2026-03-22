@@ -1,5 +1,6 @@
 P = 2**64 - 59
 
+# Liste de mes 9 premiers flags
 flags = [
     "420d66ffc695a390bcc41c89dd521f355bf8a1ce8bc62b0180671b53d2e891a8",
     "4296c6ee787bac7de665521d490c63dc61ae9c81de6688266a0577c72448a498",
@@ -12,7 +13,9 @@ flags = [
     "464830fac0d902b1e193a8045a68fef6bdd8222a7e32cf7163a2912ed63eb867"
 ]
 
+# Découpage d'un MAC en 4 entiers
 def parse_mac(mac):
+    # Avoir une représentation hexadécimale uniforme
     mac = mac.strip().lower()
     if len(mac) != 64:
         raise ValueError(f"MAC invalide (longueur {len(mac)} au lieu de 64): {mac}")
@@ -23,12 +26,14 @@ def parse_mac(mac):
     c = int(mac[48:64], 16)
     return x, a, b, c
 
+# Algorithme d'Euclide étendu
 def egcd(a, b):
     if b == 0:
         return a, 1, 0
     g, x1, y1 = egcd(b, a % b)
     return g, y1, x1 - (a // b) * y1
 
+# Calcul de l'inverse de a modulo p
 def modinv(a, p):
     a %= p
     g, x, _ = egcd(a, p)
@@ -36,10 +41,12 @@ def modinv(a, p):
         raise ValueError("inverse impossible")
     return x % p
 
+# Interpolation de LAgrange en 0
 def lagrange_eval_at_zero(points, p):
     res = 0
     n = len(points)
 
+    # Calcule la formule de Lagrange en 0: L_i(0) = ∏_{j != i} (-xj) / (xi - xj)
     for i in range(n):
         xi, yi = points[i]
         num = 1
@@ -60,6 +67,7 @@ def lagrange_eval_at_zero(points, p):
 seen = set()
 pts_R, pts_S, pts_T = [], [], []
 
+# Construire la liste de points
 for mac in flags:
     X, A, B, C = parse_mac(mac)
     if X in seen:
@@ -71,6 +79,7 @@ for mac in flags:
 
 print(f"Points uniques : {len(pts_R)}")
 
+# Récupérer R(0)
 if len(pts_R) >= 9:
     R0 = lagrange_eval_at_zero(pts_R[:9], P)
     print("R(0) =", R0)
@@ -78,6 +87,7 @@ if len(pts_R) >= 9:
 else:
     print("Pas assez de points pour R")
 
+# Récupérer S(0)
 if len(pts_S) >= 17:
     S0 = lagrange_eval_at_zero(pts_S[:17], P)
     print("S(0) =", S0)
@@ -85,6 +95,7 @@ if len(pts_S) >= 17:
 else:
     print("Il manque", 17 - len(pts_S), "point(s) pour S(0)")
 
+# Récupérer T(0)
 if len(pts_T) >= 25:
     T0 = lagrange_eval_at_zero(pts_T[:25], P)
     print("T(0) =", T0)

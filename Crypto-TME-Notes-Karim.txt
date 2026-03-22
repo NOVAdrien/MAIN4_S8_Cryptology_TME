@@ -1,0 +1,1247 @@
+TME CRYPTOLOGIE 1 — Journal d’actions + commandes (Karim)
+========================================================
+
+But : garder une trace claire de ce que j’ai fait, avec les commandes utilisées.
+Remarque : je mets les flags à la fin de chaque partie (à remplacer/coller si besoin).
+
+
+[0] Setup (venv + dépendances)
+------------------------------
+# Création / activation venv (dans le dossier du projet)
+python3 -m venv venv
+source venv/bin/activate
+
+# Installation librairie crypto (pour le client / scripts)
+pip install pycryptodome
+
+# Vérif OpenSSL (important sur Mac)
+openssl version
+
+========================================
+FLAG 1 — Déchiffrement AES (post-it)
+========================================
+
+Contexte
+--------
+On trouve un post-it contenant un texte chiffré en base64 et un mot
+de passe : ISECR0XX. Le chiffrement utilisé est AES-128-CBC via OpenSSL.
+
+Approche
+--------
+Le code fourni contenait déjà une fonction encrypt() qui appelle OpenSSL
+en ligne de commande via subprocess pour chiffrer un message. Il fallait
+écrire la fonction inverse decrypt().
+
+Le raisonnement est simple : on reprend les mêmes arguments qu'encrypt()
+en ajoutant deux flags :
+  - '-d' : pour dire à OpenSSL de déchiffrer au lieu de chiffrer
+  - '-A' : pour lire le base64 en une seule ligne (sans ça, OpenSSL
+            découpe le base64 en lignes de 64 caractères et peut mal
+            interpréter notre entrée)
+
+Le flag '-pbkdf2' est conservé car le chiffrement a été fait avec cette
+fonction de dérivation de clé. Sans lui, OpenSSL renvoie "bad decrypt"
+car il dérive le mot de passe différemment et obtient la mauvaise clé.
+
+Note : on utilise subprocess.run() pour envoyer le ciphertext sur stdin
+d'OpenSSL et récupérer le texte clair sur stdout. C'est la même mécanique
+que encrypt(), mais dans l'autre sens.
+
+Résultat
+--------
+Le déchiffrement du post-it avec le mot de passe ISECR0XX donne :
+  95bd1405-b0ac-4d74-bcec-8551b3be301f
+
+FLAG 1 : decrypt:26:1|95bd1405-b0ac-4d74-bcec-8551b3be301f
+
+======================================================================
+FLAG 2 — PKI Tutorial (chiffrement RSA)
+======================================================================
+
+Contexte
+--------
+Le terminal de service propose un tutoriel PKI : il faut récupérer la
+clé publique de "pki_tutorial", chiffrer le message "I got it!" avec,
+et soumettre le résultat en hexadécimal.
+
+Étape A — Récupérer la clé publique
+------------------------------------
+Dans le Service Terminal > PKI menu > "Query public-key directory",
+on demande la clé de l'utilisateur "pki_tutorial". Le terminal affiche
+la clé publique au format PEM.
+
+Étape B — Préparer la clé localement
+-------------------------------------
+On enregistre la clé dans un fichier pki_tutorial_pub.pem, puis on
+vérifie qu'OpenSSL sait la lire :
+
+    openssl pkey -pubin -in pki_tutorial_pub.pem -text -noout
+
+  - pkey    : outil de manipulation de clés
+  - -pubin  : on donne une clé publique en entrée
+  - -text   : affiche la structure (module N, exposant e)
+  - -noout  : n'affiche pas le PEM brut, juste la structure
+
+Étape C — Chiffrer le message
+------------------------------
+On chiffre "I got it!" avec la clé publique et on convertit en hex :
+
+    printf 'I got it!' | openssl pkeyutl -encrypt -pubin \
+        -inkey pki_tutorial_pub.pem -pkeyopt rsa_padding_mode:pkcs1 \
+        | xxd -p -c 1000000
+
+  - printf '%s' : écrit le message sans ajouter de retour à la ligne
+  - openssl pkeyutl -encrypt : chiffre avec RSA
+  - -pubin -inkey ... : utilise la clé publique de pki_tutorial
+  - -pkeyopt rsa_padding_mode:pkcs1 : utilise le padding PKCS#1 v1.5
+  - xxd -p -c 1000000 : convertit le résultat binaire en hexadécimal
+    sur une seule ligne (-p : hex pur, -c 1000000 : pas de retour à la ligne)
+
+Note sur le padding :
+  En RSA, on ne chiffre jamais un message brut. On ajoute du "padding"
+  (rembourrage aléatoire) avant le chiffrement pour que le même message
+  donne un résultat différent à chaque fois. Il existe deux standards :
+    - OAEP : le padding moderne, plus sécurisé
+    - PKCS#1 v1.5 : l'ancien standard, plus simple
+  On a d'abord essayé OAEP (plus logique en terme de sécurité), mais
+  le serveur renvoyait "decryption failure". En passant à PKCS#1 v1.5,
+  le déchiffrement a fonctionné → le serveur attendait ce padding-là.
+
+Étape D — Soumission
+---------------------
+On colle l'hexadécimal dans le champ "Ciphertext" du tutoriel.
+Réponse : "TUTORIAL COMPLETED"
+
+FLAG 2 : pki.tutorial:26:1|ff2788e37a10d3a7f0aad14e7c7db87fb639adbc164e907afb89759f858f8539
+
+======================================================
+FLAG 3 — Upload de clé publique (PKI)
+======================================================
+
+Contexte
+--------
+Le système affichait "public-key uploaded: NO". Pour débloquer les
+opérations PKI (signer, chiffrer, etc.), il fallait uploader sa propre
+clé publique RSA d'au moins 2048 bits.
+
+Étape A — Générer une paire de clés RSA
+----------------------------------------
+    openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out priv.pem
+
+  - genpkey : génère une clé privée
+  - -algorithm RSA : on veut du RSA
+  - -pkeyopt rsa_keygen_bits:2048 : taille de 2048 bits (minimum demandé)
+  - -out priv.pem : sauvegarde la clé privée dans priv.pem
+
+La clé privée contient tout : N, e, d, p, q. La clé publique (N, e)
+s'en extrait avec :
+
+    openssl pkey -in priv.pem -pubout -out pub.pem
+
+  - pkey : outil de manipulation de clés
+  - -in priv.pem : lit la clé privée
+  - -pubout : extrait uniquement la partie publique (N, e)
+  - -out pub.pem : sauvegarde la clé publique dans pub.pem
+
+Étape B — Upload dans le jeu
+-----------------------------
+    cat pub.pem
+
+  - affiche le contenu de pub.pem pour pouvoir le copier-coller
+
+Dans le jeu : Service Terminal > PKI menu > "Upload public-key"
+On colle le bloc PEM complet (de -----BEGIN PUBLIC KEY----- à
+-----END PUBLIC KEY-----) puis on valide avec une ligne vide.
+
+Note : la clé privée (priv.pem) reste sur notre machine. On ne
+l'envoie jamais. C'est le principe de la cryptographie asymétrique :
+on partage la clé publique, on garde la clé privée secrète.
+
+FLAG 3 : pki.upload:26:1|8c1fd3e468427f2d6af1d63ca2e29a823b79c1309f1d81638b2752efbd7dec9c
+
+=============================================================
+FLAG 4 — Signature d'un challenge (Power Controller)
+=============================================================
+
+Contexte
+--------
+Pour fermer le disjoncteur, le Power Controller demande de prouver
+notre identité en signant un challenge (une phrase aléatoire).
+Le serveur connaît notre clé publique (uploadée au flag 3), il va
+vérifier que la signature a bien été faite avec la clé privée
+correspondante.
+
+Principe de la signature RSA
+-----------------------------
+On ne signe pas le message directement. On le hash d'abord avec
+SHA-256, une fonction qui transforme n'importe quel message (même
+très long) en un nombre fixe de 256 bits. C'est nécessaire car RSA
+ne peut opérer que sur des nombres plus petits que N (2048 bits).
+
+La signature se fait en deux étapes :
+  1) h = SHA-256(message)     (on réduit le message à 256 bits)
+  2) s = h^d mod N            (on "chiffre" le hash avec la clé privée)
+
+Pour vérifier, le serveur fait :
+  1) h' = SHA-256(message)    (il recalcule le hash de son côté)
+  2) h'' = s^e mod N          (il "déchiffre" la signature avec notre clé publique)
+  3) si h' == h'' → signature valide
+
+Ça marche car (h^d)^e = h^(d*e) = h^1 = h mod N
+(puisque d*e ≡ 1 mod phi(N), par construction de la clé).
+
+Étape A — Récupérer le challenge
+---------------------------------
+Le Power Controller affiche :
+    challenge: deuce strip sleet uncut tiler
+    signature:
+
+Étape B — Signer le challenge
+------------------------------
+    printf '%s' 'deuce strip sleet uncut tiler' \
+        | openssl dgst -sha256 -sign priv.pem \
+        | xxd -p -c 1000000
+
+  - printf '%s' : écrit le challenge sans retour à la ligne
+    (important : un '\n' en trop changerait le hash SHA-256
+    et la signature serait rejetée)
+  - openssl dgst -sha256 : calcule le hash SHA-256 du challenge
+  - -sign priv.pem : signe ce hash avec notre clé privée d
+    (celle dont la clé publique a été uploadée au flag 3)
+  - xxd -p -c 1000000 : convertit la signature binaire en hex
+    sur une seule ligne
+
+Note : on utilise bien priv.pem (clé privée d), pas pub.pem.
+C'est le principe de la signature : on signe avec le privé, on
+vérifie avec le public.
+
+Étape C — Soumission
+---------------------
+On colle l'hexadécimal dans le champ "signature:" du Power Controller.
+
+FLAG 4 : (flag affiché par le jeu après validation)
+
+
+
+===================================================
+FLAG 5 — Attaque par dictionnaire sur protocole CHAP
+====================================================
+
+Contexte
+--------
+Dans la salle RC-13, un terminal demande une authentification pour
+l'utilisateur zara16. Un document imprimé dans la pièce contient
+une trace d'un échange CHAP (Challenge-Handshake Authentication
+Protocol) :
+
+    challenge : U2FsdGVkX18oI06whakfUBJjtJ1pAtFjE9yj7lERMYZBcFe6P7aEJn5fAlLQCrZf
+    response  : desex event could gauss studs
+
+Un post-it indique que le mot de passe est choisi dans le Cambridge
+English Dictionary.
+
+Principe du protocole CHAP
+---------------------------
+Le protocole CHAP fonctionne ainsi :
+  1) Le serveur envoie un challenge (ici chiffré en AES)
+  2) Le client déchiffre le challenge avec son mot de passe
+  3) Le client renvoie le résultat (la response)
+  4) Le serveur vérifie que la response est correcte
+
+L'intérêt : le mot de passe ne transite jamais en clair sur le
+réseau. Mais si un attaquant intercepte le challenge ET la response
+(comme ici sur la feuille imprimée), il peut tester des mots de
+passe hors ligne.
+
+Identification du chiffrement
+-------------------------------
+Le préfixe "U2FsdGVkX1" en base64 correspond aux octets "Salted__",
+qui est la signature d'un chiffrement OpenSSL avec :
+  - AES en mode CBC (chiffrement symétrique)
+  - dérivation de clé PBKDF2
+  - encodage base64
+
+Méthode — attaque par dictionnaire
+------------------------------------
+Puisqu'on sait que :
+  - decrypt(challenge, mot_de_passe) doit donner la response
+  - le mot de passe vient d'un dictionnaire connu
+
+On télécharge le dictionnaire :
+    curl -s https://m1.tme-crypto.fr/words > words.txt
+
+Puis on teste chaque mot comme passphrase avec la fonction decrypt()
+développée au flag 1. Pour chaque mot :
+  - on tente de déchiffrer le challenge
+  - si le déchiffrement échoue (mauvais mot de passe), on passe au suivant
+  - si le résultat == "desex event could gauss studs", c'est le bon
+
+Résultat :
+    FOUND PASSWORD: additivity
+
+Exploitation
+------------
+Connexion au terminal :
+    username : zara16
+    password : additivity
+
+FLAG 5 : dict.atk:26:1|a7df8ffb99affc3cc185d6dd431b28e2f4d223b44327d7ca0ae49010779e255f
+
+Conclusion sécurité
+-------------------
+Cette attaque montre qu'un mot de passe choisi dans un dictionnaire
+(même un dictionnaire anglais complet) est vulnérable à une attaque
+par force brute. Ici le dictionnaire contient quelques dizaines de
+milliers de mots, donc l'attaque prend quelques secondes à peine.
+Un mot de passe aléatoire ou une passphrase longue rendrait cette
+attaque impraticable.
+
+==================================================================
+FLAG 6 — ATRIUM (clé RSA contenant "+++ATRIUM+++" + signature NFC)
+==================================================================
+
+Contexte
+--------
+Le lecteur NFC de l'Atrium impose que la clé publique RSA encodée
+dans le badge contienne la chaîne "+++ATRIUM+++" à l'intérieur du
+bloc base64 du PEM. Il ne suffit pas de la coller à la fin : elle
+doit faire partie de l'encodage réel de la clé.
+
+Rappel : format PEM et base64
+-------------------------------
+Une clé publique RSA est stockée au format PEM :
+
+    -----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...
+    -----END PUBLIC KEY-----
+
+Le contenu entre les tirets c'est la structure binaire de la clé
+(format DER/ASN.1) encodée en base64. Cette structure contient des
+en-têtes, le module N (256 octets pour du RSA 2048) et l'exposant e.
+
+Le base64 traduit les octets par blocs de 3 → 4 caractères. Si on
+veut qu'une chaîne précise apparaisse dans le base64, il faut que
+les octets correspondants tombent pile sur une frontière de bloc.
+
+Stratégie : injecter "+++ATRIUM+++" dans l'exposant e
+-------------------------------------------------------
+Pourquoi e et pas N :
+  N = p × q. Si on choisit N avec des octets arbitraires, on ne
+  pourra jamais retrouver ses facteurs p et q, donc impossible de
+  calculer la clé privée d = e^(-1) mod phi(N).
+  En revanche, e est un paramètre libre qu'on choisit à la génération.
+  La librairie RSA cherche ensuite des p et q compatibles avec notre e.
+  Il suffit que e soit impair et premier avec phi(N).
+
+Comment :
+  "+++ATRIUM+++" est une chaîne base64 valide. Elle correspond à une
+  suite d'octets précise (base64.b64decode("+++ATRIUM+++")). On
+  construit un exposant e qui contient ces octets. Quand la clé est
+  sérialisée en PEM (DER → base64), la chaîne apparaît naturellement.
+
+Le problème d'alignement :
+  Dans le fichier DER, l'exposant e est précédé par les en-têtes ASN.1
+  et le module N. La taille totale de ce qui précède e n'est pas
+  forcément un multiple de 3. Si nos octets cibles ne tombent pas
+  sur une frontière de bloc base64, ils seront mélangés avec les
+  octets voisins et on verra du charabia.
+
+  Solution : on ajoute des octets de padding (0 à 80 octets) AVANT
+  nos octets cibles dans e pour décaler jusqu'au bon alignement.
+  On ajoute aussi un suffixe impair APRÈS pour garantir que e est
+  impair (obligation RSA).
+
+  Le script essaie toutes les combinaisons (padding × suffixe) jusqu'à
+  ce que le PEM généré contienne "+++ATRIUM+++".
+
+Étape 1 — Exécution du script
+-------------------------------
+    python3 forge_key_flag6.py
+
+Le script s'arrête dès qu'il trouve une clé valide et sauvegarde :
+  - atrium_pub.pem  (clé publique à mettre sur le badge)
+  - atrium_priv.pem (clé privée pour signer les challenges)
+
+Étape 2 — Upload de la clé publique dans le badge NFC
+------------------------------------------------------
+Dans le jeu : menu "ID Card" → "Upload card data"
+On colle le contenu complet de atrium_pub.pem (de -----BEGIN PUBLIC
+KEY----- à -----END PUBLIC KEY-----), puis une ligne vide.
+
+Étape 3 — Signature du challenge
+----------------------------------
+Après upload, le lecteur NFC affiche un challenge :
+
+    challenge: clefs asset whips altar omits
+    signature:
+
+On signe avec la clé privée ATRIUM (pas l'ancienne priv.pem) :
+
+    printf '%s' 'clefs asset whips altar omits' \
+        | openssl dgst -sha256 -sign atrium_priv.pem \
+        | xxd -p -c 1000000
+
+  - printf '%s' : pas de '\n' parasite (sinon le hash change)
+  - openssl dgst -sha256 : hash SHA-256 du challenge
+  - -sign atrium_priv.pem : signe le hash avec notre clé privée ATRIUM
+  - xxd -p -c 1000000 : convertit en hex sur une seule ligne
+
+On colle l'hex dans le champ "signature:" → accès validé.
+
+FLAG 6 : (flag affiché par le jeu après validation)
+
+Questions possibles du jury et réponses :
+
+"Pourquoi manipuler e et pas N ?" : N = p×q. Si je fixe N, je ne sais pas le factoriser donc je ne peux pas calculer la clé privée. Avec e, la librairie cherche p et q compatibles.
+"C'est quoi le padding dans le script ?" : Des octets ajoutés avant nos octets cibles pour forcer l'alignement base64. Le base64 marche par blocs de 3, si on est décalé la chaîne sera illisible. Le padding corrige ce décalage.
+"Pourquoi tester \x00 ET \x01 ?" : Parfois trop de zéros rendent e incompatible avec RSA (pgcd avec phi(N) ≠ 1). Alterner avec des \x01 augmente les chances de trouver un e valide.
+"Le if e % 2 == 0 sert à quoi ?" : C'est une sécurité. En pratique nos suffixes (\x01, \x03) donnent déjà un e impair, donc cette condition ne se déclenche jamais. Mais elle est là par prudence.
+"Pourquoi des suffixes de 2 octets ?" : Ça change la longueur totale de e, ce qui modifie l'alignement base64 du côté droit. Ça donne plus de combinaisons à essayer.
+"Pourquoi atrium_priv.pem et pas priv.pem pour signer ?" : Parce que le badge contient atrium_pub.pem. Le serveur va vérifier la signature avec cette clé publique. Si on signe avec priv.pem (une autre clé privée), la vérification échoue car les clés ne correspondent pas.
+
+===================================================
+FLAG 7 — Accès Catalogue via authentification CHAP
+===================================================
+
+Contexte
+--------
+Pour accéder au catalogue complet de la bibliothèque, il faut
+s'authentifier via le protocole CHAP.
+
+Protocole CHAP et son intérêt
+------------------------------
+CHAP (Challenge-Handshake Authentication Protocol) permet de prouver
+qu'on connaît un mot de passe sans jamais l'envoyer en clair :
+
+  1) On saisit le nom d'utilisateur
+  2) On entre "_CHAP_" comme mot de passe (déclenche le protocole)
+  3) Le serveur renvoie un challenge chiffré en AES (base64)
+  4) On déchiffre ce challenge avec le VRAI mot de passe
+  5) On renvoie le texte clair comme preuve d'identité
+  6) Le serveur vérifie → authentification réussie
+
+L'intérêt : le mot de passe ne transite jamais sur le réseau. De plus,
+le challenge est différent à chaque fois (aléatoire), donc un attaquant
+qui intercepte un échange ne peut pas le rejouer plus tard.
+
+Différence avec le flag 5 : au flag 5, on ne connaissait pas le mot de
+passe → attaque par dictionnaire nécessaire. Ici on connaît déjà le mot
+de passe ("987123Kh?"), donc un simple déchiffrement suffit.
+
+Identification du chiffrement
+-------------------------------
+Le préfixe "U2FsdGVk" correspond aux octets "Salted__", signature d'un
+chiffrement OpenSSL (AES-128-CBC, PBKDF2, base64). C'est le même format
+que les flags 1 et 5.
+
+Déchiffrement
+--------------
+On réutilise la fonction decrypt() développée au flag 1.
+Le challenge reçu :
+
+    U2FsdGVkX19IjmmWeJqdR8EU6ZD7nIZuhrh+l6x3tXh9HVlj+sJd96dzbRH2w/5Q
+
+Résultat du déchiffrement avec le mot de passe "987123Kh?" :
+
+    "redid fusee avail hutch lefty"
+
+Validation
+----------
+On colle exactement "redid fusee avail hutch lefty" dans le champ
+response du terminal CHAP. Le serveur vérifie que c'est le bon texte
+clair → authentification réussie, accès au catalogue débloqué.
+
+FLAG 7 : (flag affiché par le jeu après validation)
+
+====================================================
+FLAG 8 — Authentification par clé publique (PK login)
+=====================================================
+
+Contexte
+--------
+Pour débloquer plus de livres dans le catalogue, on peut s'authentifier
+via le protocole PK (Public Key) au lieu de CHAP.
+
+Différence entre CHAP et PK
+-----------------------------
+  - CHAP (flag 7) : on prouve qu'on connaît un MOT DE PASSE
+    → on déchiffre un challenge avec le mot de passe
+  - PK (ici) : on prouve qu'on possède une CLÉ PRIVÉE
+    → on signe un challenge avec la clé privée
+
+L'avantage du PK : pas besoin de mot de passe. Le serveur a notre clé
+publique (uploadée au flag 3), il vérifie que la signature correspond.
+Seul le possesseur de la clé privée peut produire une signature valide.
+
+Principe (identique au flag 4)
+-------------------------------
+  1) h = SHA-256(challenge)    (on hash le challenge)
+  2) s = h^d mod N             (on signe avec la clé privée)
+  3) le serveur vérifie : s^e mod N == SHA-256(challenge)
+
+Étapes
+------
+1) Bibliothèque → Catalogue → login PK
+2) On saisit :
+     username : Karim
+     password : _PK_    (déclenche le protocole PK)
+3) Le terminal affiche un challenge :
+     malty stile tatty bitty sunny
+
+4) On signe le challenge :
+
+    printf '%s' 'malty stile tatty bitty sunny' \
+        | openssl dgst -sha256 -sign priv.pem \
+        | xxd -p -c 1000000
+
+  - printf '%s' : écrit le challenge sans retour à la ligne
+  - openssl dgst -sha256 : hash le challenge en SHA-256
+  - -sign priv.pem : signe le hash avec notre clé privée
+  - xxd -p -c 1000000 : convertit en hex sur une seule ligne
+
+5) On colle l'hex dans le champ "signature" → login réussi
+
+Note : on utilise priv.pem (la clé privée générée au flag 3). Si on
+avait utilisé une autre clé (ex: atrium_priv.pem du flag 6), la
+signature serait rejetée car le serveur a enregistré la clé publique
+correspondant à priv.pem.
+
+FLAG 8 : (flag affiché par le jeu après validation)
+
+===============================
+FLAG 9 — Certificat X.509 (CSR)
+===============================
+
+Contexte
+--------
+Le terminal affiche "DEVICE DOES NOT CONTAIN A CERTIFICATE".
+Pour avancer, il faut obtenir un certificat signé par l'autorité
+de certification (CA) du jeu.
+
+Qu'est-ce qu'un certificat X.509
+----------------------------------
+Un certificat c'est un document numérique qui lie une identité
+(ex: "Karim") à une clé publique. C'est signé par une autorité
+de certification (CA) qui garantit que "oui, cette clé publique
+appartient bien à Karim".
+
+C'est le même principe que la carte d'identité : la photo (clé
+publique) est liée à un nom (identité), et c'est tamponné par
+la préfecture (CA). Sans le tampon, n'importe qui pourrait
+fabriquer une fausse carte.
+
+Un certificat contient :
+  - le subject (identité), notamment le CN (Common Name)
+  - la clé publique du propriétaire
+  - la signature de la CA qui valide le tout
+
+Qu'est-ce qu'une CSR (Certificate Signing Request)
+----------------------------------------------------
+Pour obtenir un certificat, on ne peut pas le fabriquer soi-même
+(sinon ça serait pas sécurisé). On envoie une demande à la CA :
+c'est la CSR (PKCS#10). Elle contient :
+
+  1) Notre identité (CN = "Karim")
+  2) Notre clé publique
+  3) Une signature faite avec notre clé privée
+
+La signature dans la CSR est importante : elle prouve qu'on possède
+bien la clé privée correspondant à la clé publique qu'on envoie.
+Sans ça, quelqu'un pourrait demander un certificat au nom d'un
+autre avec une clé qui ne lui appartient pas.
+
+La CA reçoit la CSR, vérifie la signature et l'identité, puis
+renvoie un certificat signé.
+
+Étapes
+------
+
+1) Générer la CSR :
+
+    openssl req -new -key atrium_priv.pem -batch -subj "/CN=Karim" \
+        -out karim.csr.pem
+
+  - req -new : on crée une nouvelle demande de certificat
+  - -key atrium_priv.pem : on utilise notre clé privée (celle de
+    l'Atrium, flag 6) pour signer la CSR
+  - -subj "/CN=Karim" : notre identité (CN = Common Name = username)
+  - -batch : pas de questions interactives
+  - -out karim.csr.pem : sauvegarde la CSR
+
+2) Vérification (optionnel) :
+
+    openssl req -in karim.csr.pem -subject -noout
+
+  Affiche le subject pour confirmer que CN = Karim.
+
+3) Soumettre la CSR dans le jeu :
+
+  Terminal de service → PKI → "Submit Certificate Signing Request"
+  On colle le contenu complet de karim.csr.pem (de -----BEGIN
+  CERTIFICATE REQUEST----- à -----END CERTIFICATE REQUEST-----),
+  puis une ligne vide pour valider.
+
+  La CA du jeu vérifie :
+    - que la signature de la CSR est valide (preuve de possession)
+    - que le CN correspond à notre utilisateur
+  Puis délivre le certificat.
+
+FLAG 9 : (flag affiché par le jeu après validation)
+
+=======================================================
+FLAG 10 — Chiffrement hybride (broadcast / e-secretary)
+=======================================================
+
+Contexte
+--------
+Depuis RC-13, la commande broadcast renvoyait "Session-key decryption
+error" + la clé publique RSA du programme e-secretary. Il fallait
+envoyer un message au format "chiffrement hybride".
+
+Pourquoi le chiffrement hybride ?
+-----------------------------------
+On a deux outils de chiffrement, chacun avec un gros défaut :
+
+  Symétrique (AES) :
+    + Rapide, peut chiffrer des gigaoctets
+    - Il faut que les deux parties partagent le même mot de passe.
+      Comment transmettre ce mot de passe sans qu'un pirate l'intercepte ?
+
+  Asymétrique (RSA) :
+    + Pas besoin de secret partagé : on chiffre avec la clé publique
+      du destinataire, lui seul déchiffre avec sa clé privée
+    - Très lent et limité en taille (max ~245 octets pour RSA 2048).
+      Impossible de chiffrer un long message avec.
+
+Le chiffrement hybride combine les deux :
+  - AES fait le gros du travail (chiffrer le message)
+  - RSA ne sert qu'à transporter la clé AES de façon sécurisée
+
+C'est exactement ce que fait HTTPS, Signal, PGP, etc.
+
+Principe détaillé
+------------------
+Côté expéditeur (nous) :
+  1) On invente un mot de passe temporaire (clé de session)
+  2) On chiffre le MESSAGE avec AES + cette clé de session
+     → ciphertext (long, encodé en base64)
+  3) On chiffre la CLÉ DE SESSION avec la clé publique RSA du
+     destinataire → session-key chiffrée (court, encodé en hex)
+  4) On envoie les deux dans un JSON
+
+Côté destinataire (e-secretary) :
+  1) Il déchiffre la session-key avec sa clé privée RSA
+     → il récupère le mot de passe temporaire
+  2) Il déchiffre le ciphertext avec AES + ce mot de passe
+     → il récupère le message en clair
+
+La clé de session est jetable : elle ne sert qu'une seule fois,
+pour cette conversation. C'est pour ça qu'on l'appelle "clé de session".
+
+Note sur les encodages : l'hexadécimal et le base64 ne sont PAS du
+chiffrement. Ce sont juste des formats pour représenter des données
+binaires en texte, afin qu'elles puissent voyager dans un JSON sans
+casser sa structure.
+
+Étapes réalisées
+-----------------
+
+1) Choisir une clé de session (mot de passe temporaire) :
+
+     session_key = "KarimHecheime123"
+
+   Contrainte : au moins 16 caractères, lettres + chiffres.
+
+2) Chiffrer la clé de session avec la clé publique RSA du destinataire :
+
+     echo -n "KarimHecheime123" \
+         | openssl pkeyutl -encrypt -pubin -inkey secretaire_pub.pem \
+         | xxd -p | tr -d '\n '
+
+   - echo -n : écrit la clé de session sans retour à la ligne
+   - openssl pkeyutl -encrypt : chiffre avec RSA
+   - -pubin -inkey secretaire_pub.pem : utilise la clé publique du
+     destinataire (e-secretary). Lui seul pourra déchiffrer avec sa
+     clé privée.
+   - xxd -p | tr -d '\n ' : convertit en hex sur une seule ligne
+
+   → c'est le champ "session-key" du JSON
+
+3) Chiffrer le message avec AES (via la fonction encrypt() du TP) :
+
+     m = "test"
+     s = "KarimHecheime123"
+     print(encrypt(m, s))
+
+   encrypt() appelle OpenSSL en AES-128-CBC avec PBKDF2 et encode
+   le résultat en base64. La passphrase est notre clé de session.
+
+   Résultat : U2FsdGVkX1/JMjgp/Bn1/fOYZma/4cFCZoO1qtScrA0=
+
+   → c'est le champ "ciphertext" du JSON
+
+4) Envoyer le JSON au broadcast :
+
+     {"session-key":"<HEX_RSA>","ciphertext":"<BASE64_AES>\n"}
+
+   Note : il faut ajouter un \n à la fin du ciphertext base64,
+   car c'est ce que produit OpenSSL et le serveur s'y attend.
+
+Résultat
+--------
+Le programme e-secretary déchiffre d'abord la session-key avec sa
+clé privée RSA, puis utilise ce mot de passe pour déchiffrer le
+ciphertext en AES → message lu avec succès.
+
+FLAG 10 : (flag affiché par le jeu après validation)
+
+========================================================================
+FLAG 11 — Signatures de clé publique (Web of Trust / PKI)
+========================================================================
+
+Contexte
+--------
+Après le flag 10 (chiffrement hybride), e-secretary refuse encore :
+"Votre clef publique est signée par personne". Il exige que notre clé
+publique soit signée par au moins deux utilisateurs enregistrés dans
+la PKI.
+
+Le problème : l'usurpation d'identité
+---------------------------------------
+Le chiffrement hybride (flag 10) protège le CONTENU du message : seul
+le destinataire peut le lire. Mais ça ne prouve pas QUI l'a envoyé.
+
+N'importe qui peut générer une paire de clés RSA et dire au serveur
+"je suis Karim, voici ma clé publique". Si le serveur accepte
+aveuglément, un pirate pourrait se faire passer pour nous.
+
+Le serveur a donc besoin d'une preuve d'identité. C'est le rôle des
+signatures de clé publique.
+
+La solution : le Web of Trust (toile de confiance)
+----------------------------------------------------
+Le principe est celui du parrainage :
+
+  - Le serveur fait déjà confiance à certains utilisateurs enregistrés
+    dans la PKI (ex: AdrienPanguel, victor.zhou)
+  - Si ces utilisateurs signent notre clé publique, ils disent :
+    "Nous attestons que cette clé publique appartient bien à Karim"
+  - Le serveur fait confiance à Adrien et Victor → par transitivité,
+    il fait confiance à nous
+
+C'est le même principe que dans PGP/GPG : pas d'autorité centrale
+unique, mais un réseau de confiance entre utilisateurs.
+
+Comment fonctionne une signature de clé publique
+--------------------------------------------------
+Quand Adrien signe notre clé publique, voici ce qui se passe :
+
+  1) Il prend notre fichier de clé publique (le PEM complet)
+  2) Il calcule son hash SHA-256 (empreinte de 256 bits)
+  3) Il chiffre ce hash avec SA clé privée à lui
+     → signature = SHA-256(karim_pub.pem)^d_adrien mod N_adrien
+
+Le résultat c'est la signature : un blob de 256 octets en hex.
+
+Quand le serveur vérifie cette signature :
+
+  1) Il prend la clé publique d'Adrien (dans la PKI)
+  2) Il déchiffre la signature : s^e_adrien mod N_adrien
+  3) Il recalcule SHA-256(karim_pub.pem) de son côté
+  4) Si les deux correspondent → la signature est valide
+     → seul Adrien (possesseur de la clé privée) a pu la produire
+
+Étapes réalisées
+-----------------
+
+A) Récupérer les clés publiques des signataires :
+
+   Terminal de service → PKI → Query public-key directory
+   On récupère les clés de AdrienPanguel et victor.zhou
+   et on les sauvegarde dans des fichiers PEM locaux.
+
+B) Mes collègues signent ma clé publique :
+
+   Adrien et Victor récupèrent ma clé publique depuis la PKI,
+   puis la signent chacun avec leur clé privée :
+
+     openssl dgst -sha256 -sign adrien_priv.pem karim_pub.pem \
+         | xxd -p | tr -d '\n'
+
+   - openssl dgst -sha256 : hash SHA-256 de mon fichier de clé publique
+   - -sign adrien_priv.pem : Adrien signe ce hash avec SA clé privée
+   - xxd -p | tr -d '\n' : convertit la signature en hex sur une ligne
+
+   Chacun m'envoie sa signature en hexadécimal.
+
+C) Upload des signatures dans la PKI :
+
+   Terminal de service → PKI → Upload signature
+   Pour chaque signataire, on fournit :
+     - le username du signataire (ex: AdrienPanguel)
+     - la signature en hex qu'il nous a envoyée
+   On fait ça deux fois (une pour Adrien, une pour Victor).
+
+   Le serveur vérifie chaque signature avec la clé publique du
+   signataire dans la PKI. Si c'est valide, la signature est
+   enregistrée sur notre clé.
+
+Résultat
+--------
+Avec 2 signatures valides, e-secretary considère notre clé publique
+comme légitime → obtention du flag 11.
+
+Récapitulatif flags 10 et 11
+------------------------------
+  Flag 10 (chiffrement hybride) : protège le CONTENU du message
+    → personne ne peut lire le message à part le destinataire
+  Flag 11 (signatures de clé) : prouve l'IDENTITÉ de l'expéditeur
+    → le serveur sait que la clé publique appartient bien à Karim
+
+Les deux sont nécessaires pour une communication sécurisée complète.
+
+FLAG 11 : (flag affiché par le jeu après validation)
+
+"C'est quoi le lien entre flag 10 et flag 11 ?" : Le flag 10 c'est le chiffrement (protéger le contenu). Le flag 11 c'est l'authentification (prouver l'identité). Les deux sont complémentaires : chiffrer sans authentifier, c'est comme envoyer une lettre dans un coffre-fort mais sans dire qui l'envoie.
+"Pourquoi 2 signatures et pas 1 ?" : C'est une politique de sécurité du serveur. Plus il y a de garants, plus la confiance est forte. Si Adrien se fait pirater, la signature de Victor reste valide. C'est le même principe qu'en justice : un seul témoin c'est fragile, deux c'est plus solide.
+"Pourquoi c'est Adrien qui signe avec SA clé privée et pas la mienne ?" : Parce que c'est lui qui se porte garant. La signature prouve qu'Adrien a vérifié que ma clé m'appartient. Si je signais moi-même avec ma propre clé, ça prouverait rien : n'importe qui peut signer sa propre clé.
+"C'est quoi la différence entre certificat (flag 9) et Web of Trust (flag 11) ?" : Le certificat (flag 9) c'est une autorité centrale (la CA) qui valide ton identité. Le Web of Trust c'est des utilisateurs qui se valident entre eux, sans autorité centrale. PGP utilise le Web of Trust, HTTPS utilise les certificats.
+"Que se passe-t-il si un des signataires est compromis ?" : Si la clé privée d'Adrien est volée, un pirate peut signer n'importe quelle clé au nom d'Adrien. C'est pour ça qu'on exige 2 signatures : le pirate devrait compromettre les deux signataires.
+
+=====================================
+FLAG 13 — RSA “shared modulus” (RC-25)
+======================================
+Contexte
+- Dans le hall, un panneau affiche deux grosses valeurs hex associées à :
+  - nelsonkenneth : <blob hex 1>
+  - scottjessica  : <blob hex 2>
+- On récupère aussi leurs clés publiques RSA (format PEM). Les deux clés ont le même modulo N
+  (ce qui est une mauvaise pratique et une faille connue).
+
+Étape 1 — Préparer les fichiers de clés publiques
+1) On enregistre les clés publiques dans deux fichiers :
+   - nelson.pem
+   - scott.pem
+2) Les PEM contenaient un suffixe de “promo” du type “+++ATRIUM+++B” qui cassait le parsing OpenSSL.
+   On l’a retiré pour obtenir des PEM propres.
+
+Étape 2 — Extraire N et e avec OpenSSL
+On utilise OpenSSL pour afficher la structure RSA (modulus + exponent) :
+
+    openssl rsa -pubin -in nelson.pem -text -noout
+    openssl rsa -pubin -in scott.pem  -text -noout
+
+Résultats :
+- Le champ “Modulus” est identique pour Nelson et Scott → N est partagé.
+- Le champ “Exponent” est différent → e1 ≠ e2.
+
+Conversion en hex :
+- On convertit N (Modulus) en une seule ligne hex en supprimant “00:” au début et tous les “:”.
+- On fait pareil pour les exponents e1 et e2 (hex -> int).
+
+Étape 3 — Exploitation : Common Modulus Attack
+On a deux valeurs RSA (les blobs hex du panneau) associées à deux exposants différents mais au même N.
+C’est le cas typique de l’attaque “common modulus”.
+
+Approche mathématique :
+
+Dans RSA, le chiffrement d'un message m est : s = m^e mod N.
+Ici, le même message m a été chiffré avec deux exposants différents e1 et e2,
+mais le même modulo N :
+   s1 = m^e1 mod N   (Nelson)
+   s2 = m^e2 mod N   (Scott)
+
+On vérifie que gcd(e1, e2) = 1. Par le théorème de Bézout, il existe donc
+deux entiers a et b tels que :
+   a*e1 + b*e2 = 1
+
+Ces coefficients se calculent via l'algorithme d'Euclide étendu (vu en cours,
+chapitre II). On reconstruit alors le message :
+   s1^a * s2^b  =  (m^e1)^a * (m^e2)^b
+                =  m^(a*e1 + b*e2)
+                =  m^1
+                =  m   (mod N)
+
+Note : si a ou b est négatif (par ex. a < 0), on ne peut pas calculer
+s1^a directement. On passe par l'inverse modulaire : s1^(-|a|) = (s1^-1)^|a| mod N.
+L'inverse modulaire de s1 existe car gcd(s1, N) = 1 (sinon on aurait
+factorisé N, ce qui serait encore mieux).
+
+C'est pour ça que partager le même N entre plusieurs utilisateurs est une
+faille critique : un attaquant qui intercepte deux chiffrés du même message
+peut le déchiffrer sans aucune clé privée.
+
+Étape 4 — Script flag12.py
+On a codé un script (flag12.py) qui :
+1) définit N, e1, e2 (issus d’OpenSSL et convertis en int),
+2) définit s1, s2 (les blobs du panneau convertis en int),
+3) calcule (a,b) via Euclide étendu,
+4) reconstruit m (common modulus attack),
+5) convertit m (un gros entier) en message lisible :
+   - m.to_bytes() transforme l'entier en une suite d'octets (bytes)
+   - .decode() convertit ces octets en texte UTF-8
+   (c'est la conversion standard en RSA : le message clair est encodé
+   comme un entier pour le chiffrement, il faut faire le chemin inverse
+   pour retrouver le texte)
+
+Sortie obtenue :
+- Le script affiche un texte contenant :
+    “Nouveau digicode de la salle RC-25 : f2d1a897911a8dedfa34cd6d4169277a”
+
+Étape 5 — Validation dans le jeu
+- On entre ce digicode sur la porte RC-25, ce qui ouvre l’accès.
+- Flag obtenu :
+    rsa.shared:26:1|9ae0ed6d7cd399c01b66efd88563c5f6032f8f18587082574f5225a8ddbc947d
+
+
+============================================================================================
+FLAG 14 — Terminal RC-19 défectueux → récupération du mot de passe de la salle d’expériences
+============================================================================================
+
+Contexte
+- Dans le labo, pour déverrouiller le sas, je suis allé en RC-19 où un terminal “défectueux” crashe (segfault) et “dump” un core.
+- Ce dump affiche :
+  - un IV (en hex) : bd449c0830e1570449429306ddd934ac
+  - un gros bloc de données en Base64 (le ciphertext)
+
+Idée / but
+- Le terminal a chiffré un journal (“Cahier de manipulation”) en AES-128-CBC.
+- La clé AES et l’IV ne sont pas saisis directement : ils sont dérivés d’une seed très courte (2 octets).
+- Le but est donc de retrouver la seed (bruteforce 2^16), reconstruire (K, IV), puis déchiffrer le ciphertext.
+
+Paramètres à renseigner dans le script
+1) IV_HEX_TARGET :
+   - l’IV affiché par le crash, en hex :
+     IV_HEX_TARGET = "bd449c0830e1570449429306ddd934ac"
+
+2) CIPHERTEXT_B64 :
+   - le bloc Base64 affiché après le crash (collé tel quel dans une string multi-ligne).
+
+Procédure (ce que fait le script)
+1) Décodage Base64 → cipher_bytes.
+2) “Key expansion” :
+   - on part de seed = x (0..65535) encodée sur 2 octets,
+   - on calcule 8 fois SHA-256 en chaîne,
+   - on concatène les 4 premiers octets de chaque hash → 32 octets au total.
+   - km[:16] = clé AES (K)
+   - km[16:32] = IV
+3) Bruteforce :
+   - on teste toutes les seeds (0..65535) et les deux endianness (big/little),
+   - on garde la seed dont km[16:32] == IV_HEX_TARGET.
+4) Déchiffrement :
+   - une fois (K, IV) trouvés, on lance OpenSSL :
+     openssl enc -d -aes-128-cbc -K <K_hex> -iv <IV_hex>
+   - on récupère le plaintext lisible.
+
+Résultat obtenu
+- Le déchiffrement révèle le “Cahier de manipulation”.
+- À l’intérieur, on trouve la ligne :
+  “Nouveau mot de passe pour la salle d'expériences : 568fbd43c63355669dabab14469d713a”
+- Ce mot de passe permet ensuite de déverrouiller l’accès demandé pour continuer l’objectif.
+
+=============================================================
+FLAG 15 — Attaque RSA “Small Public Exponent” (Håstad, e = 3)
+==============================================================
+
+Contexte
+--------
+Dans le manuel du distributeur, le mot de passe ADMIN est chiffré avec les
+clés publiques de trois développeurs :
+    - ernestwilson
+    - ujones
+    - igraham
+
+Chaque développeur possède :
+    - un module RSA différent N1, N2, N3
+    - le même exposant public e = 3
+
+Le message chiffré est identique pour les trois.
+
+Après récupération des clés publiques
+    
+
+on extrait pour chacun :
+    - le module N (en hex)
+    - l’exposant public e
+
+via la commande openssl rsa -pubin -in pseudo.pem -text -noout
+On constate que e = 3 pour les trois clés → cas classique de l’attaque de Håstad.
+
+------------------------------------------------------------
+ASPECT MATHÉMATIQUE — Attaque de Håstad (1988)
+------------------------------------------------------------
+
+On a le même message m envoyé à trois destinataires différents :
+
+    c1 = m^3 mod N1
+    c2 = m^3 mod N2
+    c3 = m^3 mod N3
+
+Comme les Ni sont distincts et premiers entre eux :
+
+1) On applique le Théorème des Restes Chinois (CRT) pour résoudre :
+
+       X ≡ c1 mod N1
+       X ≡ c2 mod N2
+       X ≡ c3 mod N3
+
+   On obtient :
+
+       X ≡ m^3 mod (N1*N2*N3)
+
+2) Si m^3 < N1*N2*N3, alors on a en réalité :
+
+       X = m^3  (égalité dans ℤ)
+
+3) Il suffit alors de calculer la racine cubique entière :
+
+       m = X^(1/3)
+
+⚠️ Point important :
+On casse RSA sans factoriser les modules.
+C’est une faiblesse liée à l’exposant public trop petit (e = 3)
+et à l’envoi du même message à plusieurs destinataires.
+
+------------------------------------------------------------
+ASPECT PROGRAMMATION — Ce que fait le code
+------------------------------------------------------------
+
+1) Conversion des données
+   - Les chiffrés c1, c2, c3 sont convertis de hex → int.
+   - Les modules N1, N2, N3 sont convertis de hex → int.
+
+2) Implémentation du CRT
+
+   N_total = N1 * N2 * N3
+
+    Pour chaque i :
+       Ni_hat = N_total / Ni       (produit de tous les modules SAUF Ni)
+       inverse = Ni_hat^(-1) mod Ni (inverse modulaire)
+       contribution = ci * Ni_hat * inverse
+
+   On somme les contributions modulo N_total.
+
+   → On obtient m_cubed = m^3.
+
+3) Racine cubique entière
+
+   On ne peut pas utiliser la formule X^(1/3) directement car les
+   nombres flottants de Python n'ont que 53 bits de précision, alors
+   que X fait environ 6000 bits. Le résultat serait complètement faux.
+
+   On utilise à la place une recherche dichotomique sur les entiers.
+   Le principe : on cherche m dans un intervalle [low, high].
+   À chaque étape, on teste la valeur du milieu (mid) :
+     - si mid^3 < X : mid est trop petit, le vrai m est au-dessus
+       → on remonte la borne basse (low = mid + 1)
+     - sinon : mid est assez grand ou trop grand
+       → on descend la borne haute (high = mid)
+   L'intervalle est divisé par 2 à chaque itération, donc on trouve
+   la réponse exacte en environ 6000 étapes, ce qui est instantané.
+   Quand low = high, on a trouvé m tel que m^3 = X. Opus 4.6Étendue
+
+4) Suppression du padding RSA
+
+   Le message RSA est structuré comme :
+       00 02 || padding || 00 || MESSAGE
+
+   Le code :
+       - convertit m en bytes
+       - cherche l’octet 0x00 séparateur
+       - récupère la partie finale = message lisible
+
+------------------------------------------------------------
+Résultat
+------------------------------------------------------------
+
+Le message extrait correspond au mot de passe ADMIN
+du distributeur automatique.
+
+Ensuite :
+    - Retour au distributeur
+    - Saisie : ADMIN
+    - Entrée du mot de passe récupéré
+    → Obtention du flag 15
+
+------------------------------------------------------------
+Conclusion Sécurité
+------------------------------------------------------------
+
+Cette attaque montre que :
+- RSA avec petit exposant (e = 3)
+- Envoi du même message à plusieurs destinataires
+- Absence de padding sécurisé (ex: OAEP)
+
+→ rend le système vulnérable sans avoir besoin de factoriser N.
+
+C’est un exemple concret montrant que :
+“Breaking RSA can be easier than factoring.”
+
+================================================================================
+🚩 FLAG 16 : ATTAQUE PAR AVEUGLEMENT RSA (RSA BLINDING)
+================================================================================
+
+1. PROBLÉMATIQUE ET RÉFLEXION
+-----------------------------
+Le but est d'obtenir une signature valide du Directeur sur le message suivant :
+"I, the lab director, hereby grant Karim permission to take the BiblioDrone-NG."
+
+Obstacle : Le serveur du Directeur (assistance program) possède un filtre qui
+refuse de signer tout message contenant des mots sensibles comme "director" ou
+"permission". On ne peut donc pas lui envoyer le message en clair.
+
+Solution : Exploiter la MALLÉABILITÉ de RSA. En multipliant le message par un
+facteur "aveuglant", on cache le contenu au Directeur. Une fois signé, on retire
+ce facteur pour retrouver la signature du message original.
+
+2. APPROCHE MATHÉMATIQUE
+------------------------
+L'attaque repose sur la propriété homomorphique de RSA :
+
+a) Préparation : Soit M le message encodé (PKCS#1 v1.5). On choisit un 
+   facteur aléatoire x = 2.
+b) Aveuglement : On calcule M_blind = (M * x^e) mod N.
+   C'est ce nombre "aléatoire" que l'on envoie au Directeur.
+c) Signature : Le Directeur calcule S_blind = (M_blind)^d mod N.
+   Par les propriétés des puissances :
+   S_blind = (M * x^e)^d = (M^d) * (x^(e*d)) mod N.
+d) Simplification : Comme (e*d) ≡ 1 mod phi(N), alors x^(e*d) ≡ x mod N.
+   On a donc : S_blind = M^d * x mod N.
+e) Désaveuglement : Pour obtenir la signature finale S = M^d, on multiplie
+   S_blind par l'inverse modulaire de x (noté x^-1) :
+   S = S_blind * x^-1 mod N.
+
+3. APPROCHE INFORMATIQUE (CODE PYTHON)
+--------------------------------------
+Voici le script utilisé pour forger le payload et extraire la signature :
+
+import hashlib
+import binascii
+
+# --- Données du Directeur ---
+N_hex = "00bed6cdc8f142d61854b6bddc6f9eb36bbbf4e5dab77207240078293c384eb53d4e3a0b2f250d6dd1192448973b250d563517218c90a12c0447f5b31df37410d8a2e21573c0f05a8aa9924114708053b08878d3b53ccd35ba3516c02c3692d048ad46e98b7fbe13a99b4670fcc96dd51e7a04a3da93493ab5b5b0ff7ae77708d74f8c964112523fed59c1bdc949bfea248ff0a39285302b0292a6b8de23f98a920135cf1b5660e16eb4fddbb24b4312ef5c59f4a02a67dff2b28a6d1b0c3e3942c1736faa43a94f0995e04bda6c873a1cbaf6685424196abc6185d3e40fc1cc276fae72de0465d9748e6eb7e165b62800a53f2c67e4693cc92b37a9ee4bc449e9"
+N = int(N_hex, 16)
+e = 65537
+x = 2 # Facteur d'aveuglement
+
+# --- ÉTAPE 1 : Encodage PKCS#1 v1.5 ---
+msg = b"I, the lab director, hereby grant Karim permission to take the BiblioDrone-NG."
+msg_hash = hashlib.sha256(msg).digest()
+sha256_id = binascii.unhexlify("3031300d060960864801650304020105000420")
+data = sha256_id + msg_hash
+
+# Padding FF pour bloc de 256 octets (RSA-2048)
+pad_len = 256 - 3 - len(data)
+M_bytes = b"\x00\x01" + (b"\xff" * pad_len) + b"\x00" + data
+M = int(binascii.hexlify(M_bytes), 16)
+
+# --- ÉTAPE 2 : Génération du Payload (Aveuglement) ---
+M_blind = (M * pow(x, e, N)) % N
+print(f"Payload à envoyer : {hex(M_blind)[2:]}")
+
+# --- ÉTAPE 3 : Extraction de la signature (Désaveuglement) ---
+# S_blind est la valeur retournée par le serveur
+S_blind_hex = "72ccffaa228b8211c045be5bc30415d2b756698a96dbf90a3e479bb272e08f624cf6cb3823d3f3ce0ea7b428ec5ec80f633a3fc35661ce960cd27c815a7e442594ede69a6e42255dac125fcf635b11f5922c612dcdedd863003bb5567da58926b11caf838e509bbe544d82ea2bb81de791fab6d72eb43baae4e874d453c1e9210978f2c7902e724e046b51fb799742c6158ffa3af740db41a7923bc260fe43d47c32af121b438690aebb6fc537287a9339d68491eac07c1db40816a1705700423ce32fc2ee13104b7e04f920e38031119eefc179e7697bfa138c74b66b18f73b703e711ca8f3b3ced8168174ef2470435031b33b6f1d2e9682220486e807ee7"
+S_blind = int(S_blind_hex, 16)
+
+# On multiplie par l'inverse modulaire de x pour supprimer le masque
+S_final = (S_blind * pow(x, -1, N)) % N
+print(f"Signature finale : {hex(S_final)[2:]}")
+
+4. CONCLUSION
+-------------
+La signature S_final obtenue est mathématiquement identique à celle que le
+Directeur aurait produite s'il avait accepté de signer le message en clair.
+Le robot valide cette signature car elle correspond au hash du message d'origine
+une fois déchiffrée avec la clé publique du Directeur.
+
+======================================================================
+ RAPPORT — Flag 17 : Firmware Update Key via interpolation de Lagrange
+======================================================================
+
+CONTEXTE
+--------
+Dans ce challenge, le système de sécurité consigne des événements dans un
+journal. Chaque entrée contient un nom court (ex. rsa.malleable) et un MAC
+de 256 bits signé par le security engine. L'objectif est de reconstituer
+une firmware update key permettant d'obtenir de nouveaux privilèges
+(accès sudo / ascenseur).
+
+
+ANALYSE DE LA STRUCTURE DU MAC
+-------------------------------
+La spécification indique que chaque MAC de 256 bits est structuré en
+quatre blocs de 64 bits :
+
+  X = MAC[0  :64 ]  —  abscisse d'évaluation, commune aux trois polynômes
+  A = MAC[64 :128]  —  valeur R(X) mod p, avec R polynôme de degré 8 inconnu
+  B = MAC[128:192]  —  valeur S(X) mod p, avec S polynôme de degré 16 inconnu
+  C = MAC[192:256]  —  valeur T(X) mod p, avec T polynôme de degré 24 inconnu
+
+où p = 2^64 - 59 est un nombre premier. Les coefficients constants R(0),
+S(0) et T(0) sont les firmware update keys à reconstituer.
+
+Chaque flag capturé fournit donc simultanément un point sur chacun des
+trois polynômes : (X, A) pour R, (X, B) pour S, (X, C) pour T.
+Ces valeurs X, A, B, C sont toutes directement lisibles dans le MAC.
+
+
+APPROCHE MATHEMATIQUE
+---------------------
+Le théorème de Lagrange garantit qu'un polynôme de degré d est uniquement
+déterminé par d+1 points distincts. R étant de degré 8, 9 flags suffisent
+pour déterminer R de façon unique.
+
+L'objectif n'est pas de reconstruire le polynôme R entier, mais uniquement
+d'évaluer R(0). La formule de Lagrange appliquée directement en x = 0 donne :
+
+         8
+  R(0) = Σ   Ai  ·  ∏    -Xj / (Xi - Xj)    (mod p)
+        i=0       j≠i
+
+Dans cette formule, Ai, Xi et Xj sont tous des valeurs connues, extraites
+directement des MACs des flags capturés. La seule difficulté est le calcul
+de la division -Xj / (Xi - Xj) dans un contexte d'arithmétique modulaire,
+car diviser n'a pas de sens direct modulo p.
+
+On remplace donc chaque division par une multiplication par l'inverse
+modulaire :
+
+  a / b  (mod p)  =  a × b^(-1)  (mod p)
+
+Pour calculer b^(-1) mod p, on utilise le théorème d'Euler :
+si pgcd(a, N) = 1, alors a^φ(N) ≡ 1 (mod N).
+
+Comme p est premier, φ(p) = p - 1, ce qui donne le petit théorème de Fermat :
+  a^(p-1) ≡ 1 (mod p)
+
+En multipliant les deux membres par a^(-1) :
+  a^(p-2) ≡ a^(-1) (mod p)
+
+Donc pour calculer 1/b mod p, il suffit de calculer b^(p-2) mod p.
+C'est exactement ce que fait pow(b, p-2, p) en Python.
+
+On ne résout aucun système linéaire et on ne calcule aucun coefficient
+du polynôme — la somme finie ci-dessus suffit à obtenir R(0) directement.
+
+
+RESULTAT
+--------
+L'exécution du script sur les 9 premiers flags donne :
+
+  R(0) = 588879a8459d179d
+
+Cette valeur est la nouvelle firmware update key.
+
+
+PROCHAINES ETAPES
+-----------------
+  Polynôme  Degré  Flags nécessaires  Statut
+  --------  -----  -----------------  ------
+  R           8            9          Résolu — clé : 588879a8459d179d
+  S          16           17          En attente de 8 flags supplémentaires
+  T          24           25          En attente de 16 flags supplémentaires
+
+S(0) et T(0) seront calculés par le même algorithme dès que suffisamment
+de flags auront été capturés, en remplaçant les colonnes A par B ou C
+dans le découpage du MAC.
