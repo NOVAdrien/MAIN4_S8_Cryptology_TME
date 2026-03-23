@@ -6,7 +6,7 @@ with open("./Texts/sign_challenge1.txt", "w", encoding="utf-8") as f:
 
 # Signer le fichier avec la clé privée RSA
 cmd = [
-    "openssl", "dgst",                          # Commande OpenSSL pour calculer un condensat et signer
+    "openssl", "dgst",                          # Commande OpenSSL pour calculer un condensat/haché et signer
     "-sha256",                                  # Utiliser SHA-256 comme fonction de hachage
     "-sign", "./Keys/PrivateKeys/my_sk.pem",    # Clé privée utilisée pour signer
     "-out", "./Binary/sign_challenge1.bin",     # Fichier de sortie contenant la signature binaire

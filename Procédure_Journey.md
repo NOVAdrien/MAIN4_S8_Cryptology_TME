@@ -131,7 +131,7 @@ breve falls ovate disks bwana
 >>> terminal
 [security engine] register:52:1|b644c1e209b41a83e9ed72be2f7878f8eb9c34fde9a06f0e9701f5448840e16a      [PREMIER FLAG !!!]
 
-### FLAG 2: Chiffrement symétrique
+### FLAG 2: Chiffrement asymétrique (RSA)
 
 >>> conseil
 Vous ne trouvez pas qu'il fait sombre ?  Essayez de remettre le courant.
@@ -807,17 +807,17 @@ python3 build_session_key.py
 
 [Ou bien obtenir la session-key à partir de cette clé publique avec les commandes suivantes]:
 
-echo -n "AdrienPanguel123" | openssl pkeyutl -encrypt -pubin -inkey ./Keys/PublicKeys/pk_broadcast.pem | xxd -p | tr -d '\n ' > ./Keys/pk_broadcast.pem
+echo -n "AdrienPanguel123" | openssl pkeyutl -encrypt -pubin -inkey ./Keys/PublicKeys/pk_broadcast.pem | xxd -p | tr -d '\n ' > ./Keys/session_key.pem
 
-cat ./Keys/pk_broadcast.pem
+cat ./Keys/session_key.pem
 
 [Retour de ces commandes]:
 
 b5a25a0fce193fe776d3154e1dbe964474392052918e81698b497c3087460f7045bafd1e34b12b350a40b2d8261b120833006ec544caa25e96ec2bec6e3762d1283210a73509289b7431ce18ef025c089a08298ca81ac223add2800e576f5dc28c1a282113e2c898cc7fcc9dafa7ef34ac7bdf34cea344ac607b55cfe5f79f1f66df1e7b405d77e67a76c9652c0958658c121873743c0cc39062290b06c22e1a1738a975884d34a583dd8429c3e221000cf70a362982053634b442dc2bcc3fd63e1c46a37add62b28486cac02de6a23938942949f1c1716e84e911ae92a8e34a56b0d783cbb1084012a47f48f67cd908fe86aed4cccb5830f924dd40059062b5
 
-[Puis lancer le code encrypt_ciphertext_session_key.py pour chiffrer un message clair choisi "test" avec le message clair "AdrienPanguel123" avec la commande suivante]:
+[Puis lancer le code encrypt_plainttext_session_key.py pour chiffrer un message clair choisi "test" avec le message clair "AdrienPanguel123" avec la commande suivante]:
 
-python3 encrypt_ciphertext_session_key.py
+python3 encrypt_plaintext_session_key.py
 
 [Retour de la commande]:
 
@@ -1459,11 +1459,11 @@ openssl rsa -pubin -in ./Keys/PublicKeys/pk_director.pem -noout -modulus | sed '
 bed6cdc8f142d61854b6bddc6f9eb36bbbf4e5dab77207240078293c384eb53d4e3a0b2f250d6dd1192448973b250d563517218c90a12c0447f5b31df37410d8a2e21573c0f05a8aa9924114708053b08878d3b53ccd35ba3516c02c3692d048ad46e98b7fbe13a99b4670fcc96dd51e7a04a3da93493ab5b5b0ff7ae77708d74f8c964112523fed59c1bdc949bfea248ff0a39285302b0292a6b8de23f98a920135cf1b5660e16eb4fddbb24b4312ef5c59f4a02a67dff2b28a6d1b0c3e3942c1736faa43a94f0995e04bda6c873a1cbaf6685424196abc6185d3e40fc1cc276fae72de0465d9748e6eb7e165b62800a53f2c67e4693cc92b37a9ee4bc449e9
 
 [C'est le N de la clé publique du directeur à déposer dans ./Hexa/n_director.hex.]
-[Lancer le code RSA_blinding.py avec ce N.]:
+[Lancer le code blinding_plaintext.py avec ce N.]:
 
-python3 RSA_blinding.py
+python3 blinding_plaintext.py
 
-[Retour de la commande + stocké dans ./Texts/rsa_blinding.txt]:
+[Retour de la commande + stocké dans ./Texts/blinding_plaintext.txt]:
 
 --- DATA À ENVOYER AU DIRECTEUR ---
 
@@ -1497,7 +1497,7 @@ YOU HAVE BEEN WARNED
                     8b6821c407716ad36b6fec58af03b25a3e3d410614a920ba19d8a0c193479e4f4647bb725157afb463c3307d05a09b307db7ce75f80d00b79b4bae2b18f6623aea8c0f827840f8d7ff52a7663fc12e25afbf10761bd5c7b0064416a2609bda951741e432a4fea8ceed0d980941abdbd7e38baecb3cc2fdd3caf77c7c3386c6bd3b633dabb3ef035b928cdb5102f605cf48256475bbee6ab98cb46538eeefc3465ece9176222c4c430fbaba81c688c7e44735ae43039ca41f10848696fc8a212e850a1309e860369a314fc1c33939a9a6ac183576a375fc6df0ced4cfcbfa060c58a79e04f44505c650a9da57c46435b4b8275632b8086f17c30e960af20da490
 [press any key]
 
-[Noter cette signature dans ./Texts/sign_rsa_blinding.txt.]
+[Noter cette signature dans ./Texts/sign_blinding_plaintext.txt.]
 [Retourner au Robot gardien et donner cette signature.]
 >>> Robot gardien
 Vous vous approchez prudemment du robot gardien, et à votre grande surprise

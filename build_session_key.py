@@ -2,7 +2,7 @@ import subprocess
 from pathlib import Path
 
 # Texte à chiffrer
-plaintext = "AdrienPanguel123"
+plaintext = b"AdrienPanguel123"
 
 # Chiffrer ce Plaintext avec la clé publique pour obtenir la session-key
 cmd = [
@@ -13,15 +13,13 @@ cmd = [
 ]
 
 # Lancer la commande OpenSSL
-result = subprocess.run(cmd, input=plaintext, capture_output=True, text=True)
+result = subprocess.run(cmd, input=plaintext, capture_output=True)
 
 # Tester si le processus OpenSSL s’est terminé avec une erreur
 if result.returncode != 0:
     print("Erreur lors du chiffrement :")
     print(result.stderr)
     raise SystemExit(1)
-
-cipher_bin = result.stdout.encode("latin1")
 
 # Convertir le binaire en hexadécimal avec xxd -p
 cmd = [
@@ -30,7 +28,7 @@ cmd = [
 ]
 
 # Lancer la commande OpenSSL
-result = subprocess.run(cmd, input=cipher_bin, capture_output=True)
+result = subprocess.run(cmd, input=result.stdout, capture_output=True)
 
 # Tester si le processus OpenSSL s’est terminé avec une erreur
 if result.returncode != 0:

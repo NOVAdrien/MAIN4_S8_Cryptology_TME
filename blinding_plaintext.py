@@ -54,7 +54,7 @@ M_blind = (M * pow(x, e, N)) % N
 
 print("--- MODULUS DU DIRECTEUR ---")
 print(N_hex)
-print()
+print() 
 
 print("--- DATA À ENVOYER AU DIRECTEUR ---")
 print(hex(M_blind)[2:])
