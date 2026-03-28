@@ -955,7 +955,7 @@ Le micro-écran LCD affiche "terrymichelle's key has been revoked (reason: secre
         signature:
 [Il nous faut la clé privée de l'individu A.]
 [Comme on sait que la clé privée de l'individu A a été construite en RSA avec le même N que celle de l'individu B qu'on peut trouver à partir du "d" trouvé par terre, on va faire une attaque par module partagé.]
-[Lancer le code shared_modulus_attack.pem pour obtenir la clé privée de A et B avec la commande suivante]:
+[Lancer le code shared_modulus_and_private_key.pem pour obtenir la clé privée de A et B avec la commande suivante]:
 
 python3 shared_modulus_and_private_key.py 
 
@@ -1584,7 +1584,7 @@ Il manque 8 point(s) pour T(0)
 
 [ On a aussi la commande "#!bluetooth".]
 
-### FLAG 18: 
+### FLAG 18: Generator TME (poste informatique #1)
 
 [On monte au niveau JU dont voici le plan]:
 
@@ -1612,6 +1612,322 @@ UFR   : 24-25 / 2ème
 LIP6  : 24-25 / 4ème + 25-26 + 26-00
 LPNHE : 12-22
 DSI   : 33-34 / 2ème (accès par la tour 34)
+
+[Aller tout 15]
+[Utiliser la commande #!sudo pour utiliser l'ascenseur de la tour 15.]
+[Aller à l'étage 3 avec cet ascenseur.]
+[Aller au PPTI.]
+[Aller à la salle TME.]
+[Utiliser poste informatique #1]:
+
+TME #1 : générateur d'ordre imposé
+
+Difficulté : *
+
+But     : produire (p, g) avec p premier (a <= p < b)
+          et g d'ordre q modulo p
+
+a = f5c9d3253a67e46073550a07ea6d36a1ad08de67e49fbdaec8b70437c10ddbfc2d5d24024c0f0bb5a5cb014fe7da4a9cf3b69b302afd19134180165571bbafd8c21c0493441b38a1afedabc26622738e8de9c64169af2ea96cf5fdf39751295e237704cae3a5c76f2ae7a2821acea059598456b645563867a4a0e25c2b6bb77bc49e9c13755d13d8598c697ef862b2542bbfa9a9545aff6d57d7542390bd3d517ca8e631db28e055a304a45049c50c92bc818bbb0c3f33f84c07340fa826619371dead9c06972b652c59233c8227d6630cb198f9b3cdbf903c0903ae59454c289d2f2444a298142334334410ef880d1cd0547f447bce510042b8d8199d3878b4
+b = a + 2**1950
+q= ddcf292ef95a5501e9ea8d1a03dbb9014bfe595627fe7f34f976a32c9701ba79
+
+                    p :
+
+[Copier le "a" et le "q" dans le code "tme_generator.py", et lancer ce code avec la commande suivante]:
+
+python3 tme_generator.py 
+
+[Retour de la commande]:
+
+p premier tel que (a <= p < b) et (p - 1) soit un multiple de q: 
+31027908228350701914025864504557515739915559785818231510366483032463870397424452675061804034109485272381954995619118130837353357882215727987450281266218938513969006255950523330216770488282166879262899123543483558682328289220379134136622851824282707505037599850618579043566718784721943418582586582132307663206131477997864740923689410909946922653858685575362450809867154561921688926623543210334987582051709254580943170296609631747761260050505181303926409613298736068938462469657841927266235861641913527998512806919986065140364690922679368811393695296764662508133219659486184236889490181402553419345348936244335995485051
+g tel que g**q == 1 mod p: 
+16797006352808561697258051821927368231242261389511207928233185270399452472581789279800777444133254557068183848502312128442580527266274858602632590982536090375616864113082625535857889023178694944029703853976244165089207196529065173543338869399796749139649300442310067327088219949831387091289380473301729253865199338294433823633322395581825898324798854857619069527093229995014997760738820706080352707132980344321965208588668937626882926714807679059755418866355857312496991005959069178071171712780437660623905325429388615547068152703892084338213768971508100104373086443344193053870063178978865009434998504601099455979693
+
+[On a retrouvé le p et le g.]
+[Entrer ce p et ce g dans le poste informatique.]
+
+TME #1 : générateur d'ordre imposé
+
+Difficulté : *
+
+But     : produire (p, g) avec p premier (a <= p < b)
+          et g d'ordre q modulo p
+
+a = f5c9d3253a67e46073550a07ea6d36a1ad08de67e49fbdaec8b70437c10ddbfc2d5d24024c0f0bb5a5cb014fe7da4a9cf3b69b302afd19134180165571bbafd8c21c0493441b38a1afedabc26622738e8de9c64169af2ea96cf5fdf39751295e237704cae3a5c76f2ae7a2821acea059598456b645563867a4a0e25c2b6bb77bc49e9c13755d13d8598c697ef862b2542bbfa9a9545aff6d57d7542390bd3d517ca8e631db28e055a304a45049c50c92bc818bbb0c3f33f84c07340fa826619371dead9c06972b652c59233c8227d6630cb198f9b3cdbf903c0903ae59454c289d2f2444a298142334334410ef880d1cd0547f447bce510042b8d8199d3878b4
+b = a + 2**1950
+q= ddcf292ef95a5501e9ea8d1a03dbb9014bfe595627fe7f34f976a32c9701ba79
+
+                    p :                         31027908228350701914025864504557515739915559785818231510366483032463870397424452675061804034109485272381954995619118130837353357882215727987450281266218938513969006255950523330216770488282166879262899123543483558682328289220379134136622851824282707505037599850618579043566718784721943418582586582132307663206131477997864740923689410909946922653858685575362450809867154561921688926623543210334987582051709254580943170296609631747761260050505181303926409613298736068938462469657841927266235861641913527998512806919986065140364690922679368811393695296764662508133219659486184236889490181402553419345348936244335995485051
+                    g :                         16797006352808561697258051821927368231242261389511207928233185270399452472581789279800777444133254557068183848502312128442580527266274858602632590982536090375616864113082625535857889023178694944029703853976244165089207196529065173543338869399796749139649300442310067327088219949831387091289380473301729253865199338294433823633322395581825898324798854857619069527093229995014997760738820706080352707132980344321965208588668937626882926714807679059755418866355857312496991005959069178071171712780437660623905325429388615547068152703892084338213768971508100104373086443344193053870063178978865009434998504601099455979693
+
+                                                          +---------------+
+                                                          | Bonne réponse |
+                                                          +---------------+
+
+[security engine] tme.generator:52:1|49192d579149fb449a6a2efece855bde4a28d1a0e474f6ce4e19607fee1d9347 [DIX-HUITIEME FLAG !!!]
+
+### FLAG 19: Generator TME (poste informatique #2)
+
+[Utiliser le poste informatique #2]:
+
+TME #2 : racine primitive
+
+Difficulté : **
+
+But     : produire (p, g) avec p premier (a <= p < b) et g d'ordre p-1 modulo p.
+          Il faut également fournir la factorisation de p-1.
+          p-1 doit être un multiple de q.
+
+a = c77d83a7fd9416dbb0ed531372bcae3ed82a4f2f488c540d27f4de7cd3f972428fd8e5aed2a6cfa2e182fd9514278f2a2adeb8d55e8cac0e22b9a41e0a02bd641868d6c98ff68cad9c2f65492d1856b789210530b0cdabb51b59ab3f434f477fd4f14c2df80b1864c28489cc2dd2fa4857e69a9bc7d5aea9d7bd8241d087ae6266a27d35d942d9886be92b6b45ec0cd31533e8141541cee16dc12c637851a4c7b1f4439cfff8b0094099beba35611c2390719902645ba39083dd1e7cddf45bba1df49b1082d857a65c36bc902572eef78faf8416c2f0aef63bc57098cb2af925d032e3d746b3929e99284913d5b2fcabc4dfbda88d66ff6c826eb373452e90de
+b = a + 2**1950
+q = 669819f383990b34742018a2ce8e8feefa462b86747b3b03967177397913469b8eb9606804195edbf7f2073308f5192d
+
+Format pour (p-1) // q : x1, x2, ..., xn
+
+                    g :
+
+[Copier le "a" et le "q" dans le code "tme_generator2.py", et lancer ce code avec la commande suivante]:
+
+python3 tme_generator2.py 
+
+[Retour de la commande]:
+
+[*] Recherche de p...
+[*] Recherche de g...
+
+===== RÉSULTATS =====
+p = 25183316087538994903031845478445293051152948719311060961352224487587037534758041925911578796432086481875309988559980384776803307645222503129967449036014270270602465182423734814371379727176916680191291224967505501489179745543117142565322148139994781546346410729233081100258623587612238084354778868990859924678031293320312175567121739881891176103643300830263066410630405230963043169232369094289837117225089537080362486884012357726592568690139137659992303640670535268353007896075466284924165711982282663001274437968502281203555099223902474528619859699849827918799018703319765326023817557724913187523580254685977759790203
+g = 2
+(p-1)//q = 2 * 797410537767790833644587933027668451872111695844673970436822750149427788478865734556134768268452569347848937390752245719077307479520061589879123333627830853253948082844043745178918050024476757731086087676055223174979443507791884909621126173179672222636981763289529706892353837128305501691545689764134306029969575379078780936572573563324808484437439570573983259422072659635612118140598651102124026132774047068959333656499184564220679894522273676197905770160012834845731134227651782799401847782634688337
+Format à saisir pour (p-1)//q : 2, 797410537767790833644587933027668451872111695844673970436822750149427788478865734556134768268452569347848937390752245719077307479520061589879123333627830853253948082844043745178918050024476757731086087676055223174979443507791884909621126173179672222636981763289529706892353837128305501691545689764134306029969575379078780936572573563324808484437439570573983259422072659635612118140598651102124026132774047068959333656499184564220679894522273676197905770160012834845731134227651782799401847782634688337
+
+[On récupère g, et (p-1)//q (prendre le "format à saisir").]
+[Retourner sur le poste informatique #2.]
+
+TME #2 : racine primitive
+
+Difficulté : **
+
+But     : produire (p, g) avec p premier (a <= p < b) et g d'ordre p-1 modulo p.
+          Il faut également fournir la factorisation de p-1.
+          p-1 doit être un multiple de q.
+
+a = c77d83a7fd9416dbb0ed531372bcae3ed82a4f2f488c540d27f4de7cd3f972428fd8e5aed2a6cfa2e182fd9514278f2a2adeb8d55e8cac0e22b9a41e0a02bd641868d6c98ff68cad9c2f65492d1856b789210530b0cdabb51b59ab3f434f477fd4f14c2df80b1864c28489cc2dd2fa4857e69a9bc7d5aea9d7bd8241d087ae6266a27d35d942d9886be92b6b45ec0cd31533e8141541cee16dc12c637851a4c7b1f4439cfff8b0094099beba35611c2390719902645ba39083dd1e7cddf45bba1df49b1082d857a65c36bc902572eef78faf8416c2f0aef63bc57098cb2af925d032e3d746b3929e99284913d5b2fcabc4dfbda88d66ff6c826eb373452e90de
+b = a + 2**1950
+q = 669819f383990b34742018a2ce8e8feefa462b86747b3b03967177397913469b8eb9606804195edbf7f2073308f5192d
+
+Format pour (p-1) // q : x1, x2, ..., xn
+
+                    g :                         2
+                    (p-1) // q :                2, 797410537767790833644587933027668451872111695844673970436822750149427788478865734556134768268452569347848937390752245719077307479520061589879123333627830853253948082844043745178918050024476757731086087676055223174979443507791884909621126173179672222636981763289529706892353837128305501691545689764134306029969575379078780936572573563324808484437439570573983259422072659635612118140598651102124026132774047068959333656499184564220679894522273676197905770160012834845731134227651782799401847782634688337
+
+                                                          +---------------+
+                                                          | Bonne réponse |
+                                                          +---------------+
+
+[security engine] tme.primitive:52:1|ac80f74782bef561be0ef58d966e4a890a7420a05ded4f4661eac620bb887165   [DIX-NEUVIEME FLAG !!!]
+
+### FLAG 20: Generator TME (poste informatique #4)
+
+[Utiliser le poste informatique #4]:
+
+TME #3 : certificat de primalité
+
+Difficulté : ****
+
+But     : produire un certificat de primalité de Pratt pour un entier p premier
+          (a <= p < b).  Un tel certificat pour p est un dictionnaire composé de :
+          - p   : le nombre dont il s'agit de prouver la primalité
+          - g   : un élément d'ordre p-1 modulo p
+          - pm1 : la liste des certificats des facteurs premiers de p-1
+
+          Si p < 1024, alors il n'est pas nécessaire de fournir g et pm1.
+          (la définition récursive est donc bien fondée).
+
+a = 2c840bc73912bf164f99439327a7968c800a281a33e88056ae061dad66a3c1ccb8d10328f0d4ff708de5e8d01ba6a019a50e06c933558dab2eb5f53f210344b1e2957e79a61dc2e269b46f9761732e9bf7f5db36ef2b4d3819790e5e6cabebf01d5fea37053481e44f8c0255caf65db23e2cb10cdd7024fea607853366e0e46a
+b = a + 2**960
+
+Format : dictionnaire JSON
+
+                    certificat :
+
+[Copier le "a" dans le code "tme_generator3.py", et lancer ce code avec la commande suivante]:
+
+python3 tme_generator3.py 
+
+[Retour de la commande]:
+
+[*] Construction de la base P...
+[+] Base P construite avec 123 petits nombres premiers.
+[*] Recherche de q ...
+[+] Succès après 548 itérations !
+[*] Génération du certificat complet...
+[+] Terminé ! Le certificat a été sauvegardé dans './JavaScriptObjectNotation/certificat_pratt.json'
+
+[Copier-coller le contenu du fichier "certificat_pratt.json" dans le poste informatique #4]:
+
+TME #3 : certificat de primalité
+
+Difficulté : ****
+
+But     : produire un certificat de primalité de Pratt pour un entier p premier
+          (a <= p < b).  Un tel certificat pour p est un dictionnaire composé de :
+          - p   : le nombre dont il s'agit de prouver la primalité
+          - g   : un élément d'ordre p-1 modulo p
+          - pm1 : la liste des certificats des facteurs premiers de p-1
+
+          Si p < 1024, alors il n'est pas nécessaire de fournir g et pm1.
+          (la définition récursive est donc bien fondée).
+
+a = 2c840bc73912bf164f99439327a7968c800a281a33e88056ae061dad66a3c1ccb8d10328f0d4ff708de5e8d01ba6a019a50e06c933558dab2eb5f53f210344b1e2957e79a61dc2e269b46f9761732e9bf7f5db36ef2b4d3819790e5e6cabebf01d5fea37053481e44f8c0255caf65db23e2cb10cdd7024fea607853366e0e46a
+b = a + 2**960
+
+Format : dictionnaire JSON
+
+                    certificat :                {"p": 31260061148569846620599555407415018704026190986572432720505256112821513377449074400578646757115615585810820585040505621106057304345380261523358420265073453003536552333936300601916052500394311042491951050582611588954982977931637812779639062073262635813342621006590896755075104920962596185506231049815114025191, "g": 15, "pm1": [{"p": 2}, {"p": 3}, {"p": 5}, {"p": 7}, {"p": 11}, {"p": 13}, {"p": 17}, {"p": 19}, {"p": 23}, {"p": 29}, {"p": 31}, {"p": 37}, {"p": 41}, {"p": 43}, {"p": 47}, {"p": 53}, {"p": 59}, {"p": 61}, {"p": 67}, {"p": 71}, {"p": 73}, {"p": 79}, {"p": 83}, {"p": 89}, {"p": 97}, {"p": 101}, {"p": 103}, {"p": 107}, {"p": 109}, {"p": 113}, {"p": 127}, {"p": 131}, {"p": 137}, {"p": 139}, {"p": 149}, {"p": 151}, {"p": 157}, {"p": 163}, {"p": 167}, {"p": 173}, {"p": 179}, {"p": 181}, {"p": 191}, {"p": 193}, {"p": 197}, {"p": 199}, {"p": 211}, {"p": 223}, {"p": 227}, {"p": 229}, {"p": 233}, {"p": 239}, {"p": 241}, {"p": 251}, {"p": 257}, {"p": 263}, {"p": 269}, {"p": 271}, {"p": 277}, {"p": 281}, {"p": 283}, {"p": 293}, {"p": 307}, {"p": 311}, {"p": 313}, {"p": 317}, {"p": 331}, {"p": 337}, {"p": 347}, {"p": 349}, {"p": 353}, {"p": 359}, {"p": 367}, {"p": 373}, {"p": 379}, {"p": 383}, {"p": 389}, {"p": 397}, {"p": 401}, {"p": 409}, {"p": 419}, {"p": 421}, {"p": 431}, {"p": 433}, {"p": 439}, {"p": 443}, {"p": 449}, {"p": 457}, {"p": 461}, {"p": 463}, {"p": 467}, {"p": 479}, {"p": 487}, {"p": 491}, {"p": 499}, {"p": 503}, {"p": 509}, {"p": 521}, {"p": 523}, {"p": 541}, {"p": 547}, {"p": 557}, {"p": 563}, {"p": 569}, {"p": 571}, {"p": 577}, {"p": 587}, {"p": 593}, {"p": 599}, {"p": 601}, {"p": 607}, {"p": 613}, {"p": 617}, {"p": 619}, {"p": 631}, {"p": 641}, {"p": 643}, {"p": 647}, {"p": 653}, {"p": 659}, {"p": 661}, {"p": 673}, {"p": 677}, {"p": 531239448388209888052949, "g": 2, "pm1": [{"p": 2}, {"p": 2}, {"p": 17}, {"p": 2017, "g": 5, "pm1": [{"p": 2}, {"p": 2}, {"p": 2}, {"p": 2}, {"p": 2}, {"p": 3}, {"p": 3}, {"p": 7}]}, {"p": 12239, "g": 13, "pm1": [{"p": 2}, {"p": 29}, {"p": 211}]}, {"p": 12323, "g": 2, "pm1": [{"p": 2}, {"p": 61}, {"p": 101}]}, {"p": 80911, "g": 3, "pm1": [{"p": 2}, {"p": 3}, {"p": 3}, {"p": 5}, {"p": 29}, {"p": 31}]}, {"p": 317399, "g": 11, "pm1": [{"p": 2}, {"p": 158699, "g": 2, "pm1": [{"p": 2}, {"p": 79349, "g": 2, "pm1": [{"p": 2}, {"p": 2}, {"p": 83}, {"p": 239}]}]}]}]}]}
+
+                                                          +---------------+
+                                                          | Bonne réponse |
+                                                          +---------------+
+
+[security engine] tme.pratt:52:1|5911d3fed5bb49921a530f3c2f944e5443b66e021349663136c0b93a192f6445       [VINGTIEME FLAG !!!]
+
+### FLAG 21: Generator TME (poste informatique #4)
+
+[Aller au niveau JU, à l'atrium, premier étage, salle 112.]
+
+                                                           UGLIX v4.0 beta
+                                                  (Sensitive Data Storage Terminal)
+                    Active user: AdrienPanguel
+                                                              Main menu
+                                                              ---------
+                    1. Secure Mode
+                    2. Recovery Mode
+                    3. Exit
+
+[Taper 2.Recovery Mode]:
+
+STC18213 00000090 $HASP100 BPXAS ON STCINRDR
+STC18213 00000090 $HASP373 BPXAS STARTED
+STC18213 80000010 IEF403I BPXAS - STARTED - TIME=13.36.36 - ASID=001F - SC53
+STC16316 00000291 IST663I IPS SRQ REQUEST FROM ISTAPNCP FAILED, SENSE=08570002
+     111 00000291 IST664I REAL OLU=USIBMSC.S52TOS48 REAL DLU=USIBMSC.S48TO
+     111 00000291 IST889I SID = ED0385CAAEEAAF28
+     111 00000291 IST264I REQUIRED RESOURCE S48TOS52 NOT ACTIVE
+     111 00000291 IST314I END
+STC16352 00000291 IST663I IPS SRQ REQUEST FROM ISTAPNCP FAILED, SENSE=087D0001
+     883 00000291 IST664I REAL OLU=USIBMSC.S52TOS48 ALIAS DLU=USIBMSC.S48TO
+     883 00000291 IST889I SID = ED0385CAAEEAAF28
+     883 00000291 IST314I END
+STC28215 00000291 IST663I IPS SRQ REQUEST TO ISTAPNCP FAILED, SENSE=08570002 86
+     864 00000291 IST664I REAL OLU=USIBMSC.S52TOS48 ALIAS DLU=USIBMSC.S48TO
+     864 00000291 IST889I SID = ED0385CAAEEAAF28
+     864 00000291 IST264I REQUIRED RESOURCE S48TOS52 NOT ACTIVE
+     864 00000291 IST891I USIBMSC.SC48M GENERATED FAILURE NOTIFICATION
+     864 00000291 IST314I END
+
+12.31.31            %lu mkt01 noracf tso
+12.31.31 STC08791   IRRA011I (%) OUTPUT FROM LU:
+USER=MKT01
+12.31.31 STC08791   TSO INFORMATION
+
+ACCTNUM= ACCT#
+PROC= IKJSYSP
+SIZE= 00512000
+MAXSIZE= 00512000
+UNIT= 3390
+HASHFCN= CRC64-ISO
+HASHPWD= 1a70e26a5e14b7eb
+
+[L'username est "MKT01" et le nouveua hash est "1a70e26a5e14b7eb".]
+
+[Entrer les valeurs de l'username et du nveau hash dans le code "112.py" et le lancer avec la commande suivante]:
+
+python3 112.py
+
+[Retour de la commande]:
+
+[*] Hash cible : 0x1a70e26a5e14b7eb
+[*] Inverse de X^64 trouvé.
+[+] Mot de passe en Hex : 0x1d68e9183e93f3d0
+[!] Le mot de passe contient des caractères non imprimables. Utilisez la version Hex ou Bytes.
+[+] Mot de passe Bytes : b'\x1dh\xe9\x18>\x93\xf3\xd0'
+
+[Taper 1.Secure Mode]:
+
+                                                           UGLIX v4.0 beta
+                                                  (Sensitive Data Storage Terminal)
+                    Active user: AdrienPanguel
+                                                              Main menu
+                                           +----------------PLEASE LOGIN----------------+
+                                           | username:                                  |
+                                           |                                            |
+                                           |                                            |
+                                           +--------------------------------------------+                    1. Secure Mode
+                    2. Recovery Mode
+                    3. Exit
+
+[Entrer l'username "MKT01" et comme mdp l'hexa "0x1d68e9183e93f3d0" sans le "0x".]
+
+                                                           UGLIX v4.0 beta
+                                                  (Sensitive Data Storage Terminal)
+                    Active user: AdrienPanguel
+                                                              Main menu
+                                           +----------------PLEASE LOGIN----------------+
+                                           | username: MKT01                            |
+                                           | password: ****************                 |
+                                           | Successful login. Press any key.           |
+                                           +--------------------------------------------+                    1. Secure Mode
+                    2. Recovery Mode
+                    3. Exit
+
+[Suite]:
+                                                           UGLIX v4.0 beta
+                                                  (Sensitive Data Storage Terminal)
+                    Active user: AdrienPanguel
+                                                              Main menu
+                                                              ---------
+                    1. Print RPC & Kerberos documentation
+                    2. Exit
+
+[Taper 1.Print RPC & Kerberos documentation.]
+
+[security engine] crc64.preimage:52:1|5c8a3d95af15454ea3f56eada71c4a950c9dd622e4b94f50f420c4ae17880901  [VINGT-ET-UNIEME FLAG !!!]
+
+### FLAG 22: Generator TME (poste informatique #4)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
