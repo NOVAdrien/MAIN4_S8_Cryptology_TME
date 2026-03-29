@@ -243,7 +243,7 @@ cat ./Hexa/msg_pki_tutorial.hex
 
 ### FLAG 3: Générer ma paire de clé RSA publique/privée
 
-[ Lancer le code generate_pk_sk_rsa.py pour générer notre paire de clé RSA publique/privée avec la commande suivante]:
+[Lancer le code generate_pk_sk_rsa.py pour générer notre paire de clé RSA publique/privée avec la commande suivante]:
 
 python3 generate_pk_sk_rsa.py
 
@@ -783,6 +783,25 @@ openssl req -new -key ./Keys/PrivateKeys/sk_atrium.pem -batch -subj '/CN=AdrienP
 [Revenir au CICSV et badger la carte]:
 
 [security engine] pki.cert:52:1|8fe700cd09c6930261a71d3f75981625b83f3bcd5391b161e280bbbfd4078350        [9e flag !!!]
+
+[Aller au RC-07 de l'Atrium.]
+>>> regarder firmware
+Elle est écrite sur le coin d'une enveloppe.  Elle dit :
+                    firmware update key: 35ba26a3b0297f0d
+
+[Lancer le code "firmwares.py" avec les 9 premiers flags.]
+[Aller à l'atrium, au foyer, sur la borne de mise à jour des firmwares keys, et entrer la firmware key obtenue]:
+
+                                                      UGLIX v4.0 beta
+                                                 (Firmware Update Station)
+                    Active user: AdrienPanguel
+                    Firmware update key:        35ba26a3b0297f0d
+
+                               +------------------------------------------------------------+
+                               | Firmware updated. New command activated: ``#!item-debug''. |
+                               +------------------------------------------------------------+
+
+[Cette commande "#!item-debug" sera utile plus tard.]
 
 ### FLAG 10: Chiffrement hybride & Broadcast
 
@@ -1501,6 +1520,9 @@ YOU HAVE BEEN WARNED
 [press any key]
 
 [Noter cette signature dans ./Texts/sign_blinding_plaintext.txt.]
+
+[Lancer le code "obtain_sign.py" pour enlever le masque du message blindé.]
+
 [Retourner au Robot gardien et donner cette signature.]
 >>> Robot gardien
 Vous vous approchez prudemment du robot gardien, et à votre grande surprise
@@ -1552,16 +1574,16 @@ Il manque 16 point(s) pour T(0)
                                                  | Firmware updated. New command activated: ``#!sudo''. |
                                                  +------------------------------------------------------+
 
-                                                                                                                [17e flag !!! (Directement dans le terminal du RC-25 de l'Atrium).]
+secret.sharing:52:1|728d50e73e997cd4515a7c5568887012fc70406d739dc3cdad9cb5ad0337c462            [17e flag !!!]
+(Directement dans le terminal du RC-25 de l'Atrium)
 
 [Désormais, on peut taper "#!sudo#, un terminal ">>>" s'ouvre, et on peut aller dans n'importe quelle tour (tour 26 contient tout) avec un ascenseur et taper]:
 
 >>> #!sudo
-
 [SUDO]>>> ascenseur
           Level (SS / SB / JU / 2 / 4):
 
-[Mtnt que nous avons 7 flags, récupérons la 3ème firmware key en lançant le code inteprolation2.py]:
+[Mtnt que nous avons 17 flags, récupérons la 3ème firmware key en lançant le code firmwares.py]:
 
 python3 firmwares.py 
 
@@ -1582,7 +1604,7 @@ Il manque 8 point(s) pour T(0)
                                                       | Firmware updated. New command activated: ``#!bluetooth''. |
                                                       +-----------------------------------------------------------+
 
-[ On a aussi la commande "#!bluetooth".]
+[On a aussi la commande "#!bluetooth".]
 
 ### FLAG 18: Generator TME (poste informatique #1)
 
@@ -2089,8 +2111,12 @@ Vous êtes maintenant à l'intérieur de la bibliothèque déserte.  C'est parfa
 
 [security engine] multi.lamport:52:1|c8ef4b69021b534ba8bb6e0c85efdd4d77947289ca6c632601d950b164acf904         [24e flag !!!]
 
-### FLAG 25: 
+### FLAG 25: RML
 
+[Lire le "guide pour la programmation de firmwares" à l'ISIR, étage du haut, H20.]
+
+[Aller à l'ISIR, niveau du haut, H04.]
+>>>utiliser PC
                                                              UGLIX v4.0 beta
                                                        (experimental RML compiler)
 
@@ -2106,105 +2132,10 @@ Vous êtes maintenant à l'intérieur de la bibliothèque déserte.  C'est parfa
 
                     UPLOADING A CUSTOM FIRMWARE WILL VOID THE WARRANTY.
 
+[Copier-coller le contenu du fichier ""guide pour la programmation de firmwares" et entrer le MAC]:
 
------BEGIN RML PROGRAM -----
-extern type string.
-extern type ROOM.
+[Retour]:
 
-extern def print (message : string) -> nothing.
-extern def here () -> ROOM.
-extern def room_name(room : ROOM) -> string.
-
-def main(action : string maybe, direction : string maybe, item : string maybe) -> nothing {
-  let location : ROOM = here();
-  if room_name(location) != "ISIR_CAFET" {
-    print("0xbadCAFE !!!"); 
-    panic                               # nobody steals our hackable coffee pot!
-  };
-  # ... rest of the coffee-making program
-  # ejecting previous roast
-  # grounding fresh beans
-  # sending water
-  # etc...\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x12\x38
-print("Give me the flag!");
-}
------END RML PROGRAM -----
-
-
-
-
-
-
-
-
-
-INPUT PROGRAM:
-(Any line that contains ``-----BEGIN RML PROGRAM -----'' is ignored.
-Input stops on any line that contains ``-----END RML PROGRAM -----''.
-This line is ignored.  No (\n is added at the end of the previous line).
->>> -----BEGIN RML PROGRAM -----
->>> extern type string.
->>> extern type ROOM.
->>>
->>> extern def print (message : string) -> nothing.
->>> extern def here () -> ROOM.
->>> extern def room_name(room : ROOM) -> string.
->>>
->>> def main(action : string maybe, direction : string maybe, item : string maybe) -> nothing {
->>>   let location : ROOM = here();
->>>   if room_name(location) != "ISIR_CAFET" {
->>>     print("0xbadCAFE !!!");
->>>     panic                               # nobody steals our hackable coffee pot!
->>>   };
->>>   # ... rest of the coffee-making program
->>>   # ejecting previous roast
->>>   # grounding fresh beans
->>>   # sending water
->>>   # etc...\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x12\x38
->>> print("Give me the flag!");
->>> }
->>> -----END RML PROGRAM -----
-
-
-
-
-
-
-
-
-
-
-
-
-
-[Copier-coller le retour de la commande "" et entrer le MAC]:
-"""
-INPUT PROGRAM:
-(Any line that contains ``-----BEGIN RML PROGRAM -----'' is ignored.
-Input stops on any line that contains ``-----END RML PROGRAM -----''.
-This line is ignored.  No (\n is added at the end of the previous line).
->>> -----BEGIN RML PROGRAM -----
->>> extern type string.
->>> extern type ROOM.
->>>
->>> extern def print (message : string) -> nothing.
->>> extern def here () -> ROOM.
->>> extern def room_name(room : ROOM) -> string.
->>>
->>> def main(action : string maybe, direction : string maybe, item : string maybe) -> nothing {
->>>   let location : ROOM = here();
->>>   if room_name(location) != "ISIR_CAFET" {
->>>     print("0xbadCAFE !!!");
->>>     panic                               # nobody steals our hackable coffee pot!
->>>   };
->>>   # ... rest of the coffee-making program
->>>   # ejecting previous roast
->>>   # grounding fresh beans
->>>   # sending water
->>>   # etc...\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x12\x38
->>> print("Give me the flag!");
->>> }
->>> -----END RML PROGRAM -----
 [Dumping listing]
 [   1] extern type string.
 [   2] extern type ROOM.
@@ -2240,9 +2171,7 @@ This line is ignored.  No (\n is added at the end of the previous line).
 
 [security engine] length.extension:52:1|e7a643d1fd256665317b0301a4c45e6ee6a99fb99be3124ceb5f7d9ea687a2d5        [25e flag !!!]
 
-### FLAG 26:
-
-[Nous pouvons obtenir la denrière firmware key avec les 25 premeirs flags.]
+[Nous pouvons obtenir la denrière firmware key avec les 25 premiers flags.]
 [Lancer le code "firmwares.py" avec la commande suivante]:
 
 python3 firmwares.py
@@ -2257,15 +2186,9 @@ hex(S(0)) = 0x471147f3676e890f
 T(0) = 2261492315977216760
 hex(T(0)) = 0x1f626f478c18f2f8
 
-
-
-
-                                                                                                             UGLIX v4.0 beta
-                                                                                                        (Firmware Update Station)
-
+                                                             UGLIX v4.0 beta
+                                                        (Firmware Update Station)
                     Active user: AdrienPanguel
-
-
                     Firmware update key:        1f626f478c18f2f8
 
 [Affichage]:
@@ -2273,151 +2196,9 @@ Ooops, il y a eu un gros problème pendant l'utilisation de cet objet.
 Les administrateurs sont prévenus automatiquement.
 On continue quand même...
 
+### FLAG 26: RSA attack (Armoire)
 
-
-
-
-
-
-
-
-
-
-[ITEM DEBUG]>>> utiliser clef
-Le mot CLEF est ambigü. Cela pourrait être :
- - clef USB
- - clef de sécurité ronde (rouge)
- - clef de sécurité carrée (violette)
- - clef de sécurité triangulaire (verte)
-
-[ITEM DEBUG]>>> utiliser clef ronde
-Vous insérez la clef dans l'emplacement correspondant dans le coffre.
-Elle s'adapte parfaitement !
-[debug] protagonist.location(world_id='5828ebe2fecee7f5ae04ca384786775a')
-[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_SAFE')
-[debug] item.location(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4')
-[debug] item.set-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='circle', value=True)
-[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_CIRCLE_KEY')
-[debug] item.move(world_id='5828ebe2fecee7f5ae04ca384786775a', item='d86c5d6a10233a5c443e3d3ba02c9f8e', room='7f17cda8ac75806deba331ba99db5194')
-[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='circle')
-[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='square')
-[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='triangle')
->>>
-[ITEM DEBUG]>>> utiliser clef carrée
-Vous insérez la clef dans l'emplacement correspondant dans le coffre.
-Elle s'adapte parfaitement !
-[debug] protagonist.location(world_id='5828ebe2fecee7f5ae04ca384786775a')
-[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_SAFE')
-[debug] item.location(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4')
-[debug] item.set-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='square', value=True)
-[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_SQUARE_KEY')
-[debug] item.move(world_id='5828ebe2fecee7f5ae04ca384786775a', item='02bfeaf046dbdaf224beff4aee0c845e', room='7f17cda8ac75806deba331ba99db5194')
-[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='circle')
-[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='square')
-[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='triangle')
->>>
-[ITEM DEBUG]>>> utiliser clef triangulaire
-Vous insérez la clef dans l'emplacement correspondant dans le coffre.
-Elle s'adapte parfaitement !
-
-Vous entendez un déclic et la porte du coffre-fort s'ouvre,
-révélant ainsi son contenu.
-[debug] protagonist.location(world_id='5828ebe2fecee7f5ae04ca384786775a')
-[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_SAFE')
-[debug] item.location(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4')
-[debug] item.set-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='triangle', value=True)
-[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_TRIANGLE_KEY')
-[debug] item.move(world_id='5828ebe2fecee7f5ae04ca384786775a', item='efa1530dc2c45c3e0cdda320a3a30866', room='7f17cda8ac75806deba331ba99db5194')
-[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='circle')
-[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='square')
-[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='triangle')
-[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='GEOLOCATOR')
-[debug] item.move(world_id='5828ebe2fecee7f5ae04ca384786775a', item='b3a7f2217aad512fe2bc364a0284babf', room='7f9c2f16451ee5b7423cd5f1f02ba503')
->>>
-[ITEM DEBUG]>>> utiliser coffre-fort
-Vous n'allez pas essayer de l'ouvrir avec vos ongles.
-
-[ITEM DEBUG]>>> vor coffre-fort
-Vous n'allez pas essayer de l'ouvrir avec vos ongles.
-
-[ITEM DEBUG]>>> voir coffre-fort
-Blindé.  Apparemment, il s'ouvre avec non pas une, non pas deux, mais avec TROIS
-clefs physiques.  Sur la porte, un autocollant vante son haut niveau de technicité
-+--------------------------------------------------------------------------------+
-|  Ce coffre-fort Kryptonite Mk IV met en oeuvre les mesures de sécurité         |
-|  les plus modernes :                                                           |
-|  - Blindage en plomb anti rayon-X autour des circuits intégrés                 |
-|  - Plaques de Cobalt-Vanadium-Tungstène anti-perceuse devant la serrure        |
-|  - Relockers en verre (se brisent et bloquent tout en cas de perforation)      |
-|  - Relockers en cire (fondent et bloquent tout en cas d'attaque thermique)     |
-|  - Lasers*, chocs électriques*, gaz toxique**, etc. anti-gangsters             |
-|                                                                                |
-|   * fonctionnent avec de l'énergie renouvelable                                |
-|  ** biodégradable (les composants toxiques sont absorbés par l'adversaire)     |
-+--------------------------------------------------------------------------------+
-Il y a aussi un petit afficheur digital :
-               ,gPPRg,             ^             ┌───────┐
-              dP'   `Yb           / \            │       │
-              8)     (8          /   \           │       │
-              Yb     dP         /     \          │       │
-               "8ggg8"         /_______\         └───────┘
-
-                CIRCLE          TRIANGLE           SQUARE
-                PRESENT          PRESENT          PRESENT
-
-DOOR UNLOCKED
-
-[ITEM DEBUG]>>>
-Merci de vous exprimer clairement et de fournir un complément d'objet direct (valide).
-
-[ITEM DEBUG]>>> prendre coffre-fort
-Il pèse plusieurs centaines de kilos. En plus vous ne savez pas trop
-Ce qui pourrait se passer si vous essayiez de le déplacer...
-
-
-[ITEM DEBUG]>>> ouvrir coffre-fort
-Vous n'allez pas essayer de l'ouvrir avec vos ongles.
-
-
-[ITEM DEBUG]>>> RC-14
-Vous êtes dans un local de stockage, presque une sorte de débarras.  Le personnel
-du nettoyage y range aussi ses fournitures.
-
-Ici se trouve un coffre-fort.
-Ici se trouve un terminal de service.
-Ici se trouve un GeoLocator.
-
-[ITEM DEBUG]>>> prendre Geolocator
-OK
-
-[ITEM DEBUG]>>> consiel Geolocator
-Le petit écran LCD de l'appareil affiche :
-room_handle = 42b63e696db91dee99aae026fce1a285
-Vous vous demandez ce que cela peut bien signifier.
-[debug] room.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LIP6_26_00_412')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-[Aller au LPNHE]:
+[Aller au LPNHE, couloir 12-22/1]:
 LPNHE (barre 12-22)
 
            couloir 12-22/2 ------- dispositifs expérimentaux
@@ -2428,8 +2209,9 @@ LPNHE (barre 12-22)
                              |
                             117
 
-[Récupérer la clé USB et le Kit de développement pour dispositifs USB.]
-[Dans le couloir 12-22/1, utiliser le kit]:
+[Récupérer la clé USB (dans les dispositifs expérimentaux) et le Kit de développement pour dispositifs USB (dans le H20 à l'ISIR premier étage).]
+
+[Utiliser le kit]:
 >>> utiliser kit
 mtp-probe[28455]: checking bus 1, device 4: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-6"
 kernel: usb 4-1: new SuperSpeed USB device number 2 using xhci_hcd
@@ -2602,7 +2384,63 @@ prime2:
 0002dbb0: 5111 0863 4040 4040 4040 4040 c0a8 0884  Q..c@@@@@@@@....
 0002dbc0: 3120 2020 2020 2020 2060 5404 c218 1010  1        `T.....
 
-[Lire le mode d'emploi à la cafétééria (juste au-dessus)]:
+[Copier-coller les contenus de Modulus, privateExponent, prime1, prime2 dans le code rsa_get_d_p_q.py]
+
+[Aller au LPNHE, couloir 12-22/1]:
+
+[SUDO]>>> voir
+Vous êtes dans le couloir 12-22/1er étage.  C'est un couloir standard
+post-rénovation.  L'ambiance est rouge : dans les boucles latérales, les murs
+et le sol sont peints en rouge vif, tandis que les panneaux de bois d'un côté
+du couloir sont cramoisis.  Une vitrine expose du matériel utilisé dans de
+grandes expériences de détection de rayons cosmiques.  Il y a une cafétéria
+d'un côté du couloir et le bureau 117, qui est ouvert, de l'autre.
+
+Ici se trouve une armoire blindée.
+
+[Lancer le code "rsa_get_d_p_q.py" avec la commande suivante]:
+
+python3 rsa_get_d_p_q.py 
+
+[Retour de la commande]:
+
+n = 0xbd25d2428f5064ef8411a28bfbc8d35a372ee32086e36983ec09ac35c92bfd4e489befb31481aa6732b33ca909f9819c410f1857c064c0c37bbccb9d9d3846a277c58435db15eddf34571765615edf2bbcf8247f60aaf04ce42f6e7089dcc71a3a6451df6e087d7dd1772da631055188704f8ed957d6b3fc16c19330136a22911086f7de1ded5d4a49e873f3d10d91613ae4ddaf66179be0193e1e9c5c2274896c5a465726fb4ba9334543317ae7221b07e362691219883cdd62aa7ddf065299551e09b53635f9143d56b79b02103a172b595c2fdc5bd193d164dbaed77640be9f448d0372bdc226d633b8dd2af38f0deb5c6c96208f25a1d9f3b6d2454fd3c1
+p = 0xd829242261b12f24119df0c7b7485f0f0bdad5a294a3baca796181fcb606172756c126649d9fa769d6fecc23fe9f7794c8fff989a6973b10122eed8ceb281b9faac7801d5afe4d425a43cbc6bd255f5a812637050d2af71cd93a0d13172217d0610f6da5145caa2ed611212eb3f6730cf44a3a72cd0ccf5b65656d6af285797b
+q = 0xe00228a5864d73938d7de36fecd2dfd9189ae145fc28a5898df24da34517a494abe54ad3533819456205dc4289f17eefd0d139e3012e90fd1e53182696764918cca8001964d0825b9f123022c2303ff0e901099c0f6455b298cd23f07429dc0921ea4e8bf2c37f86d50f132c43a7f73a65e60d1e24e1bd492f8e107a8b974cf3
+d = 0x7e1a7214d8116449df461695b736cbd9f0c27cc099cd91f256f297f27ffda8f2812c1d61ca412c8782e0c6877853f55a647198ec2023cbf44851b57a8e700f7f8fd48a7191700c57ec404823da07f347e8c39329ad1c29fb498269e1f3b7d2b224cdef5bc3b33b5f1fc09219a3c304f9aecf0bd0d1641e38ea3f024f6212379a53f1419e1c34de049c84b1d6362d14591060e87c5585c3dc7db13619c2e0f0085af97f1440f6ef57fbc508ae5764a5c8b3f7c1859da9d7e3fd21041cbaab6887aba40a9cda79aac5e34e8dd429f118f4d108042166b406ac195c8c458a1105951608b73222773e43ecd1255ddcb55e40585713136263c5bbcd3df9b5ba94c9c5
+
+[Aller sur l'armoire]
+[SUDO]>>> armoire
+        challenge: misty psalm hoots osier supes
+
+        signature:  
+
+[Copier-coller n,p,q,d (sans le "0x") dans le code "rsa_sign.py" ainsi que le challenge "misty psalm hoots osier supes" et lancer le code avec la commande suivante]:
+
+python3 rsa_sign.py
+
+[Retour de la commande]:
+
+PEM écrit dans ./Keys/rsa_sign.pem
+Signature hex :
+a1f934ecc0447f2a378b0cfbd0acaab9f6f97f90cc7fd714a3d37761a9c4ae0589b093286cded0d8d1312936fcb6f49d20caa7794968d4f5eb36de7d0d6c873403e82352e389e9c519b64b1ade26ce5bafe7ed3ea4b68cd6632f6f5552b5edd42539b65122f16fac9ee0d20d32405c3f51b32c615b54ddcdc0927591363e0571e8d0bd20c71297a2966ccb967e7b3fc023a3eecebf0ae873f376649857a39d6713e54effc409e26b31d3b70c29ee0dce05b71fab648ae8d1b940352801dfb225571f8ae3cb6343d60ee24d870240e68429f393f491d3be6a571fcd2a3cd30bbbe9463d114a602c55aa758c2d3f347caa74f585361775efde2ec45d3ff46d2434
+
+[Copier-coller cette signature dans l'armoire]:
+
+[SUDO]>>> armoire
+        challenge: misty psalm hoots osier supes
+
+        signature:  a1f934ecc0447f2a378b0cfbd0acaab9f6f97f90cc7fd714a3d37761a9c4ae0589b093286cded0d8d1312936fcb6f49d20caa7794968d4f5eb36de7d0d6c873403e82352e389e9c519b64b1ade26ce5bafe7ed3ea4b68cd6632f6f5552b5edd42539b65122f16fac9ee0d20d32405c3f51b32c615b54ddcdc0927591363e0571e8d0bd20c71297a2966ccb967e7b3fc023a3eecebf0ae873f376649857a39d6713e54effc409e26b31d3b70c29ee0dce05b71fab648ae8d1b940352801dfb225571f8ae3cb6343d60ee24d870240e68429f393f491d3be6a571fcd2a3cd30bbbe9463d114a602c55aa758c2d3f347caa74f585361775efde2ec45d3ff46d2434
+
+Une LED verte s'allume sur l'armoire et vous entendez le mécanisme
+se déverrouiller.
+[press any key]
+[security engine] rsa.coldboot:52:1|aa140d1ede7bb37cbc249f500f880842f8531b634f077935c6478ba7259979a8       [26e flag !!!]
+
+### FLAG 27: AES-128-CBC attack
+
+[Aller au LPNHE.]
+[Lire le mode d'emploi à la cafétéria (juste au-dessus)]:
 
 >>> lire mode d'emploi
 algo = AES-128-CBC
@@ -2636,9 +2474,12 @@ oDBLJcbykMxYbLS2lV/Rj5sZ4+jY1MS94s6R/sgoLI4=
 
 pip install z3
 
-
+[Lancer le code "AES_attack_key_schedule.py" avec la commande suivante]:
 
 python3 AES_attack_key_schedule.py 
+
+[Retour de la commande]:
+
 [*] Reconstruction de la clé AES-128 depuis les round keys corrompues...
 [+] Clé AES-128 retrouvée : 887e2e3cf2bb17fc8eb55f56d111eaa7
 
@@ -2680,624 +2521,371 @@ Le digicode d'armement est :
 [-] Aucun flag direct détecté dans le plaintext.
 [*] Sauvegarde du plaintext dans plaintext.bin / plaintext.txt
 
-
-[Aller "armoire"]:
-
-[SUDO]>>> armoire
-        challenge: cycad adorn runts roper shuck
-
-        signature:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>> voir BiblioDrone-NG
-Il ressemble à une (grosse) voiture téléguidée munie de capteurs et d'un
-bras articulé pour manipuler des livres.  Une afficette explique qu'il
-s'agit de d'un drone de Nouvelle Génération aux performances améliorées.
-Hautement évolutif grâce à ses 4 emplacements pour modules optionnels et
-doté d'une armure renforcée, il est conçu pour les missions de
-récupération de livres les plus délicates.  Ce prototype devrait être mis
-en production à la bibliothèque des licences dans quelques mois, après
-d'ultimes réglages.  Vous admirez son design sportif et élégant.  Il s'en
-dégage à la fois une impression de puissance contenue et d'agressivité
-sauvage.  Un seul module optionnel est attaché ; dessus il y a écrit
-``Compact Pulse Laser''.
-
->>> prendre BiblioDrone-NG
-OK
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-
-
-                    Username:                   dcook
-
-                    Public key:
-                    -----BEGIN LAMPORT PUBLIC KEY-----
-                    YxxN4ciBGDd53htN8+83czGEfQuTLncrJZ1CJN9z2KH35nKjkfLqECtW+dszo+/s
-                    HVJf+DgvefWbN26MKlrojk1pxr5TrCb+L9l5EQ1D00MwC2C557vXeiEDQGUphN5L
-                    clkc1zGvTAWtpVnQomcL4SLK73ZYwRm3JC/r6HMsC618bMbLOUy38bYjqkcRB/1g
-                    xyqTNHpMA7WVLQkYZbJ7QBBHWdtyJxGQQIrNDiNsuXCvmeMyqckG3bUfQzpM8LnP
-                    NuYwl95IrmVuJT/zViRs1kcBt1PvcUKuDYtPSubIW1II0PHL0sgXge8nFq0qbsi9
-                    ma9SxeU8dsb6FN1tE4ObmSmDTLpgxt+norOd5x8aIVM1eqQQEaak6ip4IUHtkUkL
-                    UjSx/TtG5wfslsoiMy5R1jVDl46hPobkKhRE0RiTZuOf6RkuuXdyiTkiL7StRdQc
-                    cvOaLQ1pEODf7n9beApfPdVbgBCc+0JDCNp70T3V5H4VVnJmI9SY5qHLIrd4ROB8
-                    eiFJ+aMfG7CKzzKZ1y4SkP8AKmSj6OjkZ/eVdHH/RcFJhE6Cs6ZmmhfBD8hjTmrg
-                    ALSe+HrZWGKMq+jixkjUm6ewMKoFuXGk2NXzOR5xJM6jFrTuQOQNVN8nmfIGr/FR
-                    zX2K8TjpvjTLXNvakFvuRL5Xpr/5Zw9KZ96NvrS7v6syFEcI+kDwY1aow1sEHFNb
-                    s6CoE8GyS0pPlZ8j0qURnYJCaKsbQM/MNphntQgiAj0twm3Ny/JabVWOCJ53t4Kx
-                    YnOeL0zj+B7UGRd55CdRNyGR1IS/XH1qh9JqmTq/uXWx9+zxeZCQJ9nHQW5d35cT
-                    Z63ULsmhCbKwSailLIDjK6JOIwz2P/wWMymZzV0///0wHMDBn7CP6p5ftHPQWZpf
-                    XLrAow1CuzrvoMHGaQS0HTvfYEXybQiMh/5XfIHQbrONPq0+TjpcBR7iXVom53m2
-                    tv//CRGaNchENsoH035RlWW9XPXGv6eRf0vtTEmNe6deVmTSHkF5lf5dXmYIYdqi
-                    TkngEY8oERHhmyYp3l/oKxh9xUkkuv5auYxydVfXMPrTUMKv2Lxs2JrxFTrvKMgq
-                    ry3Wat7zxOp/tnmDtGM4yk10VysgML54A3rqdiXhhJhmsJE/646mLxbOp8NWb2Pz
-                    pu0nAP4ObLinz9ZQrxWtE1pVbXjVKnSItQpBdzUtWEDc24ZrlkQf8LQvK7HtZe0x
-                    4ya3DTsA36I4L9IWy1NXDjGsPjJAL2YKyKAccwMtPmAXBlOjeqvGO2XiOYjSxgyR
-                    tYMVP6uVd+D+4j9VQXU+4w+iXTGKPOVKOBy3ghbKvp2C5FXgay7YhpuiUBA4G2Rw
-                    UwsWdq2oT6scB2J6yb6CbudSz19KzirCbDihQFuu/IKFTv0BgZGbPfwEjIJqEi1+
-                    lQhFjIZY86L3JOlCrOHoaQatwezIH79T7VykZ2Ug5cTUdsaJ3nbLDYdJGPN/DBbK
-                    FexpI2KyO04xRiLuaj/WbC/VotreHNykxiUNQqEMjNF25gAt0QjI78vzv77x9qtK
-                    SlWbphs/s/DdcyAGFF9CcufFu+AqbpbWHFkOfNO24+lmNPPf5USKKxg0dH2I7fpz
-                    wzq96BBzjGKe0xq/ot5ETkL3OSC1GSWeCcRvnCw6DEJg1Wk+6Kb5CRnfJfzsyVrP
-                    lPGySFPqSZ/6o35bY0h2i1bVG0cn0VYZlk2s/8yBn8OR3o4edr/QkGHPuG3JXDij
-                    gettKpxnD7Ab8tMdDw6pn+MqazwpQ3E7BKLeCgj+7RpFU7cYXVWzF9rM1KKmrsqs
-                    3xqXgBzo5kVPQ2CnI8RdUYCYmM4k+czaMNrG8FVbDPY8uk1XRqUBEFSSICin89b7
-                    9WCJaBMXI4j8piFzSiYpQ3JciryiVmYcxNOn6yZgJmTrm/DvWE562qEubcylAOWD
-                    NJRT8qOXmgnHHqrLyWdzfhgWuhzrSm1Y8TgPMoF+ODzL/vULmrabrnVEP3beBfkP
-                    1xbaq3BYuRTKkOy6WaROEuvlUiaAoALagFxBZ6Fe69c7cknh+yzhHOpL/bnICR+W
-                    NKbNlvPVyDbbDjJmGHL0Pkd17VkeY3B3Wf7ZGnmttFTmaQFozMLfArbZvAOM7L0r
-                    73CW2eBPC1Xwqomkmv26ZxQzEn6mdKHgTiFTRoeaAlFTsArBkHiuJhY3u3u6tkLZ
-                    aWxrtq9tAf4hqP4YxLada3hJMvEGzQP2o3Ox9byUs1wJAUcR9/6OmzHgS1sHZ316
-                    KYfXyDeWD7Keh1zuZ84y76OwxSleFf+XElt94EpIx+76xbYcyY/5jWJnUAQ4tzb2
-                    w6jYYMDhPPkKsrGD/k0XHHpGX3hp2wfbUtjabakTg7FLae3Yayd1yT2ND3AE0hSD
-                    SXyaar7WeATdrG8KSL90r/NKvnr5uouMdT6PTk48Ze7EmpRM6K67tEOI30u5Dq6y
-                    eFzxWm8KVcIoZv+naIlT8iUj1JhtnibtPgACyhbfaw13NjYL+yP+uwTU9BB3lDaT
-                    UmXaL4WS8ufXUv855V4Az48bQZg0v0kV8iN/Lk9iE2hD6p54I0IjpPBFoR7n5254
-                    aZfVTbfk0LyueY1uoliD322k1LE+U6hoDF0+tqUYL8SP55xIUfM4pVZitspACSm0
-                    LLjtrtZBgBlaWPL19nKyuG+2E1AxpGzpXZlWX7oLw1Tt+RmWhzkNB88SnuEEbWAR
-                    //H3Wg4aDBjY8MbwtDl1HmoAvk4X3oTY2NJPdkAF1sEsbWXh+Zl4C+h6I6FIn7wq
-                    CB+4gy0Jgh+2QFi59aPPCeiTQg/q7xU89jJ+Ioig2t5NBvhxdvhHb1f1d2nA6+0X
-                    /k6k+/8jIbbK4c7PZCmNsNMuMk5KbSd/YB6u8I1uHnosRqRj1ti3Uv4M24DEyuuH
-                    wCxB+WxYG7hIAuk5s3Wh/jHGauO7GXwtM2ZSWK+DBDMEwXSnWurVxvpgTvtXC35a
-                    f5xO2kh29qoh0iItb6Ribta9htUeH3hwHf7RTsXP2y6ovNXmMjhYOnAHJccaPQDs
-                    KPBiUgXUhnU9+3/bNhQUxNIOWKSq1PmlFCXAWASxfWQg5KH8kMkPo3f47e2+LIol
-                    EJwvaMXxlgviJanOC6l2JkHsnpRGAA7mHEa6rhJgS8WM9dlgse2EaEfMM48DCm65
-                    vECTEFogwlP5dbBu0wt1iAXllAZ1VyTZ5o7oop4EXn9+gyP90HZodBeDVNfvDU4P
-                    10ZSH2EPK8d/Ms+dHoIYjK+msyBHpUgcQAzcdfEOTszvK3HRRDtNlSQHVH1G9xZT
-                    chlKwc/2/ko/GLtzM9nB7O1qP3+/BM0/YGrxWi2nZIjOBBCPObq+j6Ls87kveU1D
-                    fcoPilZSZQcEPh/KiHT4NcMTa9KakkrNlNzP5A8x0iu51v9x6kSkipcuzn2hxkTV
-                    6B9kSXkOT+ht1PJ1tQHPObjiqPeGzpmQP5jSpk6p1scPAOugVKSBiS/dBijZ5QIb
-                    dU42E0DTuUPtFv4enGlbq/KqeB8KzpK32gKRi7WhD+lLpi4u5PLt4kQKFlpMQWra
-                    8ztNn01ikAYRHUjHJlG14LCJ3w9UiOB7/FiIZpmuyCVD41xr2LHxChdc9/zR2yXR
-                    gMG5RjKTr/JTXDef6Od6/t/oQg/W2NfnBqM2L9JofwM+EdDK4q29ffuRf/tIu0if
-                    tgsPoRT1phnlpgJQEH4EE0cQocwJcwdtdUSYrlxbEumPBSmaI9reg8QbwD8Lza6D
-                    HlcAfnNDd2sO5fL6/pEAc5RrJQAEgAhbXI8uJBIXiXywHOrG2czkCE1+OQPr8cSB
-                    moHuVDReNmHUQKpDTCTS/yiBmrhzXETI2TgtOGN8RwIfr7I8xnl6VGgTmah7gWQt
-                    904l2FPXkyntfnC6mxCLz1OeV3WQm5H9IboOJ2Aui3gOUhe3AwObzEc+eOzH76HD
-                    K04Uy6auADaSwACPPgxTWttbe9j4GDs7zSW3GJml0jldTeSSxfHmPuxxGh0X4vYU
-                    jVHUU3Mq2wQIaBbcYimpUg8HEhgKQK8o6y0OHiGQ59YHIPmco/v6fhJKssrqKmS8
-                    nIK2hjWtp+BQ3sZdKhHYT7emfy+9WwPk0sF+DPwCQdY6enTPf3UUIjTSq0WxaTJj
-                    Ey5pRpmaCAv49XwnE34ZRlRxdJpMur6szTZ1ho8PDocvpmolZEv1bwWX48bysEYY
-                    AEhnaNVZzK9TtDa6XDnFZks+FHgvw2vDLr6o3RoGs/hQxMC68cpsa1eNYB5fyKSf
-                    GagT0/kDo4c5Rpm2/Lq+EfXYlPWHjMl9qFulyKBMcuClrfGE8kZliHqe7fUFFtMM
-                    i9gij3T1JXfVv/EbbCDbrWqjRMEOwr8xNBQ+kiJcw7/j+QxOCvsmqzIUXaHjkIxH
-                    736+xErxTBOUf41Vj8mxEJTKGxh8C5Sld0Uek6jeQ2wOdWQGStHTpEbU1r9gW4N3
-                    sMSKbRLxeAq9CsP4ZTaCBNgwkzCbc2lInSi9qmll3jENvR06wuvxypdQ8dFibu+a
-                    PVYE4Go5JMnNgnQXiQbkSD+rXkUn7wUie44o4CUs7eHLewE6yr6RZW02A4tbOpC4
-                    ZHoQPE/74qaoD2dDB0mRXQOHVVwVrU9lgt8HV/OQ1VRzKe+twdGKV6JtJuAPoB3+
-                    NmXNEegMdF98rNAxvfuyw6hjRMaf03civNhoPINWCFDee1P8gJtyE65fb+Z7JgK8
-                    8gHn5Teh6QX7wupsQAN87Wv1SZ4YP+yVGz5DI0SeKAU53pP+/FuKXMQknMdQK4hW
-                    KBzvJQzNKH0v+EabN47dxCUvvbuhpD3gjlcgyFsDDpoarPFcP9VsCtgKDoMW/WUc
-                    Y9yWFTDSoprh5NTP4MPVvNsmMVF5cKuOftyTv2/uWxzgCPxi2x0diwVFvjnwxFq1
-                    z5Vh8wFJdLCVX6bYROl3XsvHvgTHLlsG1v1rbr1ixIQktcpvunAdFQTdi5lqWQwD
-                    h3WL9xIUg5HwJvKNW8jdGvr/Q1T27uJBAoW04JGpRoBRzA+niehN42A7hGwPFD/m
-                    oydCUJ4bZIU6IbBZ5ZIqhzxMHo9U/fK2Ud7ITVGLeVZe2xcvv3JDMaPie+8jKM1N
-                    bayDqPs6Uk9r18TDs12daWNFPx5kWKaGZgQvKNMX45xic/xZz3YfnV6VwAzeOdsj
-                    6ITR/yWrGXDnv+OCmXwXnKuhnLYG67RuNB19g0ldoTuTfGldRYRj8PWlqPYO4Moj
-                    YNHHemR87/q9NpiF4E56r36zKb3SGoHp/helhuUJz8qiDuOY6+TL8lsWD6LGK0Fw
-                    9DyphIzDb/KpqXt6U1JCwaHpyzdBKj0nGi2uH6Ujbx6BusSb7Sfw7zAZH3mQhcix
-                    7BBZLjjUFklNTHOppAmTKRpTReM9lc8byrzBk+PG0jOiAYaARVQqJhodus4yboro
-                    3hZS9EwpQckTewraC3mUgvUUbeDUOZqt8UX4uWCMJCz5kSmBZ4OB6wEIxm+JJMdB
-                    Bq9NbVzDM5ybvxmk9Ok1AOnUn3Eej17XUIWobXjOP4etLZhYZ51gXYYxJpF0pUAI
-                    OAkjo0kah7NOx9Q+RZKz5zbzPD2Se7NqH+deNdSHECCDHhsMwPfvd6FK99ix1udG
-                    ETaMXjSLIEmmaYmBTFZGPNOWM63wKb1mxmNoR11znjUnJKmdMxmMc5PSzPbPiPNV
-                    GpwT9w2Z+2XMydRwycXENLUctYxNDtqIGL21jrruH1oICjW4u4+EOOjmMiUkn2HA
-                    MZK1VDO3NgnjYzFu+gQmCohzZWm6Cp1AuD4kTukKBx2pIv/ALrXMhC4z4B1iWIRR
-                    Vidjlqkv58LO+5YCwzvifXbTctNtCCJe8o9ZQZ3vGwldQvjvOoFcJgdw0c1OHqIv
-                    KJDstLH5E5nUQkQ6riRdytaFesCrhp91u8SbRqQL3syHVbCYVNl+STBKfue4+qg/
-                    mXCvBp05Ug6QG7G4GrL++ilWwuD8thK1PcbSjQuj+db620EfbMopzwEagIuHDOQM
-                    Yu+zbo4eU3HFhXfEsQFJHy5Gp2qTYw/OrTehd2DkptzgjFQzfhj45WqKMkFito5L
-                    AUnDUTT0BzFgx0Xekt1xxoR6jL3mQkaS7TSeIEsmfAtlboaKizStgHbn1I8vh9Ik
-                    W4YGSgOxJ+qBs8x8LBt1mWNGrAnFjuHQ8yyLGZo6QTxJCUStPdRpm0yhEqDOYmKp
-                    myLzBS5vSw3upStCFREGPI4BWRYv3W8e4PrJ7cowFo6YYToYOXPecFE20GZRC3gt
-                    2M5bYtybrfWSzxWqBV1ewSdJOzIaYBQDex+noCUfelR8302ynICLXwuqn5oUQBBH
-                    TUhrKNiVO6ZaaOzMkGhwWYa+bLfmy9FGDveHfkXitHv1BSSNLA2u5r/zbKbTt7wy
-                    Xz8KHn2FGMGrL3DkGOmhCi5BA4+0zHupLuuxRhij5rte+01tgRSheDOz1qmKRy7O
-                    yflaWQ33NE0w8kPQRiyUPnLf9PsIvhsYJH4X9GiKNShEsX9ghsy72rBaaRgTzmhr
-                    vOntJ0ma/EcaSMVLGDvFh75/6nMdsz5xMXXCiu9WnsMUHDEZM1IABUf9o/DiOMnp
-                    zaHZNXQvaIb+TYpAou/gCqWZghRLmFti+b4rSXsdIWWtUZKcr9R/CM/5PwZtT5+8
-                    FpkuRghj3CZEuIoTPfDd6tQMfYV/DvDGPd5d15U+033/hXMVmn6L8jhNurIUYl/d
-                    Cr3I1VeKyAk5kf6Y61ozobVDZI+6acs432E+R8mbxb6afBCDB/Sqr9QJo3w4M58M
-                    /3bLOrf9baANmfAVco14hpfJREfF57oHvP5B2sd5ud56y+eOBLtRJxewws9gtvAM
-                    g8NPziGAoVIlO8PB6Np6A8vuFv4pF5A47QEcw3ZuiAFKrhQqW+rIFlD2N6A5Skjt
-                    Hsg+L399Zr/UHZUoN0JNjP19Sp5v+y1wB5v0DuBcjM4f3T+A1J7PfXIVcUA0WPOr
-                    ZQ7ZlkUsYFtBwHrRZDCIMN5QXHr67VfN32KeinyxKkApBDtlbDRIiC7F0Lf++DSE
-                    CRrkHglBWhwJTHFi95KeAvve8vLC9LdcIK5zU266F5tso79RxUkBJkhIrzcoBj5E
-                    F3peIL6rd9EWt4fHqcmZCoQ1LSe6aeAJ3aaSq0pZTSoXN60Xd0UGpYr1FKn9tMNJ
-                    dnckkJ5alZ2a4LdlP8lFxHCb407Dooyfn8LM2y/0fws7E207FTNELAAhCYlIHcjd
-                    JjAgFVtXYvTz0+G8dQRNop5kaThwTyOda7ZsjNqw0wvntpgW7YArsGvNkBRMSzeS
-                    uqtFKzPFcrxT8XPmJ0L73JoFxdhHUVths8YMk8NxjpQLYf0T6vCOXHmPOikn8eqC
-                    ua63kezWg0qH0l28m7td0o02GabUwuwUfD56zFlAmZItt5MTYyyIbAJXoyzqOc/j
-                    hD7LMVMXwVZPiFioLYfZPu8bfWraRmoSzQW11ngzlvRgZGSFSPZSRXLM/ClA1QbT
-                    0CODuPRCQDx6bRIsu2/5ST1xTSx2brNxwIHwRV06M/W5hNJZFOM1kzDQiKkhsUEr
-                    jgeVA4/oikUBOzx50iLlszR0fa8J3tkwrsjBuAJTnH1XoPg5zV7mSujG6AH8RkOG
-                    io4u0Je85yAn/BNbvI0WouBb6XDHExPq4FgKlP6jEye8VPO/E4DMY9kU8rjJUaT4
-                    7U5FFVufP9SXICpcJPEVGQIO0wwxbbiqdCjPRdGi4Y31+RHMC/9znXXYY1dSKCZa
-                    PIU7UImPyI0S+yPXkwvFUYRVW2qjmpIrapTsHghfLZ6PuXpIg0O/sWKx+Z4OeKFj
-                    6UbYkBP3sgQs64r/I4Ql1FQshN9M7A7BWxlsCl1PUNAB411NoyLLQpNAXU/jzYoT
-                    XboADPv39GG3c8C6baJuMYBBqrW8lJbi8awt3ps++hFfqb4Xg1j3hR4ra+lGsmzP
-                    5AEfAZZaGqcK6R28q6v1b45K9n4Xpbjy4kxGhOTcKFHq525tbgXedDJ+IcYvPPNO
-                    qnRQZAHru5hCpoLHPchWhqb6y0DZIqbHfbZy+p//6nIYW/Hbukd45f6wrJR8pr1G
-                    4W0351atcqTe8U60mTjE0wiL38RwGRKRCuVrQbbNBr1mE3UJUrn3FqglUk8Qkz+c
-                    PLNdlsP7Wy0xoIJVxi/DLn7oeKOKxI7Ru/2xjXQNgsrYGYsmasnNTxkZDWdXjXLH
-                    1wOmv2Ort757hPJ0qXh7KJRDwHOdkEac/oc2wJ6F3mkhLvfaiUgzgOvA+t6DOIvu
-                    DXk1Drhf9F+o1PZzCAccUgmUVmL++bqHH1MOwh8Tm0xJzA0WDl8U/WH88mPZPUkE
-                    LP/tVKMKjWpeSFxiJbJ+bGN1Mf6Foi8SIQv/dsNGxfjZ7KQt+n5jw9d9VLcCM3tV
-                    qyZ2Bvbam+aOB2qbU0QoypIcs+mT3n/4zEGYVuW3ETGYVcjVBq1yOPTAqm2GaJFg
-                    SwZp5lRLYgLZrF9TZz2amfGL7F09AzUx5lYMFlwvNW2vB048X3IxzGcny3Fmrm0W
-                    oYHR20sCc0Y0HhSo2wQWgVTcymbO59lRdTIMYUWUrLj8WGGr1a4KULS9JKPcKL6R
-                    s5TH6wcxM5qo2HCgweQI5xeeafiLkUlZ99ntq1lrqTjwcOvmhFnOd8MHXzJFEsMI
-                    wCcW1x9XcNMbwD7EAPEkBK2mMSiK2e6fFPl4AdCk9MFpJj/eOvWIPL41eoooYpLG
-                    iDiP26I0fFc2zCiXLZr7ffidN2Nj2j8Qyok7ldqdtr81JmJuNERAFtP+6TO+PJwW
-                    siguxfrdxIRG17xObLU+iizUbSkwW0kaUfXwu6ToIskNEg8LfAilH106KAIY/age
-                    Ph3XOfOnfIo7yxSEAicv34s2AKhH9/D2ViyK/b+TX4ZTp/1LlEkEch0REAPkCc9a
-                    q7cYzZr7EoUTYifMI4pQww1lksb0BQr4DV3rqbK47sBuW4Btxho5w+KVsGWDceRC
-                    V1aX07sj+L8aiF2O+4oA3JzFjGXd0EWXCE2UhplU0ov5KCYwpA1al+5QDQU/zt+d
-                    9g0FHQxwyMzEoJpeBn+abG12b7WCPIUm1thbicPNiIOk5yIz6ojDY1sIAyOvPsf7
-                    vEy10bhWZUE/6708VEIG2v7p47zNV4tZH7BWJCvxWC25dOEmVFWCpq0ziH/AkewX
-                    tYnlEn1JePNAhVTKRNPbWigJ58TQ12/KLQsyhDm5JNddqm0fT4KO87XnBta4gIWr
-                    3b4yx+csLmWdPHmOsTb0+V4htlTEGSP+Uut1HD/sDnhRfeEPVSMHLEk5yICbwPdN
-                    LcDLdo06UnEcACZ6Ih05oAf1dx901BHgKA8A9I0GQ+7yKubdgytP9HLqFIHcojII
-                    SbhrlaEYIFZYVF5e7gIzEV0UShY+UYXSRgDsAfFZLACO+56sQhHgHI96LSNY1wg5
-                    FL9X/HOzSOyFGn2ycqUBkvGNJgaEY0AchEpTztByXz8QRHprQXxw0wDyrpUeTGqr
-                    JpUoEjhNGLOJw93Mjkgj2qX9glF8nn05ZdKjqGcmGzgB4zx8YEmQ3tzPYc1S3gnH
-                    Z1uev1h0VU/ml2oGsxY55JocIeNAPmoVwmYN75jof8909hKFetWPSDPE8cH0fn2t
-                    T+aX5aDKJWhzjyaXqNVtskFzp82+FoKBCBHBqVn+Jdjw89lXAfuYxU5W0OxOLcp0
-                    IBZZ7Fj+7rriaimyjiL0T6ul7+cpRAkoAHjEXSyzXofZHBueONG+B99w6JnhgGp8
-                    BCAaEV8spgfOFJJeRpKOKha+Di1Kqif9sNJy23dCDXeNtLblWgScSS3CXvex1PfU
-                    tJE+zrOJt94BhNkomRo4uu+1Ir1L6u7tFLOJixGafEHNvv+I2PYZXqn6XF2qeCFm
-                    H5bReytHsVn2WgRVw3suW5UZDIk36LWLnKjU2kyux++UPXncOWsdM2Ax9oQkLRl4
-                    nAAHb303w3yJ8MWvZTcFH4mOxwiHWgd9JmCEhkb1sShxs1MkGZwU7b8Ok3UAp3hE
-                    RsedqLhnNlWwzZuuDRkiXKHZgOXA/iSpzn9F74UWSYhqqKiql3ZVuwW6nAQsnt0q
-                    e7SBKJT+6o1GlQiOmwbL/uRoyvcw63MJeRGLocbp2L+YocE3Npev+M8VjBFclHzO
-                    8qPnHVLVadp4iDWjRLBM8EKKaV1YflLf1+EoptYKcWMD3TKjYCePn3wUHX3BtIK5
-                    XmUCTGxaEJHCrAuluxNO4sRJqAao9+34EamnbMjNOaqnJlia12+1PuZaBOrzNoD+
-                    P5T+PlUOUoTPrT/quwvn72WpJcxw8qe6CaN9PxFzt34v95NFjz9e/BzJt2VBaoMP
-                    Mw5V92OB330eq9SMclHY+1pt7rcDK5j7ZkwYKUqASnFUuZ3PUneU0Or5r7ALGesF
-                    9BQyAuqDbY6bqhrD8NcPIuNcOegmMDwWuUW2usK5EXg+zlSGt2QY9/RZVni7L1jC
-                    DpjoT8SnM3YyobCyG4+URZGO3pfsJmSDVEDOlsxcpNqVgl5uskthdTKHn6VywY5X
-                    zxR+fKYqouOSv2Ztk5dIyTkfBYNg0l+U/Va4h8UkM0zQJ/5GvCDrhk7da+HhqXrm
-                    myfqo85o0NKwQFsdxvDZ2QJ5YjQMLevQ3VBmhnicO5NCxltUbWXxU+5XS60289jH
-                    EjLvlQDl2PxSaQe3KosxZPCHjuFvch0nUCyTH49CBYnZ7ii6Smahnu3KiI2Clq0m
-                    gChPH80oa/nmaUySEQ3hgL/1YSxF29SY6VK1nfmR2Bg/CQYODTt3RXzVk+Mx6WHv
-                    lEunDXF7cKKRfF+s+D19HuHGdAmIR0XL7y2xH5oT35ZOrzE3wSNWmD0vHZoAgbpZ
-                    YGLFy5bc+QmjlidQAoQdwweirhQOfwwW0WoFo+FtxdkDAffNghd8TwkWYHBmM1oa
-                    XWlgXo6qJ0I+zoaU+iiOLcToxA6Ec1J29l/Ywf9X3VsFvZJBlBL53rMiuS3LrCLf
-                    Ixtee7BQcK8xMAE3lJfezxhgenBJZcGw5CPcW0cesLwAp4LjFqkiJtjB6ex/AttV
-                    fiwoEFyMcNQ7LRKRDzZ5p4S84dRj42dkvrsr/GY2F1Fchl4hp8ZkdyIaUMUr8E8m
-                    1fGJlV4cFfQbLMg0THiphEi5mxnyd/7O+dkV1spE1n2NO1+9/UZ0ui84JJFBEzk7
-                    IhLkbNUsTBdSbASy6sHqTwKA5+CckVNvGnie0HdW2vSFDJ7C3UOzAWfZQtxboxTi
-                    nECSEBcqTOGTikgIaBbSceADblWlyHLFwi9A5kNqdePqsjF3GCux8io68jvtEEf0
-                    AyWAVwAeWOVIfsp61M9/rHiOiR3w/k4xXWWxEcyyVZcNeyv6IR8N3tb8LYQvO5La
-                    R0goJ0tsnFT3oUx85R9/o/du4RVSRLMBy1kpVIpxsWvhiZw/T651Pt+nnA5P4CgH
-                    xgcJWxBTO1glznuel0uV8ix3yQNA/kzXrBSbA+JDBxxkz7cWxeVOE19zJ61iQVAk
-                    m7gWxoSdUcQ7VSod/lfkulMsxaGBVbWz/O3Bep9ixRofgfASSmgZ1s+5oTCD2cOl
-                    5CWBbzHD2x3JWFy7G1/IcinzywC9Fl2pxU7ZzJhw8IkTbdXhOv8k1lZAjvKKBmKk
-                    +u0adKod9t1+syJlWj95eUcMpQrTWRqy3BaKljDe7yGJ1K6lh6efPSlXwq1eOS4C
-                    zWXBEeV0juoRJ4vOSonvQPFDpBrcIaalfQfTCUezhw8CNNB1jrIlL63aidG3vz5m
-                    pJf/IwHq3Py1pDZlmJktaCH1Sy7jIxT2Wgh+TbsWGjDLGkdKMI4It1umJC18npvB
-                    3ys4epOPJlYypTcRKceS8jUNmaMUe5lDn7non/W1uW9E0H9fauX3fcK1EXgRQgHC
-                    iSmmSjOfX8RPz6PQKc8pNvTzJaWPTGtgV8JxERUBCIH49g9hkJXDss4c6hw/IIMr
-                    TyKu1kuUQ2fNEwp2qxnigkpLmoyTZQvKwSSzv+sZomkivHCCvZahgf7Gww+3TcK0
-                    oHS1TNBvH9WffdWC1dnu2SleEn5tQ3k8ystU4lR5mHOLJ3u3Mslm8gvE2aqMmc/H
-                    7mvtMbyhwzkGYMGywf6Pkh4NpX/bx2d9gQp1y9R/61qZhz4RnjwLPmSSuUJyTD3P
-                    AltCVvgWe9yhvJG7H8gdALiQc8rDfHBnYg2eK9Dg4/7iEQkcGttfLATMnbuS2jIb
-                    KBCTGKyVBcgYVGPxf+r40OSrsmcygxLsS5Y1KAr5UExhQPQb+r5OnrFPXYPgdmk5
-                    G6+JV8+Kg80C6L5d7HLDH1eBfhx6xpeq6poSDqz3ME4E+JUuSjphlwK7J3IjedH8
-                    EtMGlBo1UgQ/nijbsOygBcA/oj0Miu0j/1d2Ys3Xze6T9numAkB0/RBW3sarNa7N
-                    iPzS85NEv8XuJ4E2qJIFUVx49EaaObGW5eHznW4LaPBSYrrIdT15IrLR+N52b996
-                    mGM64g/fhmUQlqeF69YspWisyvOKX+IuaVqrEPecs1pdkk+yRZIxz3WYDnLobFZy
-                    VPtchleeVHyOmqZvLtMrtvUsryfiRVDizQCMTJuT7IF3xbON6oLhLE4wrmMydMMr
-                    50qVfDEluCyvI6yvt2qir47/Rji/04I8f8XLuX/GRdD3CMVnCJ15B+0OzuQQYoPE
-                    MXir54qdXncRulo6nn7n421rtDEMXeCjlofK5zK7US1yx3qQkcKM43J4WZQTjdGj
-                    lH9HkdHJEIeTjteMLGexN9eqHz0sRW1IjCtZPJ54Hl7wE87Zkuop9C2mdMO8wOfb
-                    HinHLz2CuQ2Iq1DVsXuqVgXx4jZpHnV+0zzHZm4gFJhp9/YxzhcXptYZkOpGqZz1
-                    R2Y8YrFGjQV2mjNhaCYXQLDvWlpyrfagqpUbU5qgAWL+EjsodEztAbIr5/+NcuLF
-                    m4xdooqfAEoe3vT2Xc6e9CpjtcZI49daCJA8XbQmjT/bia/tpBlQgrvgVi/bLn4I
-                    Zsi5MkgPQvYzB1gdLkngnLsSrJ2zThpmwJOIhdPiLZm+mcXt3QWMeJxT7PpB8BD6
-                    Odnz1ZKdWpvZ4I94rqjWxPXGTEWRRWwaXAoux+B+yZRa9+IW8AGMKLzidRBJYD8I
-                    O4YcXalca4TSTf6ulxpuFU90cB3kHOSxZgRWWOmtTNP33pDfvdLxaa2fy816qYzD
-                    dfSnW7TCefBbSri7ih5eQlc752frXMdqIhIyc1DEZF+RAxbDKeazMHjMxcS0/Mzo
-                    5nC5IdQXrfY3RG4718167s6wpTFW+yHehdFdbiLyQqQnYzv3hWClepCCCzVUiOpp
-                    +Retr93bT30Vubdj0YNd6Sg15L8hZol4/3Ox4kHTk752JGIz8ZOxuAp9lD5GsMI3
-                    dgMSleMTa0ip4lOgOPwe8tLhzD5P9cEqAceMR8yFkUmtWaAeKWNDjTpdgNNmyF2v
-                    HUJAJeVXuYCcyWXU2c0nvX3sh3Rl2gHFjiik5u6e2WjpbVKtXdFMpc3kPJanTXbH
-                    YWdqQY0HKsh+npH3ilxAyAflWQL/HJwJlFHvcA3hGjV8edvChO6XTPOVv5lI1Okm
-                    AxvXXpOVXO+MPCl7MAom5GAHm1tf+a/spYVOVh9pJrZ4S9Kd6x7D0XMXeBp1mzxH
-                    YVIT29FLKbkDFAK79jh79wASxbcrak1udfXlQHQgYkoqEYJ/FrIrbhvbj67vLhO+
-                    dGlB1yMG6J2/7lpg7bdugtrqjAKfF3ThYjmEnqgTuHpjnSk4AF6sIqGYSArc2JXI
-                    J6V/XkmVcXUrm7oXavkl5RypaR8yIggrBWKPmZtL/hbJjMdxkHEQl0X5Mai9ZBS3
-                    WMUnB9Be6BCGIxPl5Mnp+CinxH6qvqcJ1iZJzfE4fGDBEr/wrWnsq30lARIBGnKB
-                    dUxs1xDM29nax8tOLDRoPyyhdqi1wFibeQhnV4IVn7vfh3mhhRg67Jb5xIe+ijnM
-                    qIo7kXEtKrgWPbxyq7F0PnCI9PpVRQ/Tz6HdV6R8euAOi+YqXECwETO6beGoRb/J
-                    Kn0tJv0B2pcgh2OGNL6gHwlkON/594Rfb1IQsS0noJ6F+3rCZe7Fgyt5nt7oGKqJ
-                    9jAGK11GojMReHRYhXJBUR0yoGf3NonQOg0MU0y8E6pZJVhvuPG0m1/DdXX0CVrP
-                    e8SBkG/cR11hMM3jv+lfHbhYD1EydHvfKfF34eORpd6Qd6Ze724d+insaQ4aA2Da
-                    W6pH1cCx5r3maqOd1K7t6jPErvlSTQpwAs463ujQGphz2srJYjDb6fiKwdPqEO2Y
-                    cXSZrpjiAZ43y8CR1UVe+LfgKAatChO7DETQ1MQjznE05G29E1jUb9OqMYxk9YiI
-                    oKACDXxJXrfKQk5bMUzP1k0j1PUvzV43ATTVUucfMAKyAgj/3c2JowsifKH6s3SX
-                    sq7wUc6mgyR/W51PsPKle/GG1pIs25WBBVUmv7LnE77B5lqdsBJWDRNvnrnLFInL
-                    9bBF3X9JWDE+ctM9vUruqCh8RpqXwFpiHqiv6bTlw8HW7yr9p8ebwe99IJ2rLr0T
-                    dJxU9ZB5LY3cdOlFqPA84sKxHxHnu7IBXJB3kVdZT8aM0OIq4O+81cBlZkSgMCQ4
-                    C7Q05K2K/UST9q6RYJF6lpnJko7tZI2ywXAFkcb/aA1LnVnXBPKgLk5HGWIGOPOb
-                    DUHQQht2u9btqXLwyAWrEHWBsvb4iuEavCxIdqHLIbymdU8TlCoGpVBI/VSK+4p2
-                    Qu6bz2W7EeFrw8z8qj+N6zBjYMhWctUw9Zkf4JEa6Wyx/TUwiDauyOd925NHSjht
-                    kEs+WT8ZvK01rN7JkF9MpZ0+t3bJiz++NiVI0eKhBEe0KSW8KeocIbRpn4DPrA8E
-                    nj1Y1mm1csy1CEPyAS3dv0I1iONx5p0gsAFzYD1/04uja8lScKKQ/+ouviB5r3h+
-                    wTHTZD6MOCX74CDtEErcmUivHzSaJzbpuqYquByHtjAWHQzVWWct7mMNCkkzM+e0
-                    xUiV31gcsomRL+ZtAnymDb2WBAKQnn65X5aykfqs4b/d0jR/9Ocav/9vIk85hulM
-                    Rph71jEhfRvwoIX35suqVcUu/R+I/DZmlf2MyH7Dqlq9dEIAF3uxeRKXKL0rG5Un
-                    qfUY9f50IE9gqvS01ripeYIKRa8DVcNw36i6/0AlEMGwufWXWyQCeycfSqndLGHV
-                    FFzliDulUAvK/Xa9ML745VfgLo4ZKYDED4noGviVVoHegEdpMFCLd4S9ARMcgX85
-                    9mDMDxPwXMQgaktmZnBh4at2Xs8/7Kv3olvOPWPuMLZ19usAZ1WBvHE99I07zPhU
-                    0SPWv4pHGwck79ZSXlW/TJjEwhFxqs5B5V1/xgp9OIQ2YYPvt6cLIonY2310eC0w
-                    U+fDiV7qklGmXwzoWp1iorKlaYcOiLb3ZphfQufjH5kXev/sEqQur5hXZ5fSDG/N
-                    CB3B1p46jmKdRPSTceqw9SlIQK8Mr5ZeIC2FYdty0j0oDG5u0gClq2tYHJHfmAlL
-                    +Rh5AQVv0aKLxTc5iU0DOTY5xhmQtAa23+m0g9KzWJTmiVezGfsWvTOSChTIlSs7
-                    897iV/IpYAC4dl32UqAZwZrLM5tRwUA7EUysFCMrXtf8g7myMCYKNzIgKqP1Xnhr
-                    qwYHHBjbDTGv1I7GMXXNVuex3/HcJJ+MjSzRJeh8QvrJmFtEnewHdpKu0hDWvN1j
-                    s/I4byV/awLK1ekR0Ju0LR54pDu0uz7Nz8iN3G8qOIW+ZRFWN4QxGrYgDdAIJGIB
-                    8+qi51MlZ+x5vRR3FAPavQsqQ1Zd3I4LkVQzkcE9/1K8yrSm7ajGLLR7cANQXaKQ
-                    H1JkN9+fo+2/rvKsLIpP4H9owAp5BFg4cBBQtgwZ7nLiPWhp5u1WRSgu/mcUeApJ
-                    Hw0rnIStaHMaNQrZdOhgd0BwJpt5cia2msUypEQXsHdDLeWb6GNkPmjFFzRz5s/M
-                    QdCFfyKdtLon3XE4UxsnAaSIjdbuZxm18XNTB8I7CxlsS+QC9e8OCMcFHZ6fmtEt
-                    yLYhyzWl72FPAhd0NGx+Oibx/YfUWVVIX4wpY+bCiNeajUrhw6oHkn4SqEYei3XQ
-                    7alNC0n5gCtwdjaiBzy5qRsMBwgoE9v90ThxNSzTjkwYoeXEf0qjR1cEOaGle6ml
-                    gtL+N4dcezbtb8NQHQ1foDT/1kr35DC+TO0+TsttyZfltexE/2z3GASUcz2CcDt2
-                    uHB+AO0nZm6CMlo2U3Ie5+EZDSjXsobSEqmS5QKssRJFaz3MBnczFiW2dfEVUwzk
-                    BwqLZw0dJMZP9AntyS+YelWpe1gA9WO/Y7m1EuGwgOGtPApHPpTSeQ5EupiMv4Bc
-                    wE0iZpxwzzSvT1+8oKAyL+gjn70RVI47tlmB+xVbt/cWAAfY3NGqkwRLqzQIFWMB
-                    VWZF2nEEEOZc3yUCjfqwV+s3vJvcaTR+nlJoynDaF3Y5gI0KCdN0BD6FHMYnU1Cm
-                    239nNtFquhfqyDk1ijGHoHRUoiCI3xi6eYJ1E2kbcXIRSE08GpkmHBYfey4JzIkT
-                    XxXI+76EFkEt9WvgErdnIZR37hjR3YUHSK97LGZyn1lWCC7Cl6AAKm25URl8L1JX
-                    xRAh6EChqma6MT+nmYCJ4rXvypx+Cig7iYt2qolKpAx8JQMttcKhqa5OjAF+Dxc/
-                    5a78PAcBNHMt9XcuWLuinO7df3QKbN/p1iDDHdYifbz4UrwJgg7bBthxDVfec5Se
-                    ZI97yZivifecpclOZKoAWEXN9VMlSRkvPZZLw7PpngZ48Kj8ViCJQ7xOHWP6mDtl
-                    v2wo/yhjPiizjF5PailxSAjl+pJYJrys0wJ0WLxGkCYjUJrHnRz/zWxRhUwREasE
-                    5YwEY6MWEy+SUL1KgaiMrA0qp9SRCCJQ6GFxPM1/Aydif0FxzXsAnCcff6zBv81I
-                    6DiyrqzP2ZH0ijqnDUt7e0ffC/4wQpk0V0y3hn1bdeLuvRzIffWV7NwqhrwUaSeV
-                    ucKEwa4XXtp4QYNXiKXzVpF1mxzZQ3QgyaNmiRHMJOgMrjVzcOjlgRbWLkjd5iMi
-                    0iNh9vSmyLP+NJM3jeQUIAW3Ewf/t/4wv04Uo09C5Z8gXY+0p7I+v8fzVqS1rgWF
-                    HFU0QyS8W+WcLlaUvVT6da9Ii4liROCiQ/Wv0XCX4zuLboNmBApJJk7Zc0Hqw7Ks
-                    sy+nlPK3pf25RsKGGL4iXky5OOzfr2L9X26B4PP38Rv0+UK9ZftRA04w8ihmIitQ
-                    3P4rfqTtP9lTD/1YgvuaiUHQXwcOPVBx5DaaKq5R/qntebsV+DzpERz9WuVxIXqM
-                    wZrv/RUgxOtqBs3tDgumOfGeW4fkwVhrBXMmcKpWxMCNwRGeFPTAdvgiyfnIrM/I
-                    UsBCSao/Edv+CMia8SMNMxg73C2qVpvqBdUe9HXkq2SFDqdFAcjbLNOmtQ+mnc26
-                    sc/H2jr+CvH/oXuu2LyTB+UH95TucbVWXGIKSFxrMtlvQnrGh+CeZvc2U0k6j7nu
-                    ka/rPpgrVYA/7q3hgEJeL6VFe2srWgSTQHddHM6CwkraCtsUd0FnqunnwkNYTJ7q
-                    Pex+bLcG1Pz6EQH0uhYQZl8bKMv6hPm3nFbZXdLk3weFvKCVNTEAJPlXpo6tnuXz
-                    UrCEo+p9I2qvWtyvL01MhlejSMRdrZ+wON1v0JMKJ6g5cOA2L/gdC/RKfiCZCAlM
-                    NAH61Tq5KsMzH8ZqiO2slHuf7ooY7+jEM7qcnI3xGE+f4Sgbf4p6r3FXf8xVe+jS
-                    7UafRam0OhNgucI/OEAHiah549uIaIeRo3U+mPb/KDMqJZbCbjoQ4ZylHaBXo+RN
-                    MBIfwvugbtwy/yaSWnNmWq5YlqrbzpgaaaBKpWoXmn4Ut10VN8MCWDj5ndyeYA4+
-                    iBqxcthoplu9RurcSQjWjAhycDco0YxKWrgXNMWzSOmyd5M7VkdLP5kUWKWxLE1I
-                    xBqJgEGY1YTaZB0i5NELsKtIMXKKg3ygM2bNXK+yA5yG4RBes1x75/Qw7btsmQNe
-                    rHf96xaRyRGJyFMFZWaBncUlio5K5+/VsXkXIaSe+UGOAqYAioUQMcYr+9uAoT4y
-                    Au4UGvL1EpAEy0R61ibntKY/UY2RIkvqcNtm/90KmqLCQd/IEl3edjTMqriUWYWF
-                    PP/MVYCaEAluxMXPaSjzZKoTKk504YJpo/Wwl/zkf33Y1fR7hDN3u7JdVes/SFUJ
-                    SgxsbLMS4QnJ6UF4Og4jCaIJwLgOQe/2glwJonBnRFkCHJQzM6WLzybNggqNGUJB
-                    MmFmiWdDYUe3crB4TB4PtORxu+Ze84qkdMc4vnOLDjrbtex6HAAgLq8BZU8CnSdM
-                    PyRAoEdN4LFVKB+0v7LQ6K8GYzReyHcyJZCbuXh7EeQ+IOkiHcOGJkCHZDgvjegf
-                    +0txr0dHUTm5oMdqRtA1Zz4/oCOSA9/ml1Vu2k/yh1r3BDGstoapCfhGE/DUV2WE
-                    z97BzbxZfz8i6kXxsxRmjgera97ZGraM9AJ9RH2HqCoDEJwHvT2yTXKw+o2pt17F
-                    9oS/Xtjo2NL8RnOJEab1g2hOXF4vpL0IcvlTUobynCSLOXCQ9aBNEPNVtfjH7xD/
-                    XP1zhvHcMZT2W0/jteV8OHlXjKHvPr7eNfy3qJ269+izrx6EOaygFTgtreVh6pJg
-                    sbS2gZEjaphijejB3CuiZIkMfC1PytEE/8xS2G8DYeAKwtjn5WC1nOazGkagOkaz
-                    JJe0LVK5YeabtCffv3MP+4v2KnOI7EruEDWnh+h9ca2fnetpLSnRYmDmJy/fZM+f
-                    AzV6LN7Oed3VZ812DXQPB3x31biPsETZQd8oEmEfoyfxSxZOVuQUU6PFYbx4EzA2
-                    jLebEj8Pcosx2c2UxgM6Sz7jvPTVA6IMFOpZ0a0S+mvcI/PIg7UuMiEfDnpx6S+E
-                    KzX37YsdZGbUOCiFG6p/sw0Tb07ViY324yYveCM7V3jo4QZXTDlVF/70IBwQOfsL
-                    Pzc3HVjSAtMyyA/8ykteJnA0SACUbFwvfY8EmYZ5LPbUBIlwCniXoYr+70D6w6w5
-                    9Jg+kaXkw+rVHqWlsd15ZU+k0/xwjaQCFCQ9yhSaNqJeoh/72dZ2sB/T6sp77A5C
-                    L/Rg0XxAJXEtVYzWwjpdSKBApZkeBSDxYqQa2mK+FbqUK5Bpl3p39mg7tTpUo+Dm
-                    +jTHRBp1EGsFmdyWxdnbX2wXjZ7SXq2kEhGECZEyszp5PMLurcxWOC9lmNALsYUY
-                    b9qJzcMmT25tKMT7TnW3ZmR0/pzlnKD/D4E57wNjJKnD6cYAseUN1smD+Vc975P6
-                    eQfoOOR1JnctzC6EfTn6TY8ysHeEXeLoph5W9M17byKbiq+9Vosp6WVSj6CTLpeW
-                    0SBJqgsiHxi+bT4UjLPA93EoNQ97Hef0IuPFI2/BFjQGtiFibkYUzqDXesO9/IZA
-                    FEasAaGIsLHCPUKayR7rGvG4i+raqFVmljT9t7PdMa/Owuq4m8ctSUG2z9I82qGI
-                    hxO6SXDYjFi+u+5kUusJPGVflHmv54DTTq2lVRg/+enKSTeoxY7B0W+Eewv+fwsQ
-                    a/bAslFUC9ENzGfsFNcrPHq39nvUb+5i95UnpIserLB/Xov6pCZedQ8ovPRBzezm
-                    ZJj2ZQHuhdMHsqjBXbjsmZi9rr7KcznKLwErPuZJE0RZtaLbX9ulttN60YPwsJ34
-                    xY56xeUMYMJu2fPstvpCaQy02cZHZYBlXwrgA+EByfTxnyaRLDR+FojR5xnEHGZ6
-                    +V660DTX/SS3hAeuFVtFf1rjaSa3tBWpo72Vp6nWbf+mQI9Bq/udDr6p4O+qkh/T
-                    I1WPzAlFDJonwBJ8N2Vb94T6BH+G/DehJlkhKz6MVD4VhRGHy7h2BkUtrEO+C1mf
-                    8WjbUuMw5akt3GxkojW7WyMnlwrFwuKRKAAGF1n7VPw1qXOcmarFRmayGCLzi2qo
-                    22XdNNCTHw/UHC+Gb0jPurarzfAhju0lmF4XwOWTQU/E7zUq9bJM4Zzb5U8gfjxy
-                    wuQm3Ug+Lf/lLeseNjaCmCQ4BbueTbCboXX7jrp3pfaBbAgqq2SDuOQoBFWF+EIh
-                    1hf7eIlQ9ijk04EYtLmSFwwHxJOEH9ktafQ4IuRBcvYzamUMsdfOTww0aMxqxvG6
-                    RQjUv1wHifSblD6nv5WMx2wE8p1zT7VpL/zf2wuXX5TSTkyXtkSrRvS9TFkbnzxP
-                    QynTWPpEV0RAKLUEsbNurDCRTHKUovJ+Kul6IxhKiQ9n1fZDz3C7F7z2JZhUIuDz
-                    sJVWkIaKfI4g+dlSgt2JRqrWTSdydyZwaVFjyJgxX+SFQh3/QiIg+JfVgbNLC0xQ
-                    e6hPiY+ZzKYYGDf8eIoAy6iDxMM/gP7EnehstbDShHM3X7JT2nzcc0oNdN5m5svF
-                    iX0W8EZA3XZseXYQuWGihp5HClPa7PYnI/MCpg+ViiBn7UpAnak29KV4b20X/fIB
-                    lm8D6hXOsY/+jkZVWPxQum5+maVulWXb8E6Pl9iFNuxCxsYsOQpZ4UlJ1mTbWKph
-                    O6GuPTqjMaRMUSfOo3KLB6DM1OWeg9DmoXqhmTFJBbAXqurD1a+JYis61hkX+MYx
-                    lb63Wbm2hVoh2CInU+GnupiaxxKmf/pxLEXtZQlr8h2ZJukckmW6Cxm29qxHo4/8
-                    WIOsbj3xXwesalwkSmq+uFNSlMaWKsHLLFXtQvw5RBnk9pqEjnpJQjlkZgs6Qj/j
-                    6WbpZJUJdphlpkEqZt2hVVBr6lbUV2hlT0jnCgxeaYiGsPRXzfsyG6DU59KAGb2R
-                    n7x7N4Mmh/3BIwRMgY0EF5QICwgaSI/egeYnHpLAW0WCKZSlYBm1x1dGO6ntDKcx
-                    Ro4RToN1rqC/pvRpKF2y3DrWWW5hxGOxueSKsr6FPj0iHPo5Fo9hdaPJm9WPsp6J
-                    tDnIbC9hDUO68PQpDd3E1EqyJc/zylTSSZuEiOSDGQLQ+Gap9ZIwPDioJpyb4KMB
-                    qs7Ukk8VRrQOp9Mv3pBFuy+QMFm4mLt1Nb0GPRoIgQyDVXCotKWhnLArDZ8VKXNo
-                    P5SM0RWkB5lBxZvsCNeMTeAmg/b4WsB279tRd+hKjV33mOgGpC75ny/nScUDbEF6
-                    AkOTUEJZ68+W0jF4U3YqrtLJ+AQGIPxcVlY8gp2ZSvGCOdXiBFPYb4XhQqWRCv+g
-                    ngLLy+E/ugvaxPDnQtNRXJPbvrxy9p7ukTrQAgoCTcLvXxaMRM3NwMjpKHs/gaRS
-                    BTOxlFUdn4WlkjlF4ZRnC1uC8WB0QLmKHNRyJdDIGOFuVi7/A9M5WkohSxLuLxAj
-                    Wrj0d0+u3WcaudscgrrhiTVtfpwBRRtR/G2w+lgyt/NuGGkIEHskOqo+lpMFYoKm
-                    xZCpLw4NETceAWoX+uIWQa9OMWGEd7D+A3SDKVHZBXXgq9G/IIX1vBP0GrrgEm+d
-                    aOtENIhVCZKzajfCVSnx+XxEn0lR1K65kdt8g81b7dESIiny3ggDfFOXyPONNui0
-                    6v3wEhsfysxdI0gJywuhm39VZEDRwPKr748TGUSwpRni9mKOquykgwJl4HSnInsf
-                    Cgj9OYdSHqRybrIXkFOdzL/IZhOutLTHMCMMOWoeDolkIEX8ZuOCMRGD7D6vRdnh
-                    5bS/Onq2XYegMiBJnLYBizTT7lC0tO3TDlhqg5YjPRCbbafgoH2MOpHjXOckrEIL
-                    B8ZTpEiRswp7gaLsovXR1yyI8FBgx5wuTxddbZUHKESGpBw2dPnAxsgX1YOavxYj
-                    msJXiu4snsrx6H/mkLSlEP4w1noGBrTYWMKnE/jtTGlWeqGyxNa4JVgSuS2TmWHe
-                    VVGae0lzurFniTODRNTwJd4axPZnBYLggXrttYkNbXg8ru4sg9HeZkwRmA1tF77Z
-                    5Gr4/vwaT/h81iNC4K85oXTHaifmwBR4N9RnrgDwVuAGe8RBRtCcE5LOJYTqBegB
-                    ulJ6pwSNfpwN28++2NbpT0GEZ8S5lgRRvLtZvD4g4K8gz4FQmYQmzl+PkDUmr+9W
-                    RZ8WEYXU7C/bps72ZUI9GA==
-                    -----END LAMPORT PUBLIC KEY-----
-
-                    Signatures:                 NONE
-
+[Prendre le "module d'extension pour le bibliodrone-NG" qui est par terre].
+
+[ITEM DEBUG]>>> utiliser module
+                                                0  1  2  3
+                                                4  5  6  7
+                                                8  9  A  B
+                                                C  D  E  F
+
+                    CODE: :                     28352
+
+Module succesfully armed.
+Vous enfichez le module sur votre BiblioDrone-NG.  Il s'adapte parfaitement !
+[debug] item.find-by-name(world_id='390ed516760104ce7aa401a0c7cdace3', name='LASERGUN_MODULE')
+[debug] item.get-attribute(world_id='390ed516760104ce7aa401a0c7cdace3', item='85f668417cb77c5f5e9fb5e5639349e2', attr='armed')
+[debug] action.do(world_id='390ed516760104ce7aa401a0c7cdace3', name='aes.coldboot', score=1)
+[debug] item.find-by-name(world_id='390ed516760104ce7aa401a0c7cdace3', name='LASERGUN_MODULE')
+[debug] room.items(world_id='390ed516760104ce7aa401a0c7cdace3', room='9d0498fe69b0e8df7e35155cac502033')
+[debug] item.find-by-name(world_id='390ed516760104ce7aa401a0c7cdace3', name='BIBLIODRONE_NG')
+[debug] room.items(world_id='390ed516760104ce7aa401a0c7cdace3', room='9d0498fe69b0e8df7e35155cac502033')
+[debug] action.do(world_id='390ed516760104ce7aa401a0c7cdace3', name='activate_LASERGUN_MODULE', score=0)
+[debug] item.move(world_id='390ed516760104ce7aa401a0c7cdace3', item='85f668417cb77c5f5e9fb5e5639349e2', room='f2e73ab294c66a4740039fa0f19c6f62')
+
+[Le module EST le LASERGUN !]
+[Le BiblioDrone-NG est maintenant équipé avec le module LASERGUN.]
+
+[Aller à la réserve, bibliothèque, niveau SB.]
+[Poser bibliodrone.]
+[Ouvrir le terminal]:
+                                                             UGLIX v4.0 beta
+                                                     (Bibliodrone Piloting Terminal)
+                    Active user: AdrienPanguel
+                    Bibliodrone: PRESENT
+                    Equipment  : pulse laser, plasma gun
+                                                                   Menu
+                                                                   ----
+                    0. [TODO] Sector 0
+                    X. [TODO] Sector X
+                    A. About
+                    Q. Exit
+
+*** 0
+Le monte-charge descend le BiblioDrone-NG au niveau inférieur.
+[press any key]
+Vous suivez anxieusement la progression du BiblioDrone-NG sur l'écran du terminal.
+Heureusement, il parvient à éviter tous les obstacles et à neutraliser les autres
+drones qui essayent de l'empêcher de progresser.  Maintenant vous comprenez pourquoi
+il est équipé d'un laser...
+[press any key]
+Le BiblioDrone-NG saisit finalement l'ouvrage souhaité et revient vers le
+monte-charge en passant majestueusement au milieu des tas de carcasses fumantes
+des adversaires qu'il vient de pulvériser.
 [press any key]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-[PEUT-ETRE UTILE POUR PLUS TARD]
-
-[Au RC-07 de l'Atrium.]
->>> regarder firmware
-Elle est écrite sur le coin d'une enveloppe.  Elle dit :
-                    firmware update key: 35ba26a3b0297f0d
-
-[Peut-être utile pour la suite...]
-
-
-
-                                                      UGLIX v4.0 beta
-                                                 (Firmware Update Station)
+[Réouvrir le terminal]:
+                                                        UGLIX v4.0 beta
+                                                (Bibliodrone Piloting Terminal)
 
                     Active user: AdrienPanguel
+                    Bibliodrone: PRESENT
+                    Equipment  : pulse laser, plasma gun
 
+                                                             Menu
+                                                             ----
+                    0. [TODO] Sector 0
+                    X. [TODO] Sector X
+                    A. About
+                    Q. Exit
 
-                    Firmware update key:        35ba26a3b0297f0d
+*** X
+Le monte-charge descend le BiblioDrone-NG au niveau inférieur.
+[press any key]
+Vous suivez anxieusement la progression du BiblioDrone-NG sur l'écran du terminal.
+Malheureusement, votre bibliodrone rencontre rapidement un drone de surveillance
+d'un niveau bien supérieur piloté par le security engine.  Disposant d'un
+équipement insuffisant, votre bibliodrone ne fait pas le poids.  C'est le pot
+de terre contre le pot de fer...  Votre bibliodrone est rapidement mis hors de
+combat et rentre péniblement à la base, lourdement endommagé.  Il vous faudrait
+des modules d'extension pour pouvoir faire face.
+[press any key]
 
+[Cela ne donne pas de flag, mais on a récupéré un premier module sur 3 pour le drone.]
 
+[Lire le document un sujet de projet situé à l'Atrium 4ème étage dans la salle de TP.]
 
-                               +------------------------------------------------------------+
-                               | Firmware updated. New command activated: ``#!item-debug''. |
-                               +------------------------------------------------------------+
+[Lancer le code "AES_128_CBC.py" en y mettant le "AES-CIPHERTEXT" du "Première partie : AES".]
+[Le code est en attente d'une position d'un "Successful decryption" parmi des "Decryption error".]
+[Ouvrir le fichier "./Texts/current_batch.txt", copier son contenu.]
+[Récupérer le "un tas de cartes électroniques poussiéreuses" au 2è étage de l'atrium.]
+[Taper "tas" n'importe où dans le jeu.]
+[Coller le contenu du fichier "./Texts/current_batch.txt" ici.]
+[Faire entrer encore une fois.]
+[Regarder la position de la ligne "Successful decryption" parmi des "Decryption error": tips: coller dans un fichier txt de la ligne "-----BEGIN OUTPUT-----" jusqu'à "-----END OUTPUT-----", enlever -2 au numéro de la ligne.]
+[Entrer ce résultats (numéro -2) dans le terminal encore en attente.]
+[Le terminal est encore en attente ... mais le contneu du fichier "./Texts/current_batch.txt" a changé !]
+[Répéter l'opération pour tous les blocs ! (C'EST TREEEEEEES LONNNNNNNNNNGS), jusqu'à 16*5 blocs (j'ai fait bloc 1 & 2, et c t bon à la fin du bloc 2).]
+[Aller au CICSU niveau SB, dans le foyer, sur la borne de mise à jour des firmwares, et y entrer le résultat]:
 
+                                                             UGLIX v4.0 beta
+                                                        (Firmware Update Station)
+                    Active user: AdrienPanguel
+                    Firmware update key:        b04aaf328fcd8ae9
+                                     +--------------------------------------------------------------+
+                                     | Firmware updated. New command activated: ``#!system-debug''. |
+                                     +--------------------------------------------------------------+
 
+[security engine] cbc.padding:52:1|b67924567b3351f3b039c6db6dba9c3c26cbf20a15b5c2a570e6dbd63fbd0520             [27e flag !!!]
 
+### FLAG 28: Hackeeeeeer
 
+[Taper n'importe où dans le jeu la commande "#!item-debug", puis "plan", puis faire entrée pour voir une sortie comme]:
 
+[debug] room.name(world_id='d87d48ebc0f1f3268b4d753285c51d77', room='cb84f224dadc1c6b5b0c045d3ca4e3dd')
 
+[Mettre ce "world_id" dans le code "kerberos.py".]
 
+[Aller à l'atrium niveau JU, 3ème étage et voir le tableau]:
 
-
-
-
-
-[Dans le téléporteur]
->>> voir clef
-Probablement destinée à ouvrir un coffre-fort.  Elle a cette forme-là :
-               ,gPPRg,
-              dP'   `Yb
-              8)     (8
-              Yb     dP
-               "8ggg8"
-
-
-
-
->>> voir coffre-fort
-Blindé.  Apparemment, il s'ouvre avec non pas une, non pas deux, mais avec TROIS
-clefs physiques.  Sur la porte, un autocollant vante son haut niveau de technicité
-+--------------------------------------------------------------------------------+
-|  Ce coffre-fort Kryptonite Mk IV met en oeuvre les mesures de sécurité         |
-|  les plus modernes :                                                           |
-|  - Blindage en plomb anti rayon-X autour des circuits intégrés                 |
-|  - Plaques de Cobalt-Vanadium-Tungstène anti-perceuse devant la serrure        |
-|  - Relockers en verre (se brisent et bloquent tout en cas de perforation)      |
-|  - Relockers en cire (fondent et bloquent tout en cas d'attaque thermique)     |
-|  - Lasers*, chocs électriques*, gaz toxique**, etc. anti-gangsters             |
-|                                                                                |
-|   * fonctionnent avec de l'énergie renouvelable                                |
-|  ** biodégradable (les composants toxiques sont absorbés par l'adversaire)     |
-+--------------------------------------------------------------------------------+
-Il y a aussi un petit afficheur digital :
-               ,gPPRg,             ^             ┌───────┐
-              dP'   `Yb           / \            │       │
-              8)     (8          /   \           │       │
-              Yb     dP         /     \          │       │
-               "8ggg8"         /_______\         └───────┘
-
-                CIRCLE          TRIANGLE           SQUARE
-                ABSENT           ABSENT            ABSENT
-
-DOOR LOCKED
-
->>> utiliser clef
-Vous insérez la clef dans l'emplacement correspondant dans le coffre.
-Elle s'adapte parfaitement !
-
->>> voir coffre-fort
-Blindé.  Apparemment, il s'ouvre avec non pas une, non pas deux, mais avec TROIS
-clefs physiques.  Sur la porte, un autocollant vante son haut niveau de technicité
-+--------------------------------------------------------------------------------+
-|  Ce coffre-fort Kryptonite Mk IV met en oeuvre les mesures de sécurité         |
-|  les plus modernes :                                                           |
-|  - Blindage en plomb anti rayon-X autour des circuits intégrés                 |
-|  - Plaques de Cobalt-Vanadium-Tungstène anti-perceuse devant la serrure        |
-|  - Relockers en verre (se brisent et bloquent tout en cas de perforation)      |
-|  - Relockers en cire (fondent et bloquent tout en cas d'attaque thermique)     |
-|  - Lasers*, chocs électriques*, gaz toxique**, etc. anti-gangsters             |
-|                                                                                |
-|   * fonctionnent avec de l'énergie renouvelable                                |
-|  ** biodégradable (les composants toxiques sont absorbés par l'adversaire)     |
-+--------------------------------------------------------------------------------+
-Il y a aussi un petit afficheur digital :
-               ,gPPRg,             ^             ┌───────┐
-              dP'   `Yb           / \            │       │
-              8)     (8          /   \           │       │
-              Yb     dP         /     \          │       │
-               "8ggg8"         /_______\         └───────┘
-
-                CIRCLE          TRIANGLE           SQUARE
-                PRESENT          ABSENT            ABSENT
-
-DOOR LOCKED
-
-
-
-
-
-
-
-
-
-
-
-[Atrium 3ème étage, bureau bloqué]:
-[SUDO]>>> voir tableau
 Il est dans un bureau dont les "fenêtres" donnent sur la coursive.
 À travers les vitres, on peut lire son contenu :
 
   Phase-shift module
-  ------------------
-  item_id = 77f782fff611a4ba1ab09145b3e343e3
+  
+  item_id = 808a353cf73cc1221a5660a9e7babfad
+
+[Lancer le code "kerberos.py" avec cet "item_id" avec la commande suivante]:
+
+python3 kerberos.py
+
+[Retour de la commande]:
+
+--- RÉPONSE DU SERVEUR ---
+{"jsonrpc": "2.0", "id": 737, "result": "0ed0b788122bcacf824f1e4f3c422120"}
+
+[Copier la valeur de "result" en tant que "TARGET_ROOM" dans le code "kerberos2.py".]
+[Puis lancer le code "kerberos2.py" avec le bon username, password, world_id, et target_room, avec la commande suivante]:
+
+python3 kerberos2.py
+
+[Retour de la commande]:
+
+[*] 1. Demande du TGT (Authentication Service)...
+[+] Clé TGS déchiffrée : 5149e11948144b624b8592b639648934
+
+[*] 2. Demande du Ticket de Méthode (Ticket-Granting Service)...
+[+] Clé de méthode obtenue : 9c9c250472b8f1a7dc0fabf1e182f7be
+
+[*] 3. Exécution de la téléportation (protagonist.move)...
+✅ RÉSULTAT DÉCHIFFRÉ : {"result": null}
+
+[Dans le jeu, j'ai été téléporté: faire "voir" pour constater que je suis maintenant dans le bureau fermé de l'Atrium RDC du niveau JU.]
+
+[ITEM DEBUG]>>> voir
+Vous êtes dans un bureau.  Une baie vitrée donne sur le hall de l'Atrium,
+tandis qu'une porte donne sur le couloir turquoise.
+
+Ici se trouve un module d'extension pour le bibliodrone-NG.
+
+[Ramasser le module (c'est le 2ème !), et l'utiliser sur le drone]:
+
+[ITEM DEBUG]>>> utiliser module
+Vous enfichez le module sur votre BiblioDrone-NG.  Il s'adapte parfaitement !
+
+[security engine] world.hack:52:1|a88c5ba48fb3dc3dad73d5f5bfd4768ac0f837610da4373a18b92698746e1226      [28e flag !!!]
+
+### FLAG 29: Franklin-Reiter attack
+
+[Au niveau SB, laboratoire, RC-14, il y a un coffre-fort que je peux ouvrir avec 3 clés.]
+
+[Il y a une des 3 clés dans le téléporteur (juste en-dessous, mais chacun peut avoir une des 3 clés dans le téléporteur).]
+[Pour obtenir les 2 autres clés, il faut qu'un ami qui a ces clés me les envoie vie le téléporteur.]
+[Il doit être dans le téléporteur, taper "laisser clé de sécurité ronde" par exemple, et aller dans le sas de sécurité, ouvrir le panneau, et donner le "world_id" du collègue qui souhaite recevoir la clé (attention, vous ne pouvez pas perdre votre clé, reconnectez-vous tout simplement au jeu pour toutes les récupérer sans les reprendre à ceux à qui vous les avez envoyées).]
+[Vous pouvez alors aller dans le sas de sécurité, ouvrir le panneau, et voir qu'il y a écrit "too many objects in the teleporter", aller au téléporteur, et récupérer les clés manquantes.]
+
+[Ouvrir le coffre avec les 3 clés]:
+[ITEM DEBUG]>>> utiliser clef ronde
+Vous insérez la clef dans l'emplacement correspondant dans le coffre.
+Elle s'adapte parfaitement !
+[debug] protagonist.location(world_id='5828ebe2fecee7f5ae04ca384786775a')
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_SAFE')
+[debug] item.location(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4')
+[debug] item.set-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='circle', value=True)
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_CIRCLE_KEY')
+[debug] item.move(world_id='5828ebe2fecee7f5ae04ca384786775a', item='d86c5d6a10233a5c443e3d3ba02c9f8e', room='7f17cda8ac75806deba331ba99db5194')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='circle')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='square')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='triangle')
+
+[ITEM DEBUG]>>> utiliser clef carrée
+Vous insérez la clef dans l'emplacement correspondant dans le coffre.
+Elle s'adapte parfaitement !
+[debug] protagonist.location(world_id='5828ebe2fecee7f5ae04ca384786775a')
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_SAFE')
+[debug] item.location(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4')
+[debug] item.set-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='square', value=True)
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_SQUARE_KEY')
+[debug] item.move(world_id='5828ebe2fecee7f5ae04ca384786775a', item='02bfeaf046dbdaf224beff4aee0c845e', room='7f17cda8ac75806deba331ba99db5194')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='circle')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='square')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='triangle')
+
+[ITEM DEBUG]>>> utiliser clef triangulaire
+Vous insérez la clef dans l'emplacement correspondant dans le coffre.
+Elle s'adapte parfaitement !
+
+Vous entendez un déclic et la porte du coffre-fort s'ouvre,
+révélant ainsi son contenu.
+[debug] protagonist.location(world_id='5828ebe2fecee7f5ae04ca384786775a')
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_SAFE')
+[debug] item.location(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4')
+[debug] item.set-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='triangle', value=True)
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_TRIANGLE_KEY')
+[debug] item.move(world_id='5828ebe2fecee7f5ae04ca384786775a', item='efa1530dc2c45c3e0cdda320a3a30866', room='7f17cda8ac75806deba331ba99db5194')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='circle')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='square')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='triangle')
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='GEOLOCATOR')
+[debug] item.move(world_id='5828ebe2fecee7f5ae04ca384786775a', item='b3a7f2217aad512fe2bc364a0284babf', room='7f9c2f16451ee5b7423cd5f1f02ba503')
 
 
+[ITEM DEBUG]>>> voir coffre-fort
+Blindé.  Apparemment, il s'ouvre avec non pas une, non pas deux, mais avec TROIS
+clefs physiques.  Sur la porte, un autocollant vante son haut niveau de technicité
++--------------------------------------------------------------------------------+
+|  Ce coffre-fort Kryptonite Mk IV met en oeuvre les mesures de sécurité         |
+|  les plus modernes :                                                           |
+|  - Blindage en plomb anti rayon-X autour des circuits intégrés                 |
+|  - Plaques de Cobalt-Vanadium-Tungstène anti-perceuse devant la serrure        |
+|  - Relockers en verre (se brisent et bloquent tout en cas de perforation)      |
+|  - Relockers en cire (fondent et bloquent tout en cas d'attaque thermique)     |
+|  - Lasers*, chocs électriques*, gaz toxique**, etc. anti-gangsters             |
+|                                                                                |
+|   * fonctionnent avec de l'énergie renouvelable                                |
+|  ** biodégradable (les composants toxiques sont absorbés par l'adversaire)     |
++--------------------------------------------------------------------------------+
+Il y a aussi un petit afficheur digital :
+               ,gPPRg,             ^             ┌───────┐
+              dP'   `Yb           / \            │       │
+              8)     (8          /   \           │       │
+              Yb     dP         /     \          │       │
+               "8ggg8"         /_______\         └───────┘
 
+                CIRCLE          TRIANGLE           SQUARE
+                PRESENT          PRESENT          PRESENT
 
+DOOR UNLOCKED
 
+[Sortir du labo, et revenir au RC-14 pour ramasser le Geolocator et l'utiliser]:
 
+[ITEM DEBUG]>>> RC-14
+Vous êtes dans un local de stockage, presque une sorte de débarras.  Le personnel du nettoyage y range aussi ses fournitures.
 
+Ici se trouve un coffre-fort.
+Ici se trouve un terminal de service.
+Ici se trouve un GeoLocator.
 
+[ITEM DEBUG]>>> Geolocator
+Le petit écran LCD de l'appareil affiche :
+room_handle = a05c6073d56d1a1c27714101b8ac26c9
+Vous vous demandez ce que cela peut bien signifier.
+[debug] room.find-by-name(world_id='d87d48ebc0f1f3268b4d753285c51d77', name='LIP6_26_00_412')
 
+[Mettre la valeur de "name" dans "TARGET_ROOM" du code "kerberos3.py".]
+[J'ai à nouveau été téléporté, mais je suis maintenant au LIP6]:
 
+[ITEM DEBUG]>>> voir
+Vous êtes dans un bureau avec une feneêtre qui donne sur la place Jussieu.
+C'est donc sûrement la barre 26-00.  À vue de nez, vous êtes au 4ème étage.
+Pas moins de 4 écrans sont posés sur le bureau qui fait face à la porte, et
+il y a plusieurs tours desossées et pas mal d'autres équipements dans des
+coins.  Sur un tableau blanc, un plan schématique du réseau du LIP6 est
+dessiné à la main.
 
+Ici se trouve une carte électronique toute neuve.
+Ici se trouve un poste informatique en cours de mise au point.
 
-[Atrium 4ème étage.]
-[SUDO]>>> voir
-Vous êtes dans une salle de TP avec des ordinateurs partout.  Les derniers
-occupants ont oublié d'effacer le tableau.  Vous trouvez que c'est un peu
-comme sortir des WC sans tirer la chasse d'eau !  En attendant, vous devinez
-que la dernière séance était consacrée au chiffrement RSA.
+[Prendre la "carte électronique toute neuve".]
+[Lancer le code "kerberos3.py" avec la commande suivante]:
 
-Ici se trouve un sujet d'un projet.
+python3 kerberos3.py 
 
+[Retour de la commande]:
+
+[*] 1. Demande du TGT (Authentication Service)...
+[+] Clé TGS déchiffrée : d8f900a38957987642631bde44c33867
+
+[*] 2. Demande du Ticket de Méthode (Ticket-Granting Service)...
+[+] Clé de méthode obtenue : 38c64451f0b63e76933eb3570dd3d145
+
+[*] 3. Exécution de la téléportation (protagonist.move)...
+✅ RÉSULTAT DÉCHIFFRÉ : {"result": null}
+
+[Ouvrir le "poste informatique en cours de mise au point"]:
+
+TME #X : attaque à messages liés sur RSA
+
+But     : Récupérer le message clair M (texte ASCII).
+          Vous disposez du chiffré RSA naïf de M et de (M+1).
+
+PK =
+-----BEGIN PUBLIC KEY-----
+MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQEAy7nQxx7TmJKuXFZwhY/g
+j1bj2RjbUUOfjsInkLVeoGV3yb8qXJnoJkMegI/2WBMti6RdYtHYY5f98iNCXk6B
+bKeOOlIZ3cIsnsik076uUYe2YHv3ukXl5rqHce5Cmfnw2ntT/iB1DbQ6nxKiNfTE
+e7YCWlZA69fGb1ZAYau0Z6+vRNY3XhvbCnpO+59lX26iw34TPNS865ngRiLeycQG
+COiagvsMjMIyU+2RG6YLvPCQJPfHKoXiI3LMu8+tUPmRiUNThfC5a/gyjZW0tnO2
+1tiZKChG+tHOW/BGtLOZH4P9aNhCEkBUN6C5I9aTabImucUdHEycT7b5xz1PTX1J
+NQICAQE=
+-----END PUBLIC KEY-----
+
+C = 5ee512e0a699a0334acb7a0fe9ac37b5fb5f0d409f76d4382374e9186c9a7ca9515c83a546e570ff3e4dada4392f0fe729e6b00977597f97ff0c4ed036a4f04f7e65fff2a0457b985d117c557fb9751071967b14b052d3b1ee9fcfa2fab0e20bdd838344c027d893c848344262c0feebfaf774db05c54618f5f777999ee5a58fb3a3448c806135bcc090bb7de259d783979fe7972c9fc5d03882c4fac2d437ca11f9d46eb4880b0cbb5a71b8de261a4975cb3e5d728b63229202b70c40c1518fdca441a332ba177a9deacc164921eaf9666c22feab4c50eac4cdd004bd24c71c644d4940d765acbd706b9056ece6602faac0435372c41e6ce26f014d0d6eb4c3
+C'= 5c07330e315d0abacaf6d77143c46a1c30c649c55aac3121c86f846df52412a6860c01adc6344d5b97bbce811021dca0cd7aba2eea646b6fe47f2d5588313b96c8f6633761a1db00d0381c64ae809734c7e4ab1c606cc3eca1aa8d9a180f7f2b3820fa3114252069c3d2e175c846b0d429adb6c4920b49ea8e28be19c90907f2593e05ed6b1e8b536494157350e3bdc6a7fcca17d905b500e088a60d2e1c2f011d80d197317fccb12ed060362341fbfda078cc5039a5960778507d2048eb33d36285d5ada9b6c74b47fa899bd7c0de1c04b91bc9ca510fa4857507f726cde62faa68f9071920c0e4ce1d007612b7e5a88219fcc5e1450c108598d22b03763549
+
+                    M :                         
+
+[Lancer le code "franklin_reiter.py" en remplaçant bien les valeurs "PEM", "C", et "C1" par les valeurs de "PK", "C", "C'" avec la commande suivante]:
+
+python3 franklin_reiter.py 
+
+[Retour de la commande]:
+
+n = 0xcbb9d0c71ed39892ae...
+e = 257
+
+=== Franklin-Reiter Attack ===
+Calcul de x^e - C  et  (x+1)^e - C' ...
+Calcul du binôme de Newton pour (x+1)^e ...
+Calcul du PGCD des polynômes...
+PGCD degré : 1
+PGCD : [14758011281772036540267836212971270243162575356928567838054988305118456448665914971629403849998588659664835518439232039740923824849241003042356908458242912203673091257139207499304875462417837376451614929989464833228677741968882033603019723932187653778316983018386846607261040614721446883613745032527184319836705036182359007189771241617751487960870765248125307539433539505221253935032862192152883695065446982798502025025949652673484738358792345523725717133495785209367873438505691324110082368361308580661725471172182008058300393302892663215830917766746019875041864971096258828771606421018492932513472137704867569801575, 7684244097454774244652614576382768177167566054986568727191444886011671042111221499921384042814117761738051077708916328912975300597707426341453825934303671369450973669549934157103459135105941420088868351079868262228632788804743230508089914781013060148031503945150805678709332797951245494371850320089176828337910677079124963131472434335980373437642052257439491482562736148220485611960268684455048856845989616737910370270480876965781022899150798254748788903259875267616956439742270482576083367436244323325267116693859868228091157643619241888546107912872831700164492387021124179642446221812323713863933924823855444161938]
+
+✅ M (int) = 5448408804712644147688747898790597456034770585386196023029863718833606842501212405749977712112421171358705918062390431985149345167505135727481
+✅ M (texte) = races typed rebut halls stork quack dictu haunt sicks messy
+
+[Copier-coller la valeur de "M(texte)" dans le poste]:
+
+TME #X : attaque à messages liés sur RSA
+
+But     : Récupérer le message clair M (texte ASCII).
+          Vous disposez du chiffré RSA naïf de M et de (M+1).
+
+PK =
+-----BEGIN PUBLIC KEY-----
+MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQEAy7nQxx7TmJKuXFZwhY/g
+j1bj2RjbUUOfjsInkLVeoGV3yb8qXJnoJkMegI/2WBMti6RdYtHYY5f98iNCXk6B
+bKeOOlIZ3cIsnsik076uUYe2YHv3ukXl5rqHce5Cmfnw2ntT/iB1DbQ6nxKiNfTE
+e7YCWlZA69fGb1ZAYau0Z6+vRNY3XhvbCnpO+59lX26iw34TPNS865ngRiLeycQG
+COiagvsMjMIyU+2RG6YLvPCQJPfHKoXiI3LMu8+tUPmRiUNThfC5a/gyjZW0tnO2
+1tiZKChG+tHOW/BGtLOZH4P9aNhCEkBUN6C5I9aTabImucUdHEycT7b5xz1PTX1J
+NQICAQE=
+-----END PUBLIC KEY-----
+
+C = 5ee512e0a699a0334acb7a0fe9ac37b5fb5f0d409f76d4382374e9186c9a7ca9515c83a546e570ff3e4dada4392f0fe729e6b00977597f97ff0c4ed036a4f04f7e65fff2a0457b985d117c557fb9751071967b14b052d3b1ee9fcfa2fab0e20bdd838344c027d893c848344262c0feebfaf774db05c54618f5f777999ee5a58fb3a3448c806135bcc090bb7de259d783979fe7972c9fc5d03882c4fac2d437ca11f9d46eb4880b0cbb5a71b8de261a4975cb3e5d728b63229202b70c40c1518fdca441a332ba177a9deacc164921eaf9666c22feab4c50eac4cdd004bd24c71c644d4940d765acbd706b9056ece6602faac0435372c41e6ce26f014d0d6eb4c3
+C'= 5c07330e315d0abacaf6d77143c46a1c30c649c55aac3121c86f846df52412a6860c01adc6344d5b97bbce811021dca0cd7aba2eea646b6fe47f2d5588313b96c8f6633761a1db00d0381c64ae809734c7e4ab1c606cc3eca1aa8d9a180f7f2b3820fa3114252069c3d2e175c846b0d429adb6c4920b49ea8e28be19c90907f2593e05ed6b1e8b536494157350e3bdc6a7fcca17d905b500e088a60d2e1c2f011d80d197317fccb12ed060362341fbfda078cc5039a5960778507d2048eb33d36285d5ada9b6c74b47fa899bd7c0de1c04b91bc9ca510fa4857507f726cde62faa68f9071920c0e4ce1d007612b7e5a88219fcc5e1450c108598d22b03763549
+
+                    M :                         races typed rebut halls stork quack dictu haunt sicks messy
+
+                                                            +---------------+
+                                                            | Bonne réponse |
+                                                            +---------------+
+
+[security engine] rsa.related:52:1|371bf8d76e8f89ae3ce8e6b12a65f0e4bed983944513c11b3084b34690dc41a2     [29e flag !!!]
+
+### FLAG 30: MSB Oracle
+
+[Lire le document "Un sujet d'un projet" à l'Atrium, 4è étage, dans la salle de TP.]
 [SUDO]>>> voir sujet d'un projet
 Ce projet consiste à utiliser les ChipWhisperer (des cartes électroniques
 conçues pour mettre facilement en oeuvre des attaques par canaux auxiliaires).
@@ -3307,7 +2895,7 @@ lors d'une petite soutenance à la fin du semestre.  La deuxième partie est
 réservée aux étudiants qui ont déjà fait la première.
 
 Première partie : AES
----------------------
+
 Un message a été chiffré avec l'AES-128 en mode CBC, avec une clef et un IV
 aléatoires.  Le bourrage standard a été utilisé (comme dans OpenSSL).  Utilisez
 la ChipWhisperer-lite qui a été mise à vitre disposition et mettez en oeuvre
@@ -3316,9 +2904,8 @@ une attaque de votre choix pour récuperer le texte clair.
 Voici le chiffré :
 AES-CIPHERTEXT = cf57a162cc48de7674da18ace9ce862e3f11511355acb57e5767649d9d2c1465da6a9f3f201f5cbc0c566f823e7d08f83244a0aff14b8c2fc6f1faca003ea219c7f4b5c3be4f7be423c268289c84149d
 
-
 Deuxième partie : RSA
----------------------
+
 Un message a été chiffré avec le système RSA PKCS #1 v1.5 (c'est ce que fait
 OpenSSL quand on demande un chiffrement RSA).  Demandez une ChipWhisperer-pro
 aux ingénieurs support de l'équipe pédagogique puis mettez en oeuvre une
@@ -3335,22 +2922,53 @@ ekBcapX0uhvMVhQms989dQXQRGk4Id5fyUd92X2toR6nIvYSfMWdGuDor8i4SdcF
 8QIDAQAB
 -----END PUBLIC KEY-----
 
-
 Voici le chiffré :
 RSA-CIPHERTEXT = 8beb55fe68bed9d941bc512bc442da028c3e63f1d0561fb589b688a99ac3296e9adb9b94ae66606ccbef727a35a082c7e815506c43b81b1e7200d3204b1b46b4c1f40bbd928cf03223b3c9e1818ae07e457f9ded5dad3074d462488918cc10fb5719affaec3fe0ef2fb2c9dc57d3c4ff44b1651a4ba20d0d40086d5bfdfa528458c9d8ede4c39941c125c543cda2aeb0c7c701c2d034b44546f9c892a85481103de9ec3e745729eee92fff8b3fea4f283efaafb2717edcc252d849527517b09e885c45e64da87feeed4d6724efdac885677c4da3ecf575037985b3483ce66d72ed6c452df273ef62fd3efa21523305e9ee4843a47f652c375dfadb967498ee16
 
+[Lancer le code "msb.py" en remplaçant bien les valeurs de "PEM" et "C_HEX" avec la commande suivante]:
 
+python3 msb.py
 
+[Retour de la commande]:
 
+n bits: 2048
+e = 65537
 
+Test oracle avec C original...
+Oracle(C) = 0
 
+=== Attaque MSB Oracle ===
+Bits à traiter: 2048
+  Bit 1/2048 | appels=2 | range=13313467869538058262517673068872937759158691955483760169017664694933613726852890147773569990900289888705421440688547471494718074581418357178414401082138711712089411145379976856033038791665202008673167960311406499867841588863108948588911707368748772079720097254471662350254645174840416478588027622026202135449621398938110549738046102727083667767057013278835409841873117167609530510575887433223276289057770698718661067518765303123305181678086324306743565656693781177770113344075112989961292070723203403397853779009621794306078238704636382175443638234398186910224040080393193864409112861682410920653200335556182039823096
+  Bit 201/2048 | appels=202 | range=8284991395344876194974520493489477487370639099708663357972755196224177540533088203592496428775579986403070756121320617820781860758266138663396946771528529652178030862546980367652331779562297626048997918810668192265405177251280448388458644866166367907050184218445217425330809912765949781677687819371020195391747683042981536250568762319409520221102846083276631616584480115156251126847311147307337867798896621788668116018367118138884555695741095121116243595213562182535771633730476436602760139539257363639333625316360372660935589173342038520830631077590658864
+  Bit 401/2048 | appels=402 | range=5155762803017926287886123964292545165994651558121372705507299667866500582163327760432093482892481484089110728856560735112191846235738195473288337874520030171453488085303398742036500823286831270958054340107125272403944867687038373679879858251872363459278388092842824989275234705887423406514986276382816329936468577074820307917059199346240082447438316291365290285617899394683613171927513253232291197002651934252879032859375616410837934825079500586834342864375083469401339258366803259464237483996694
+  Bit 601/2048 | appels=602 | range=3208439069220873937619597135099027991147765638646323797459264442500742444691868534525994857989478879460822751905119254851018528107243229828198296440259136060524032268741388011968188391236743966359315950280950226909712534035147723569985481212037396130478063678678821018134687330326962768374652758132772489832976837872941290507737789808332383775477902564859652969082110585257926208314730067077760215941776796387105805227705974646616513562
+  Bit 801/2048 | appels=802 | range=1996616534584807969843447326759872323434623103909769625348229529827916465823099796336466878597962809363885149221252906440359453862639384151624881314914171525577026044538512240247207966120089465173668980145616859055346510441817641228966072433295775417285095438284610377583744552616600746133741367308305539752553050836494069104120393937867502225003071865395599194270540296531822
+  Bit 1001/2048 | appels=1002 | range=1242497519875142861955155475600639819918899098812053118635277776105565114070341434539088701130921990054927755735690157480399570692177319837532343957916624038284960417483776171365440326289965871618899607091913932418562472056628421305863876871604344156974350736786409512755810557455872225414583725424350693170126085159
+  Bit 1201/2048 | appels=1202 | range=773208104888759159789198079411087386281411659561740837972245418216698775923887371375961247922590707256577896632970212559817596499412444663037529804259401888314717234656621177678206645949871621181945679183836449686315268874779317380179022568831038122441055
+  Bit 1401/2048 | appels=1402 | range=481168584968880838436339634973293390662108811092391715740428277633389877112903470605673215160199347544701211980417628884099806274083546081384409280380979194683506581380955345623582008994275093147
+  Bit 1601/2048 | appels=1602 | range=299431945548817236386610602439233211059000270514372948243811897703732492734986533151217602325242315354785598603378022857631979218010975
+  Bit 1801/2048 | appels=1802 | range=186336957182997514807817496390954214227459066590027464200548918172979506262
+  Bit 2001/2048 | appels=2002 | range=115957773137995
 
+✅ M trouvé en 2049 appels oracle
+M bytes (hex) = 04f94285c29fba78b9ebc9b5f0e30ebab32ff2347d99bb97fcd579a6b5730ca34c6a7cfe702a984cf61d50fb2945f14e9b75d4c381aac8db7cf62f4d750a4eb335044e5542a5c4cfd8c4cb5d6fc88d0645154b8e7fe44eec0693f01996de6e068920b1cdf860af4155caf31650394e028f3773d7e2db2fe9bee0105eed8b783102f7b9395529b1eb032da7c38c7537716f2b4757ba219c76ebcc80841fd075d008349ec8dff4100b95ecf9fd723a00cac8c6666ec4706a6cc460cc6ec866cc40507e7e7e7e7e7e7e7e7e7e7e7e7e7e7e40eae0c8c2e8ca40d6caf2405a5a5a40c2c6e8eac2d840e0eae4e0dee6ca40dcdee840c8cac6d2c8cac840f2cae750
 
+✅ Plaintext (hex) = cac8c6666ec4706a6cc460cc6ec866cc40507e7e7e7e7e7e7e7e7e7e7e7e7e7e7e40eae0c8c2e8ca40d6caf2405a5a5a40c2c6e8eac2d840e0eae4e0dee6ca40dcdee840c8cac6d2c8cac840f2cae750
+✅ Plaintext (texte) = ���fn�pjl�`�n�f�@P~~~~~~~~~~~~~~~@������@���@ZZZ@������@�������@���@�������@���P
 
+[Demander la conversion à Chat... ça devient]:
 
+edc37b856b0f7d3f
 
+[Aller au CICSU, niveau SB, dans la borne de mise à jour des firmwares keys et donner cette clé]:
 
+                                                             UGLIX v4.0 beta
+                                                        (Firmware Update Station)
+                    Active user: AdrienPanguel
+                    Firmware update key:        edc37b856b0f7d3f
 
+[security engine] rsa.msb:52:1|8c48b2862a5d5747dbef054e0f85d4dd85378ac5a4fb6af590570b59bf8b2788          [30e flag !!!]
 
 
 
@@ -3365,6 +2983,7 @@ RSA-CIPHERTEXT = 8beb55fe68bed9d941bc512bc442da028c3e63f1d0561fb589b688a99ac3296
 
 
 
+aes.coldboot:52:1|a9acf461c45fc5c4cf38a0d05a0ad8d0b6506aca1ab2872284bed7f8576e504c                AdrienPanguel     2026-29-29 14:00:01
 
 
 
@@ -3372,15 +2991,9 @@ RSA-CIPHERTEXT = 8beb55fe68bed9d941bc512bc442da028c3e63f1d0561fb589b688a99ac3296
 
 
 
-[LPNHE]
 
-[SUDO]>>> conseil armoire
-Le code doit bien se trouver dans les parages...
 
-[SUDO]>>> utiliser armoire
-        challenge: unsee burst aired hitch quick
 
-        signature:
 
 
 
@@ -3388,73 +3001,21 @@ Le code doit bien se trouver dans les parages...
 
 
 
+[SUDO]>>> voir brouillon d'un email
+Chère collègue,
 
-[SUDO]>>> lire mode d'emploi
-algo = AES-128-CBC
-IV = 35c6590aa778bece7400176aac9b83cf
+Cela fait maintenant
+  -31832232
+jours que vous auriez dû rendre les ouvrages intitulés :
+- grammaire du langage RML
+- spécification du système de type du langage RML
+- documentation de la librairie standard du langage RML
+- guide pour la programmation de firmwares en RML
 
-YrU2vtrkR16VIZF3KwNHlLJbPBbRS9M/tOoYjN/HM3VZ85yV/NK8Q36Bt1WmbP85
-mcNAL+IHk45KGfJci962kFnm42r4kzi+ZTU0JjDKjLEyIFoKnsrx5KhAs918f95C
-uHW1GCO1XrMvd4Wxy8zLLuW/zsBR4OsuXYizBnBiA3OhivL79MpaOjJonvxMdnIa
-CIR0i5Hm5XP1eCt9p+M74kT75nm7XRhzsHl7RUR6meYx1OWciD9N9PBXzde5l5WF
-DydbCAKbxL3Q5zzBhY62EEC0pAldbEMABmDAvD3iVy03SOZwC4Rl5wzth8v+7c8c
-L56nxuioC/GKIgb4JlhzHcHc1US/0BbTzoiRuuqdAjduq3CO+SaN1etBZY5ClM+9
-8oFywsWzx4FwVwT3kX1O15+tB5DxThSq+hf0cJ8JkJaUpIanx0Mmv7LK46t3pLCM
-rADeDI6zYqP1E6uRX4t+yzpxH3CCKEMN3ryzb31DeyjifwH3tr/oByaz2qzTLVIB
-OLSD1dqdaTi+KSL1rExdvaSo3pfqmxbg/oODfVRmWJOJmSVCgnIpJPoC06lmsnCe
-Q+1ce/ea/AxQhAZGATuK6TiNQNk90sPVwNUMJX9MzMUJYp/ujoLxfVPRG+2JitTk
-p7fKHVZpthfVDHbuiCpyeZtqYBGT8o49BN58VV6RDiyUzWU0QKybbLm0iu2AUFdn
-5C/YZcFUhKtxWFs+srbNjKG58S8UvfQy/lDMdwECnNrqqZQk7gHtfn7DkFkFVU7L
-NlwrIZJZES/xaHV8eyGcJRxrEFvPMgVfBMSlPXmJBEFaivo5voKzkbHOPJILEVeE
-G1lO1FdH1VAvVibHVMGeHqUdgzcnDbXY+J5ma7F8m2l/mQFr3MiaUNRM5R54bPcK
-1ogofoyifuJQ7TiFR/j+hP+RbmgcffJHO0EnT4URyMxN3UW5GYg60rs8wIsGJ98l
-BxGC62D0GDhWFpDT/VSpMwg19nUI38NvVAr4kz8meuNAme2bbjYoQCgG94w/cAED
-MAkjHTzO66Ex4/hIOVPJ9mfv/moo7lsoDtXYcrZfzUmpJq7GfQnWV8+haKojmsj7
-fMCgxG2edUnhpMeKbVEVAroMF+qFaWGCnBt+0ACY7SmOk5OiO6fv6/Iikuk1VwCm
-zr5/l5m1g5WAueW7aN4JYUUkuvATvyzkI1JbGhsm0hzYhaWwA6szbN8PVcx2NWHX
-VVR9ejxTyojb78I1VQ11rnG/wI5Vz901G5YsUYAavqUlz5EzUIhZDh71S40/83FB
-JF8vPmsnpjFyuLltY++UhChNpbd8OxBTGRF9ij9f2Tk3+EAIQRPeV3AlwcopqTly
-e/fBak3K6X3ZVvkCl/NUD4p2B7XQHle94huHHz2EvfIj934IcIENCf8kzClBcVuc
-oDBLJcbykMxYbLS2lV/Rj5sZ4+jY1MS94s6R/sgoLI4=
+Je vous prie de venir les rapporter à la bibliothèque dans les plus brefs
+délais.  Par ailleurs je vous informe que votre compte à la bibliothèque a
+été suspendu jusqu'au retour des ouvrages concernés.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Bien cordialement,
+Le directeur de la bibliothèque
+(copie au directeur de l'ISIR)

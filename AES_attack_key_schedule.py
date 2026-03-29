@@ -252,11 +252,11 @@ def main():
             print("   ", h)
     else:
         print("[-] Aucun flag direct détecté dans le plaintext.")
-        print("[*] Sauvegarde du plaintext dans plaintext.bin / plaintext.txt")
+        print("[*] Sauvegarde du plaintext dans ./Binary/aes_plaintext.bin / ./Texts/aes_plaintext.txt")
 
-        with open("plaintext.bin", "wb") as f:
+        with open("./Binary/aes_plaintext.bin", "wb") as f:
             f.write(pt)
-        with open("plaintext.txt", "w", encoding="utf-8", errors="replace") as f:
+        with open("./Texts/aes_plaintext.txt", "w", encoding="utf-8", errors="replace") as f:
             f.write(text)
 
 if __name__ == "__main__":
