@@ -1,0 +1,16 @@
+Ce module d'extension pour bibliodrone-NG a été développé par le LPNHE en 
+collaboration avec l'ISIR.  Comme il consomme une grande quantité d'énergie
+en peu de temps, il contient sa propre batterie.  Celle-ci nécessite environ
+10s pour se recharger après usage du module.  Le module contient un dispositif
+d'amplification de la lumière par émission stimulée de radiation qui produit
+un rayonnement lumineux spatialement et temporellement cohérent, dirigé vers
+l'avant.  Ce rayonnement délivre une grande quantité d'énergie en très peu de
+temps au point de contact, ce qui promet de causer des dégats considérables
+(perforation, explosion, ...).  Pour cette raison, il est muni d'un dispositif
+de sécurité destiné à empêcher son utilisation accidentelle : il est désarmé
+et doit être armé avant de pouvoir être utilisé.  Une première version disposait
+d'un dispositif mécanique (ruban rouge "remove to arm"), mais après l'accident
+il a été remplacé par un digicode, qui paraît plus difficile à saisir par erreur.
+Le digicode d'armement est :
+
+28352

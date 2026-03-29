@@ -3,6 +3,9 @@
 ## Informations sur le site:
 https://m1.tme-crypto.fr/
 
+## Source Github (aide)
+https://github.com/NiccoloAntonelliDziri/TME-Crypto-MAIN4-UglixV4-CBouillaguet/tree/master
+
 ## A chaque connexion
 
 ### Se connecter au jeu
@@ -1570,12 +1573,9 @@ hex(R(0)) = 0x2cca1231ebcfe35b
 S(0) = 5120953362034886927
 hex(S(0)) = 0x471147f3676e890f
 Il manque 8 point(s) pour T(0)
-
-                                                                                     UGLIX v4.0 beta
-                                                                                (Firmware Update Station)
-
+                                                             UGLIX v4.0 beta
+                                                        (Firmware Update Station)
                     Active user: AdrienPanguel
-
                     Firmware update key:        471147f3676e890f
 
                                                       +-----------------------------------------------------------+
@@ -1613,7 +1613,7 @@ LIP6  : 24-25 / 4ème + 25-26 + 26-00
 LPNHE : 12-22
 DSI   : 33-34 / 2ème (accès par la tour 34)
 
-[Aller tout 15]
+[Aller tour 15]
 [Utiliser la commande #!sudo pour utiliser l'ascenseur de la tour 15.]
 [Aller à l'étage 3 avec cet ascenseur.]
 [Aller au PPTI.]
@@ -1793,7 +1793,7 @@ Format : dictionnaire JSON
 
 [security engine] tme.pratt:52:1|5911d3fed5bb49921a530f3c2f944e5443b66e021349663136c0b93a192f6445       [VINGTIEME FLAG !!!]
 
-### FLAG 21: Generator TME (poste informatique #4)
+### FLAG 21: Secure/Recovery Mode
 
 [Aller au niveau JU, à l'atrium, premier étage, salle 112.]
 
@@ -1842,7 +1842,7 @@ HASHPWD= 1a70e26a5e14b7eb
 
 [L'username est "MKT01" et le nouveua hash est "1a70e26a5e14b7eb".]
 
-[Entrer les valeurs de l'username et du nveau hash dans le code "112.py" et le lancer avec la commande suivante]:
+[Entrer la valeur du nouveau hash dans le code "112.py" et le lancer avec la commande suivante]:
 
 python3 112.py
 
@@ -1895,7 +1895,707 @@ python3 112.py
 
 [security engine] crc64.preimage:52:1|5c8a3d95af15454ea3f56eada71c4a950c9dd622e4b94f50f420c4ae17880901  [VINGT-ET-UNIEME FLAG !!!]
 
-### FLAG 22: Generator TME (poste informatique #4)
+### FLAG 22: Multi collision attack
+
+[Aller à l'atrium 5ème étage et télécharger le fichier .tar.]
+>>> monter
+Vous êtes au 5ème et dernier étage, qui est vert pomme et rose bonbon.  Ici,
+deux "bras" surplombent le vide du milieu.
+
+Ici se trouve un papier qui traine sur une table.
+
+>>> voir papier
+Dessus il y a écrit : https://m1.tme-crypto.fr/md5_collider.tar.gz
+
+[Extraire le fichier .tar, lancer la commande suivante]:
+
+make
+
+[Retour de la commande]:
+
+g++    -c -o lib/block0.o lib/block0.cpp
+g++    -c -o lib/block1stevens00.o lib/block1stevens00.cpp
+g++    -c -o lib/block1stevens10.o lib/block1stevens10.cpp
+g++    -c -o lib/block1wang.o lib/block1wang.cpp
+g++    -c -o lib/md5.o lib/md5.cpp
+g++    -c -o lib/block1.o lib/block1.cpp
+g++    -c -o lib/block1stevens01.o lib/block1stevens01.cpp
+g++    -c -o lib/block1stevens11.o lib/block1stevens11.cpp
+g++    -c -o lib/main.o lib/main.cpp
+cc    -c -o md5.o md5.c
+cc    -c -o main.o main.c
+g++ lib/block0.o lib/block1stevens00.o lib/block1stevens10.o lib/block1wang.o lib/md5.o lib/block1.o lib/block1stevens01.o lib/block1stevens11.o lib/main.o md5.o main.o -o coll_finder
+
+[Puis lancer les commandes suivantes pour faire la multicollision]:
+
+python3 -c "print('AdrienPanguel'.ljust(64, '\x00'), end='')" > ./Texts/prefix.txt
+
+./md5_collider/coll_finder ./Texts/prefix.txt ./Binary/coll1.bin ./Binary/coll2.bin
+
+[Retour de la commande]:
+
+Generating first block: ........
+Generating second block: S11...........................................
+
+[Commande]:
+
+cat ./Texts/prefix.txt ./Binary/coll1.bin > ./Texts/prefix_new1.txt
+
+./md5_collider/coll_finder ./Texts/prefix_new1.txt ./Binary/sub_collA.bin ./Binary/sub_collB.bin
+
+[Retour de la commande]:
+
+Generating first block: ...
+Generating second block: S00....
+
+[Commande]:
+
+cat ./Texts/prefix.txt ./Binary/coll2.bin > ./Texts/prefix_new2.txt
+
+[Retour de la commande]:
+
+./md5_collider/coll_finder ./Texts/prefix_new2.txt ./Binary/sub_collC.bin ./Binary/sub_collD.bin
+Generating first block: ....
+Generating second block: W................
+
+[Commandes]:
+
+cat ./Texts/prefix.txt ./Binary/coll1.bin ./Binary/sub_collA.bin <(echo -n "h4ckm0d3") > ./Binary/key0.bin
+
+cat ./Texts/prefix.txt ./Binary/coll1.bin ./Binary/sub_collB.bin <(echo -n "h4ckm0d3") > ./Binary/key1.bin
+
+cat ./Texts/prefix.txt ./Binary/coll2.bin ./Binary/sub_collC.bin <(echo -n "h4ckm0d3") > ./Binary/key2.bin
+
+cat ./Texts/prefix.txt ./Binary/coll2.bin ./Binary/sub_collD.bin <(echo -n "h4ckm0d3") > ./Binary/key3.bin
+
+xxd -p ./Binary/key0.bin | tr -d '\n'
+
+[Retour de la commande]:
+
+41647269656e50616e6775656c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d6dbbc80da37cb14e71d0738b77ee29d754caa8bdaa5763310127f8db34092cf0ac9a704ce04287febedd33ae537257c1d8ff2add0fb450e71833080408278dde4100ec022e7e0e11353a8694a320e6dc35fde68322c1b7e768b834f4f0c2f41692cb18a02a6a2d727bdeb782a7a8143945c8987bfc106be13eaffa2d1f3a573af55723961c640fff6125e1fbf4d9739aa7e1de22efa6271238a373d12acc0f76b0115ebcf6297ba8fda6f6300484dad1222449ea438e57050e6d5581c2e04d7efe5b9f2ee061d87b58b01f0fda8231eca57caffeb3a4156d13715c94c7279a2cd395fb657c99137bb509c8f84b2574a981acaffb2fa173ed3973e93ffefde716834636b6d306433
+
+[Commande]:
+
+xxd -p ./Binary/key1.bin | tr -d '\n'
+
+[Retour de la commande]:
+
+41647269656e50616e6775656c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d6dbbc80da37cb14e71d0738b77ee29d754caa8bdaa5763310127f8db34092cf0ac9a704ce04287febedd33ae537257c1d8ff2add0fb450e71833080408278dde4100ec022e7e0e11353a8694a320e6dc35fde68322c1b7e768b834f4f0c2f41692cb18a02a6a2d727bdeb782a7a8143945c8987bfc106be13eaffa2d1f3a573af55723961c640fff6125e1fbf4d9739aa7e1d622efa6271238a373d12acc0f76b0115ebcf6297ba8fda6f6300c84dad1222449ea438e57050e6d5d81c2e04d7efe5b9f2ee061d87b58b01f0fda8231eca57ca7feb3a4156d13715c94c7279a2cd395fb657c99137bb509c8f8432574a981acaffb2fa173ed3973e13ffefde716834636b6d306433
+
+[Commande]:
+
+xxd -p ./Binary/key2.bin | tr -d '\n'
+
+[Retour de la commande]:
+
+41647269656e50616e6775656c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d6dbbc80da37cb14e71d0738b77ee29d754caa0bdaa5763310127f8db34092cf0ac9a704ce04287febedd33ae5b7257c1d8ff2add0fb450e71833000408278dde4100ec022e7e0e11353a8694a320e6dc35fdee8322c1b7e768b834f4f0c2f41692cb18a02a6a2d727bdeb782afa8043945c8987bfc106be13eaff22d1f3a5737ae2affc616c74ca658d91c74eb772be00bcafb0f913cea610d67636ed1f06e328fb0ddff2d445dd0b68f31b3d10092f6fb50919360156bb8987fbc04d4551dfc644d11b541cc70e6da67c2c664e7d8c549168a8915384ed2465b2b6cbe7600e1d0fbe2678b36f478697c9699798f11de4c4110956cd0327866620def8eeff246834636b6d306433
+
+[Commande]:
+
+xxd -p ./Binary/key3.bin | tr -d '\n'
+
+[Retour de la commande]:
+
+41647269656e50616e6775656c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d6dbbc80da37cb14e71d0738b77ee29d754caa0bdaa5763310127f8db34092cf0ac9a704ce04287febedd33ae5b7257c1d8ff2add0fb450e71833000408278dde4100ec022e7e0e11353a8694a320e6dc35fdee8322c1b7e768b834f4f0c2f41692cb18a02a6a2d727bdeb782afa8043945c8987bfc106be13eaff22d1f3a5737ae2affc616c74ca658d91c74eb772be00bcaf30f913cea610d67636ed1f06e328fb0ddff2d445dd0b68f31b3d90092f6fb50919360156bb8987fb404d4551dfc644d11b541cc70e6da67c2c664e7d8c54916828915384ed2465b2b6cbe7600e1d0fbe2678b36f478697c9699718f11de4c4110956cd03278666205ef8eeff246834636b6d306433
+
+[Aller à l'ISIR, niveau du haut, tapper "hall", "monter", "ZRR"]:
+                                                                             UGLIX v4.0 beta
+                                                                            (Secure door lock)
+                    Active user: AdrienPanguel
+                    username: AdrienPanguel
+
+Enter your 4 security keys:
+                    key 0:                      41647269656e50616e6775656c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d6dbbc80da37cb14e71d0738b77ee29d754caa8bdaa5763310127f8db34092cf0ac9a704ce04287febedd33ae537257c1d8ff2add0fb450e71833080408278dde4100ec022e7e0e11353a8694a320e6dc35fde68322c1b7e768b834f4f0c2f41692cb18a02a6a2d727bdeb782a7a8143945c8987bfc106be13eaffa2d1f3a573af55723961c640fff6125e1fbf4d9739aa7e1de22efa6271238a373d12acc0f76b0115ebcf6297ba8fda6f6300484dad1222449ea438e57050e6d5581c2e04d7efe5b9f2ee061d87b58b01f0fda8231eca57caffeb3a4156d13715c94c7279a2cd395fb657c99137bb509c8f84b2574a981acaffb2fa173ed3973e93ffefde716834636b6d306433
+                    key 1:                      41647269656e50616e6775656c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d6dbbc80da37cb14e71d0738b77ee29d754caa8bdaa5763310127f8db34092cf0ac9a704ce04287febedd33ae537257c1d8ff2add0fb450e71833080408278dde4100ec022e7e0e11353a8694a320e6dc35fde68322c1b7e768b834f4f0c2f41692cb18a02a6a2d727bdeb782a7a8143945c8987bfc106be13eaffa2d1f3a573af55723961c640fff6125e1fbf4d9739aa7e1d622efa6271238a373d12acc0f76b0115ebcf6297ba8fda6f6300c84dad1222449ea438e57050e6d5d81c2e04d7efe5b9f2ee061d87b58b01f0fda8231eca57ca7feb3a4156d13715c94c7279a2cd395fb657c99137bb509c8f8432574a981acaffb2fa173ed3973e13ffefde716834636b6d306433
+                    key 2:                      41647269656e50616e6775656c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d6dbbc80da37cb14e71d0738b77ee29d754caa0bdaa5763310127f8db34092cf0ac9a704ce04287febedd33ae5b7257c1d8ff2add0fb450e71833000408278dde4100ec022e7e0e11353a8694a320e6dc35fdee8322c1b7e768b834f4f0c2f41692cb18a02a6a2d727bdeb782afa8043945c8987bfc106be13eaff22d1f3a5737ae2affc616c74ca658d91c74eb772be00bcafb0f913cea610d67636ed1f06e328fb0ddff2d445dd0b68f31b3d10092f6fb50919360156bb8987fbc04d4551dfc644d11b541cc70e6da67c2c664e7d8c549168a8915384ed2465b2b6cbe7600e1d0fbe2678b36f478697c9699798f11de4c4110956cd0327866620def8eeff246834636b6d306433
+                    key 3:                      41647269656e50616e6775656c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d6dbbc80da37cb14e71d0738b77ee29d754caa0bdaa5763310127f8db34092cf0ac9a704ce04287febedd33ae5b7257c1d8ff2add0fb450e71833000408278dde4100ec022e7e0e11353a8694a320e6dc35fdee8322c1b7e768b834f4f0c2f41692cb18a02a6a2d727bdeb782afa8043945c8987bfc106be13eaff22d1f3a5737ae2affc616c74ca658d91c74eb772be00bcaf30f913cea610d67636ed1f06e328fb0ddff2d445dd0b68f31b3d90092f6fb50919360156bb8987fb404d4551dfc644d11b541cc70e6da67c2c664e7d8c54916828915384ed2465b2b6cbe7600e1d0fbe2678b36f478697c9699718f11de4c4110956cd03278666205ef8eeff246834636b6d306433
+
+                                                                            +----------------+
+                                                                            | Access granted |
+                                                                            +----------------+
+
+[security engine] multicollision:52:1|aa31c1dea2791f7b1bc8eb6356ce9dc59d16d0ea9d14e72448f9745c09932884     [VINGT-DEUXIEME FLAG !!!]
+
+### FLAG 23: Fraude bancaire
+
+[Aller au CICSU, auditorium, dans le webservice.]
+[Taper "1. Switch output format" pour passer au format JSON (en haut à gauche).]
+[Taper "3. Get batch of suspicious transactions".]
+[Enregistrer le contenu dans le fichier json ./Certificate/certificate_banque.crs.pem]
+[Lancer le code "banque.py" en remplaçant le bon fichier .json et le bon certificat avec la commande]:
+
+python3 banque.py
+
+[Retour de la commande]:
+
+identifier = ca0a3b666373ab2dca9aaaccce8b7758
+[True, True, False, True, True, False, True, False, False, True, False, True, True, False, True, True, True, True, False, False, True, False, True, True, False, False, False, True, False, False, False, False, False, False, False, True, False, True, True, False]
+[true, true, false, true, true, false, true, false, false, true, false, true, true, false, true, true, true, true, false, false, true, false, true, true, false, false, false, true, false, false, false, false, false, false, false, true, false, true, true, false]
+
+[Convertir en des "1" et des "0" les "True" et "False".]
+
+[Taper "4. Submit results" et entrer l'identifier et la liste des 0 et 1 dans les crochets.]
+
+                    Batch identifier:           ca0a3b666373ab2dca9aaaccce8b7758
+
+What transaction is valid?
+(Give a comma-separated list of 0/1 values, e.g. "0,1,1,0,0,1,...")
+
+                    Analysis result:            1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0
+
+                                                                           +-----------------+
+                                                                           | CORRECT. Bravo! |
+                                                                           +-----------------+
+
+[security engine] credit.fraud:52:1|a289058a258e416aa9847fcf200fce39431fc9b69bf835a3ad956274d0aa95c5     [VINGT-TROISIEME FLAG !!!]
+
+### FLAG 24: Lamport signature
+
+[Aller niveau SB, bibltiothèque, taper "catalogue".]:
+[Dans le catalogue, demander 24 fois le livre 24 et enregistrer le contenu dans le fichier ./JavaScriptObjectNotation/catalogue_lamport.json]
+
+[Taper "catalogue", puis "admin"]:
+
+                                                             UGLIX v4.0 beta
+                                                            (library terminal)
+
+                                                          Library Administrator
+                                                          ---------------------
+        username:  dcook
+        challenge: agent lobby gofer denim rodeo
+        signature:
+[Voici le challenge à signer avec Lamport.]
+[Lancer le code "lamport_sign.py" avec la commande suivante]:
+
+python3 lamport_sign.py
+
+[Retour de la commande + copier-coller le challenge à signer]:
+
+Récupéré 512/512 parties de la clé privée
+Clé privée reconstruite.
+Challenge à signer : agent lobby gofer denim rodeo
+
+Signature Lamport du challenge :
+727670c1b2182c1bf77340b192bf2b6e5c810189dbda4584383326de170f1c2e715acbc7cdc9db247bd4c09e6a63d0f32fc847792f98e3e9c5f5a517e17352884a82d809a3802eb3148a7a7f5759b3648131903b98646c4c0adfd3ec4bbb9a9255eabadab9255e8fb43f6c78b599b94e9199188bd595d42e7e51e0140926ffc8c91e87e9aec22ed77fbb0608e2c91972698b5fc971e09d3ce49584762bebcce0d241715cea2c129973358af049333c3bf6aa5bf4d65d5969994e4b1d48994e9a27859ff7dc65c6b4611a2c377247e1a09ab3d30b51a74b8143cedf005bc4ae34dffab122d95238fd8a5a93ea636a50e5aa8acf7f042889edc0ffa83e875d4f69d56d9bed10122c4f6767a51068997465c208602b75b7f7c63343310ccd7b30df74c232b3d1ff31a3b0cc4ae7a49b6f8ee162b251e14336a4a826e72b33dae52195804aaf61cc3274db4a7da51db77d32d73ee31b77959227c33fc181a135e9e1007144fb21d44c465a0572cfc3a098c248fd964f977e10888a244f144ba0a72699dd37e0238e16caf64e944c5acf54ae2c2189b5138d1fcb9a3d7502e9878d330fd4d8fc30c3b1a5f6993ad821e30275bb6299ecf6aae80e1bfbc90b2cbfc217701aa4196803e745ca4b99802cef4ed6c71fe79e0a991d35f5119560d901cfea9932d6e1ec4e33014701ac21b2c2a469533699536f838e43791658110765997be3f6e8dd0f0b3e98b550dcef4d47772ada3ae80d9e93bab6047b8faecb4375dcb3f8d5b1d30ddfa0e2e73e40b4c59b24b86d15d8495bca56020847931615770abd6713b517239828914a605587a621be16d68426ab8fc50d05d845536850a07df3e73ba20ff29bcdf4e7175aabf47643c379af8c0312d4b7131468779e3e6eb3a89073c629c983423cb3563c936ba518464fce35ee5ef302a258f8b731a877e4978a02205af1515b9f7b156d746f23ad80200b5338985c6630db5006ac586852c75a749cadfe4ec54e28cb642537aa9bc33522db3badaa15e8454561805fb24a3bc15dca06500d46874e88aca68f0c4399713e34600b926ca17f5f0363c2ac6d992f3ee2981c963f517eb140505113faccc251cfa9f6566364a61801140e59125e28bbaa3bf2bd5eb591e851b85d02083f1393d3781a49223d7dc6d0f4cc9c89fd55d977fde3e55cd9959cdf281a88e5d0a2528b664ee9e947fb8bf6ccc5bb6fdd76de804f9faa78941880fa62dd979e02e140b55317390e6c53fdd41222ce37fc58bfaf2fdbf6409c4afe44b590c80b36d25eed7c3ebcea4d020b274400539fd62750686c962cb3ce3a6d3bcfb8b5ad12f859a17c7488ee76e26b6021152d906301ec2d92cbc43ce73fbd34aa0089a43ee85fe5a2339f78daddd2ddc17ae31a90733af6bf3d55a872e754d8d6279aba5aec696dbaf43f8faf285dd13625f71c68cd526aeed1acc6e210a5da7f48c8f3563a36de1b32d93aa66c1929878e98245d55def3019f5c9607d0bf7361adbbd38d3c1475179b6fbe0c652c7536be61663a5aca538f591df8428c5d7098d30b2ec4b7a2b072c389fa81769aaafdafa41b584fcbca350a99345e0d12eb3ecc4917d6f7e1b3750ab41ce7450d0873f604f7dac149e537d8ec7dfee5ee838ac12a752f314c0c16890e6a616a99d9938fe44c511f5cd0dd5a20436a3fc00134651a3459855b8dfadd557f714d6a5674fd31f89cd88aecf04b4228e7c464fcc42fddc59d697a4edd3a4ad30c1d2a03703789826328513f6c8c73faca442aed3fe2718bda2dd4987cc5b57127e6b406040baa373035277ffd7e52abeec41818afe64a0460ab662ff3d49882e33343f32fcee348e8352c223fa9eb69d87e61447dfc906b71d4ec19531fb346c122a9843495efd141a2932b4cdc127b4b9a248615f6fb36dd4b6c71af9e35e04ba69a58a1e74227636e4317c18368fed2e4a12361efc5e439281f8566e7211ee8e8a9fc63b12e77eca2a7ae0c661fb1378d540516d9ff2cf7695171abb28aa2c78b97da0807eb2f12ab046475037f817e36fce48ab52c9fdcbeaa5f0fa24f149a6f2f7cacd81d9408587eb53e5b7e7a6b1dec44178be1af80ab8f5a1aca7b137bac53431c16a48253e6697ab0eb548defd34cde2f052e9b4031e7f6cf351ff26049522524adbf9ffdb6f2159420def10addc329a399205935fdc2364e1d737f695d19cdc91ab1899ed7e6b594bc5c843fe606eb8eeea907fc013999650e81de9c67fc897acef6dc4ded5411f6481a43bbbbe459ad69c5e53243c72851b4c2b27f39e5930349ef99a8661c37b72348679a868f3cc42194129ec5b1f5ab0d2fb5deecf9252f1e2307dd4f94478ce133606e4a220a701e593aadf3102f00e0cfe1c4554994d2555f95f156269cad283e1905c35d13db95b7a28350f94055bb6734c80989f8e3abf025b0babfc7afb35f1096ba04042ed2e1cc17127ae970f0a8c0bed66111e89a905218c10fd854e49472816e642a3ef1398c518b891f11a2e90f3e3e333030b9ec6a2e8270f217da064e02cbac41f25b990c7d2f837d2543916f5dbc195b3c1d694a45d59203bdd3188d7937efdfb6fdf72c4874830942714ad98c00eadda3ff5d4d6b6487c5e2428fd528ae1951c08eecae0daaabaaf8ce8bc35e6c2d6415a63afba6fb190b93bc6078d67e9e241417c1c820fe9304c005801acd53873ad9518850ac22a7ccd7291b8aa0c7240ea8c3c694900e27b10cfba190fddbf778c54e199c1431a758caa4654a6ba1b15202e7bea55d003b3de5706f88dd85867d123f8d931c661889d196df74e64f40c11ea7dedb4af110f451a0db3eb0ed647c523289dea4ab1d00854db072b9f281403194a367e0ad77a439a18820bdb2b67f108a5f620de1639a663dca126eb135ae4e3a004f7574d5a077f9a8fd7054bf61fcc5b30f5fb6c704ba5bded9f8974f3770ea7308f60b5ef76f02a0a11a41a8701d4ce679263a00211979f545beedb1488d949bfe1ff58ce19259df1bfcf10ed196159ff60c38c15844bc9fe052201881e593da4fbf1343c8ca86f9721352a528e3e8da02dd79fd637970c4292ccf20b7f265bc99722fbc998d589735df8342f6b18c55edd7e3a83c099e8f84443dda26e8ee31d41b19841080afdb7d5e5248b2a0fc3aaf0c7073129d69ae85fae822a6d9005b8fd2ffcd6d9117cea361ab041835dcd3bd47b631a3afb011f7e78c9e21c9596ed5178b6297b9d7a224ad36b361242bd8a7be7c2374ed8c544627ea8d5a64da6a7569946d24b751b74cee105a731052ebe90f49a799fa6c40c9ee1998b8e4c01f9299c6c5c92073a87540c8b079506128477b293cca3826b6beafc987848961f6daef21e2b94714c6fd214748b6c6f2485b314e42269ada293c818f212ea5197b462bf2f9cd0d1cbf140159fa19be0f870d30f4a8edb9ae02f20042b28548c8d7b1898c7630c14e62e3db24e34f491bb6cd89ca130ef4870440e058b3a5817d0c8ccfed58526f34d13779e667bf81f94b99018c4c06345ad208e2b8469a2d7f718c0df1d4e8b9322b0380c199ebf5c2abb75e22445bb66de1b106adb0bfc89f8affaa50130bcd6cae693af85d1fd82d53bec71612d2b4b450b14bfec4030c973c6bb35083486f2f4c741a22fb13547a917db67390d4ec7f8d608c6a2074a614b88a71942ebddff313dca04b99973507d05c01a28e1f69916125605639120e44b72ed0ec231c36d9385a46269a3d9455266c4a694094913c2ec5af0e4e487638470a35aee7139a29266ae7d4c8c588af511177c9a9301fbd15bd42953d3ff136a2374fa4a0e43d28f5a3ce41ee890c0d8f802b653791898bc70f21b7171d3a72542e867504dc7551e0c2865572250ed1f45f5823064be8b049baac5b22630c73e9ae1b8e286da37b3c86b90c34dc7ded615f48dbf3f85d83d90449c22a9167c7da8d76254d750b178a8ab8baa368b21c3099fd1e3893a892823aaa5473384e12d30c9060535a32f9f0c5bf27f57f8a13e490587740cea97a53821c62bfa5df7242a62c4176f0a97726e7d16204977bd39b13e5c0df0c3693e95babe0db2f19338822bb3758fff1c7bec14a56d207bf3a346c8c1d5f9715c2b5b0caa08c3a445cfb636445ef35dc779b326c7f889868ce7cb9c0b93131ccfea99eea992bd899da767488d6a8011c12c2228dc5b909cb389982a058997e436d51fc198377786781fa2fdb195fe0358f0fc74708629bf54c958ca9651ee359682545b43a4f9ff25bebdf615fa04e23bc4a7a4dcb3152d53c8f92644e88c7c31e91e2cab3a9dd4c49faea298ca57314a13024aced4cc32f8209155b9231554884bf0d006bdef3f5f9806d0d06820d6091d3231161fbc15a3aae681880917d71cb8192cc356ebeb294a7a7cf6a7cc8733a320a9660433da2bf3b58d7070ceb2719e652a65bb27ebb4584b46e0fe3fb11504b49b1feb18bb686c315110446f71a5101be182282f7e568bfdeb73b010f6af77cc09695a3d6ec9d82f05bf2f13a9929835b66ef7489b5d438db16fd2f5850addd98c6b27d8c97fc6f93594b558ac080d460b8ab76a3beba44f28a47f5f9d90968d45b2859f2aab52b73a14d9aee172889aeb4f596e851c28f443183b383e726eab6b7d0c5ff666ad023e172e893c1df8b6c04d51996f69152ed8418568e0bed4bd4846070594f8725256266ba2fd50278ff906e1875f7474bd3b85102e176d9d03e41f595586ec234c833aa3086798f702cf2df93f127f314eb2115d2c661d809209589edb8ee7f0c95e8435ce3a061c02dd43caa42f92cdb1f5e1b8ead629daffe73a5dbd458fc97cc79ee3ab6565dbaae282bce39797bfaf3d1ac218fc360bfebf2829059fc52fd5cba74b612fc58574351be32e96bf78b79f7c31095feb4ab5af0421f86aa28a1716c07d109a2f6316d0330108ce503069a0fdd8af1d82fede3fe0626ae603da407a6d7b8b327029b340e9948b0482363dfa04a5d849dc8b442cc50f86a058fe8ea4989aa2f852e1f2048be611ec1116fb5706f6141d466ba3df1da4dcd45f492420c7f643ceaaebf158adaf84a624b37cc63fab111588002ecc638538a0aa4f99bb8465b0c049c1a41a824a6f814f7f66fe9fe6b64731ea64aa3e88b7c3f0b268b8c0760e1569adc795ad333858ff3a116ff5c04f37bb2a9e9e2a094e9190f48db3e48ddcb373398e4d09a7a8ed1422cde9790843a80e3afd00a1407aa854612c7cc9bfffff4316f282958af7b57bc25d79e3cd588a95e1ddaeb14ab9c057c9976511e286bf9c48e1bc6698bec1e651ff14945c379a76175be77ae0dafa1bdf433bcfab99deb56f20e773c3c73318b20ac91e1ee9e903eda905aed09e807212052e870ea51832b0784e4525ad78cbe1b5ebb8fdd3f4524ff01171c352e8a4b3f0dbd8ee036cd4f7005f17333b236bf65d564d8d797186995533390c31587eca53d2c7140f208c66f9fc6d35dabe0850fa2f9227f090ea24cbef73bf379e2af1f904f7f05199bd61f9fd94c1f000fa573d4055abd498c0ec186282ef9e0c2b52d1fce3f77a911074ef670dfe130b2efd71d8744b7ae4d644b315a6440f96e1bf79014bf05194b4a9f462fc0a10b10ccc19166ba281b9063f3527bf49be1dc912e5e1d4d82f963610c9948c75af7660193b87f58003618c069aa9c074feeff0b0359a36abffde07286ec9d9fe8cfbd089d41b940a4cdfa1c94a8e7e2025d0cfb18f7c1316e559503a97e96415aa678fafee5c85ef495662b294664136d6ce379c940be2a5f6502dcd9ced581d1ed1a3ab94c121a2efc711567bc5c032fe3af66b401bedd7fc9dd58b7fa10b78de88671df90a84f8918a2181e8819a2f65d728357e004f094ee0aba8821be64c98c34e295a126dbaad1d257c837685273396b617dd00211dca165dae58d62bf345446e19f012007f89597eb95eae4f4f9335f752d6c339c2cc5f6ce136cb68f5b12b2d0ca290d2e6a75da3adc5369bc6597775c8feb4db8bb59929ff46fc102fdec4d6a9c5d4e8f8e6447c3dd8f8eb32b312658a0de1b8c14cfd65e6336d2d797e0e6e25e67243f9fb418777bf46f4f1f3bde865ae9c8261e5f299437c89de438c7139e8180fa079a9b6cbbee3576d22d48ba44e28f3aa7ba6188dc208362671e908cb43996f57d266bbfd1d7acacd0a40e806f3fbb277549a338a23ec7b3265ee0d3472e5bd0c76e93cff9f0d41d0486a50e5bd3f04cfb22435fb31f064ebc9f7109b762c7898b30492c0376aa91cfaf109d12a82e6415bf6de6926d78b783bf86cf4650cf03a8f99c00d29ccbdd47b7ac219f2e5620e18502582c530fd79068a9f684be3f1b4212ba9ca0d5124be5aedfc0ec4be825a38310d1d26766fac7a9bb889fec35d4ea15411085a95984a4ddb8d67bf88a4df79ab45ba29b9aca222eb2fbecfeca1e6b94cbdc6a9e59767bfb0531a0531d5cc464265d1e3aab03c6abdc72c0ddb72be3a894095a49c99d5ba2ced21924a55ec611c1372449f010aa1e67ec28032cedabbbe9f4a7f2bb9cef7446792237114643ac55a9938cb9508533428213a62375ddd93bdbc39dd0bbda299aabd96557685c428af77cf8905dd62e300e8eaf7747f07a3f3a0189881b419a25cffd0fc00212b10d4ff0a81f798a2a36d5d292a0fbf5e80ac2ba89418b5457fba5ea16053f56e5efedb9d51981ec014036a3796bcc31327bb40b14ab196c714212676fd6067219f3e85b5e583ddcefcdb13145504363b480c1f548d5c31ea247d52422518960ef2dfd29114b196714caaf1ee0a4d5226994a2608f4f03232883890fbcba3d7346db31b07fc3b4ea7ad834770134f2a247cfd143f215815499649aa0843b54f2c9dbb86f0465103e1d627a4c8b44a9559aaa4b2276a991836b99341b4d53c917c74d3b92d4cc84e2c993637db4505c8da037d723d72448045b0d3e47d6262f360a14a8cb8c930a251a363cecd6c9487c92b705c0d088b6cb3544a97925245514a89327203ca45536758b6eef5bc79344a5343797cd024267835a3fd12c3486b42649e0eca2f2414ff89845fe0adb12ca412270a78eea21dde1088cf0a767bdb1f7152f543b3af7b0ea747b5b645c2b003ec6ef153b9d0b9a8bacb531e3268caff14ec1445e8d2421aca4ec9cfbe5db3d3dceca346f7bacf0622cb92637152694ef958174b25ae863d24b4f86f85ea750dbc0600ad10a4bbfaa895879205092a5e53f76494e743597a42a76cdb3ac8fba6e87a023efd44164bdbefc453901d02278276419e0c90a8f4cfeefdd8cc63691a357a643a1e7cf98c2327d858b0cd74eae5bc69c8e3bd6daf54d0c50e794dce2620f3854671842aa854ac26a2f56bd361158f7400ad6b65780a3c95870a1d02eb00608145b35e3c58402daf1a1c6cc7f20a9d2c78a94f8bfde562ec8cdad8f317ab66af487555b4630730abe9ad06339debeb173417a4df1b5acd5862405d4c2045e57f42356ef81f226ff436070073db8fb4b0cdf6eff948e262a126db10cfe2aa93e478aceeca9eb570c595dc9fc0b4e3f1f0c5deba4aefebba838dae05aee21e115ae2153e37f3d6fcf19955f121de5622cdeb48fac7a69ea7da082b74123cddb040de6fc703044314b5b0c55d51b2a8714eb7df683710b1737a44cfc908ff31746baad9fc5b3aa77e6b84244a86bc68b0f693a1dc8c5e9fe563cb2faec6629845d3eec7f4b5b641c6e9e8c0dff8989ebd3dd6a77b3b4be8faa84ac2c632944af02b51a6bf16f627b9ed8443fc53acb09ce76b3b8c973d57facf4415ed57fdf4c44a55bd0b147ae318bc69acf25941ae42473227adae1122cfb772205de9ad460f41ab8eecd9177c5483abd680f94d06c9d46834750cb50968af2464a270aafa8e5646f9fb4ae46935d06eff69e25ea50c5fb3cbb24d76b2774cd96934733799e7de3e17c55ea6044c7b7ec7081f2dc2d256916c8a246ff0504e42c8b749ed65adfb62f54c74f8163cf2065a44b184bda4422ae3c5a69b8a6984f28f40306ae8fc75fbdbfaac0c5864d3e7c8b34966af2d648acd09c6c9b1af7682f9b95a3105187684d24355a69b90cf724ac81a0383ec922b7cd4dc33e337f7f4bc4a1a8830560a8a2c425957691ed2666d66d2bfdacbee966ac0a4a3ca78239fddfe60aae8f0b975f9cf859e108562f04470e96a5813210d95b07fb849c2bb967bf923048798f09517cac610de99555284dc6c2ca273f6ed147c22e80dec8e176c83324022ed97164a307eba768f12cc781659383f88280b59cb344a3aa247651a58d2813785b1b4eb02a341ad9bdd7e62fcb14b62ef648844c140eec05cc8d4751b2e5bc78c00aea8e945ea686b76a6e4f46fe38ed16dcf0262268a2564dad49c30a284fa286d7522a5f7f0acc5647be9dd5494890b3d251538127399387368a2da7ae86fd2e7bf814e8bc4d001d3ce8bc5520f78cac21924a540768b34a6fbec7ca58094d950af2c04b6006ceac663ecc7890f4087f9150611f847aa510be9b14c00ac8666ad8095d3e05924575bc1891d1c2a56842e76c22ce44827efdf41cf2bd9338236f0aaacf09b8c1827081072005afdb6d0aafed47bfc8cf77a10a37fde0089f10f59ee27a4cf4d67d8eaee3b1d3882fcdb77e551e40578a8de50c279d2e02651f6cdafcca6aee5d9679f0f7276ebbb2889ad874d41e029defe9457b8b216e3692b4cc5cd124fbb1407d5f6696f17e72e24ed47ab0d64bf696f0d98822b2a21189f4c52cbf5653c0ca436532f74212ba3a44afa6ac32badecd582e68d4a7a0073ca885d95084bf487848e9fd5d83ff34b065e36e307c7809584f3f004b7dc9334ee6f9bd92a2b7b980bdeede57fd44381f21224770870883128b2384db47f0af23ae355507a2ae91d2f5e33795a2348fb7910384d78384f8b0cda1237c5d0b3e0d08f7c849e55c6623d67ef51b45d3857502636ad3695efb749bd745789a0929f3cf2e3d3343cd93fc2ea385695d556a6e964fa6972d7095b30847f492da410cb494ac6e52523f9187ecd0247c486417c48b5fac72d69afa5846352a9ce47aea6dfaa74c5f85d4c96e839ecc1eadab1944860ebc9c64aa972df2658050af3410368dbd704d517d22d62ddfab72b3c55b043ffe9223843f318472590255d808795185ccf3473eb4817b7352691e8dec94d4ef5e33a36e82033db55c6b5becdf5307a18830ae2d6a39d5b9cd2519900611b6dd33407f7b0e1a088bf9f6d78306cf489cf1b8c3cfd13e1db6c7a6ea18f8523185ab4e3641789c461aaaa665bb4beb7b8d5de7b2877a0bf83248015c5e695e13fb8f42d572bf5fdc58b4396fa633baa231df93fe4a5e9c7a8c6ea6595011df810a2ea8dee8dc737546d41f06e0834a148fd7fe1562d5d158e1f1204ecda0bee41b94450fa3a60cb8e449533b3261ee4a2ea9ff515993704f269a6a12fa07156e480a2d2280c8870e9523ea6a90cd1fa1fd18e563d8584025ed29a7f6f0510479c936615241b5acbc59825099fe25cc5117b38f61f9094be7e99bab6771531e3efb45b5ca948944ea3228794d02ae3dc1d0f670395bf5a6d9e8d6dfcfb1f3d5e8d1827db80b82099cffa27725a2e84659e01e18ca14163639c6bedf69bf57e3029396b338cc4df654f924a592eceaf171acde39dd591cda0f90c63d51e6c3b0d6e15326d7c289d04717b05eae4d1021c610cc82b81d402f521fa5fdd7521ef33444d770e6e22a75176cc9bfb89d0e6f22cef3397d49c13ede0da9ed9e58f2ba26c3079ff0c7ad914573e6a458cfb3884dd10d4511d3e30ecbc807465a86f129ac068a1e902e098c1258df84d02e1cd17ae06533814f1c746b3034fae12654cd387ff42c30f1a8ac8d2971fc3d9c0ac95093e26670c1f6623cda66ecd03be8bf63d7067ba0fa249b0ed3be3ecaae5bd43dd386318efb741f91d2d605721da6e7af0005afe87ff110d1d871b35d1b49d94ca44028d9dc7c8eb495a94049987dd7deb7b9ff0378691ec1dca05951513260f5f357d5e4438a9ce79aa651c8e3cb217842ea810552fc0a8a63cf21279e3a17179ea2b8fa1ec9d5a4bde7baafccde3e367c856b516ce1df3ddfd87c1c9e38fd2c8f2d6f183efa2a656c00507b4e08e46784e14d91fc73678287c2a5d20a29bf96b2fbe6d966af36076d169f9e70d5e47c8d17e55e18e98ba607d89fe1e12f1383eaec490a7776924b3159386d2d029f2e66a5d14148793565c5393016255a082808d394c19e83d557a395e69dcb0591d1dec110c8f12d9fb0a0c5f4e1a893d20c7705b9c2db462ac29c267ad2177166001e962c4b55aaf2be091f3d0d64cb314284d402a352d57286e7ea508b5363e7543750b65c75d9ea550ab885609c1d5d12a0bc98581daf760f4c7fad028fe024f05e0b3cb2b0af056add551493fb609678b1c983344696456cdfca89cd7b3f24e7b595c8a5d3832dd6e5c0a746b842dad15a744410df74b63c6128f7252134caba300e9f436272b4911dcbccfba961871ffb2c7d283e8fdb50007c7fbfc508499fc4e5fd449b9b92b0cc7e96a7462ae5fb8ef8a3beae366bd7bc829159cc459b22bb30092022b48de3a69e78c99d198c90d1ec132dd1572271c8143121a5c84bd60b918127e682b44d38508130a90ceec5af9760e084335b0223c0fbafa358bd1dd66f3f76d4c520186fd223681e1e9407d08a2e8d4d459d0a1ebe994db725bbc1a5d0e9f93d4b81dfb7cfe22522432bec8cd7be47256cf6f931e9488d50e07009c32b676f952a841e2b476009ff3b8819eaa83680480fd18f1e8237609d5fd44dcc384ce51e7bd55c0f09e16a33accac282b607f9873dbfa2c37503383a649c2791a064f953d723dba0bf39ebfff743e990b22ddd2e0c3935e0b10c9f5b9439968634ab36a8a438e71cbd5883c0f5bad3080c8160ab37359e5afed27f77f0ead3b776d6bd90e4ce2e333099e3c0102862f886e2e6395cd42b1e5417b9bcccf9a93c87ff6352bee0207673eb50b1ea8a87971e18fb6124eded2e1e44f53981db18f2af6f70d3683a3db49069cf0e7b659d700e894dd41e484ada15c48158a9e733ca5199b6fdf545999edc5d15e8082bd4efcdc2408be3ea87e6b769bbb599c56474c8f15f3886398cbf08b5cbd3ee46d5724c96793cd3371c4ffb965ef281a1631af7b5a79b6f221cb9e1f9d0222866abd7189f1443a816d604b326d73b01df73d8154e5ca952fd1c6b7911ec5d3cd95013b6b93878f96786b91349054417d2fe2fd1324500685fb189454a824760984fda5e8a3f5a303802bc70311418beaee0c3f25aec8b726241f0fca645b8f0903c3584ded4a549c407a19d5d748da37a9ed3b635d3b222051f078b4a378562aadb6fb9e32ad99e7f98c1f7751e0c483e179201848e2c0798c0d6a7d77e61b7394b81a339dbaecac9867aac66e9904c4fa63c264e0b94636fddd4361b8b6f6517510eddfb1aed671fe74cabe270e4bc2c353da1cf556a2e453c104e64e52886ee32cb7205121dafc15c5b24b95d3c8b2982b10fad81b1fecf3d154dd2ba708cc6f13f2b775ec5bce0287fbdf2b0
+
+[Entrer cette signature.]
+                                                            +----------------+
+                                                            | Access granted |
+                                                            +----------------+
+
+Le verrou se désengage et vous pénetrez dans la bibliothèque.
+
+Vous êtes maintenant à l'intérieur de la bibliothèque déserte.  C'est
+parfaitement silencieux.  D'ici vous pouvez aller dans l'aile Est ou bien
+dans l'aile Ouest.
+
+[security engine] multi.lamport:52:1|c8ef4b69021b534ba8bb6e0c85efdd4d77947289ca6c632601d950b164acf904   [VINGT-QUATRIEME FLAG !!!]
+
+### FLAG 25: 
+
+                                                                                                             UGLIX v4.0 beta
+                                                                                                       (experimental RML compiler)
+
+                    This program has been made in the hope that it will be useful,Active user: AdrienPanguel
+                    but WITHOUT ANY WARRANTY; By using this program you implicitly agree
+                    that it comes without even the implied warranty of MERCHANTABILITY,
+                    FITNESS FOR A PARTICULAR PURPOSE and you acknowledge that its use is
+
+
+                    THIS COMPILER IS A RESEARCH PROJECT --- PRE-ALPHA QUALITY
+                    DO NOT USE FIRMWARE BUILT USING THIS PROGRAM IN PRODUCTION.
+
+
+                    UPLOADING A CUSTOM FIRMWARE WILL VOID THE WARRANTY.
+
+
+-----BEGIN RML PROGRAM -----
+extern type string.
+extern type ROOM.
+
+extern def print (message : string) -> nothing.
+extern def here () -> ROOM.
+extern def room_name(room : ROOM) -> string.
+
+def main(action : string maybe, direction : string maybe, item : string maybe) -> nothing {
+  let location : ROOM = here();
+  if room_name(location) != "ISIR_CAFET" {
+    print("0xbadCAFE !!!"); 
+    panic                               # nobody steals our hackable coffee pot!
+  };
+  # ... rest of the coffee-making program
+  # ejecting previous roast
+  # grounding fresh beans
+  # sending water
+  # etc...\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x12\x38
+print("Give me the flag!");
+}
+-----END RML PROGRAM -----
+
+
+
+
+
+
+
+
+
+INPUT PROGRAM:
+(Any line that contains ``-----BEGIN RML PROGRAM -----'' is ignored.
+Input stops on any line that contains ``-----END RML PROGRAM -----''.
+This line is ignored.  No (\n is added at the end of the previous line).
+>>> -----BEGIN RML PROGRAM -----
+>>> extern type string.
+>>> extern type ROOM.
+>>>
+>>> extern def print (message : string) -> nothing.
+>>> extern def here () -> ROOM.
+>>> extern def room_name(room : ROOM) -> string.
+>>>
+>>> def main(action : string maybe, direction : string maybe, item : string maybe) -> nothing {
+>>>   let location : ROOM = here();
+>>>   if room_name(location) != "ISIR_CAFET" {
+>>>     print("0xbadCAFE !!!");
+>>>     panic                               # nobody steals our hackable coffee pot!
+>>>   };
+>>>   # ... rest of the coffee-making program
+>>>   # ejecting previous roast
+>>>   # grounding fresh beans
+>>>   # sending water
+>>>   # etc...\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x12\x38
+>>> print("Give me the flag!");
+>>> }
+>>> -----END RML PROGRAM -----
+
+
+
+INPUT PROGRAM:
+(Any line that contains ``-----BEGIN RML PROGRAM -----'' is ignored.
+Input stops on any line that contains ``-----END RML PROGRAM -----''.
+This line is ignored.  No (\n is added at the end of the previous line).
+>>> -----BEGIN RML PROGRAM -----
+>>> extern type string.
+>>> extern type ROOM.
+>>>
+>>> extern def print (message : string) -> nothing.
+>>> extern def here () -> ROOM.
+>>> extern def room_name(room : ROOM) -> string.
+>>>
+>>> def main(action : string maybe, direction : string maybe, item : string maybe) -> nothing {
+>>>   let location : ROOM = here();
+>>>   if room_name(location) != "ISIR_CAFET" {
+>>>     print("0xbadCAFE !!!");
+>>>     panic                               # nobody steals our hackable coffee pot!
+>>>   };
+>>>   # ... rest of the coffee-making program
+>>>   # ejecting previous roast
+>>>   # grounding fresh beans
+>>>   # sending water
+>>>   # etc...\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x12\x38
+>>> print("Give me the flag!");
+>>> }
+>>> -----END RML PROGRAM -----
+[Dumping listing]
+[   1] extern type string.
+[   2] extern type ROOM.
+[   3]
+[   4] extern def print (message : string) -> nothing.
+[   5] extern def here () -> ROOM.
+[   6] extern def room_name(room : ROOM) -> string.
+[   7]
+[   8] def main(action : string maybe, direction : string maybe, item : string maybe) -> nothing {
+[   9]   let location : ROOM = here();
+[  10]   if room_name(location) != "ISIR_CAFET" {
+[  11]     print("0xbadCAFE !!!");
+[  12]     panic                               # nobody steals our hackable coffee pot!
+[  13]   };
+[  14]   # ... rest of the coffee-making program
+[  15]   # ejecting previous roast
+[  16]   # grounding fresh beans
+[  17]   # sending water
+[  18]   # etc...\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x12\x38
+[  19] print("Give me the flag!");
+[  20] }
+[Parsing source]
+[Compiling]
+- print
+- here
+- room_name
+- main
+[Installing firmware on micro-SD card]
+ - 654 bytes program
+ - SHA256(program) = 6971fe19722ed424494fa2fbfb6d98201460c947798d900626015bfe1fa65b26
+
+                    Enter MAC:
+
+
+
+
+
+
+
+
+
+
+
+INPUT PROGRAM:
+(Any line that contains ``-----BEGIN RML PROGRAM -----'' is ignored.
+Input stops on any line that contains ``-----END RML PROGRAM -----''.
+This line is ignored.  No (\n is added at the end of the previous line).
+>>> -----BEGIN RML PROGRAM -----
+>>> extern type string.
+>>> extern type ROOM.
+>>>
+>>> extern def print (message : string) -> nothing.
+>>> extern def here () -> ROOM.
+>>> extern def room_name(room : ROOM) -> string.
+>>>
+>>> def main(action : string maybe, direction : string maybe, item : string maybe) -> nothing {
+>>>   let location : ROOM = here();
+>>>   if room_name(location) != "ISIR_CAFET" {
+>>>     print("0xbadCAFE !!!");
+>>>     panic                               # nobody steals our hackable coffee pot!
+>>>   };
+>>>   # ... rest of the coffee-making program
+>>>   # ejecting previous roast
+>>>   # grounding fresh beans
+>>>   # sending water
+>>>   # etc...\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x12\x38
+>>> print("Give me the flag!");
+>>> }
+>>> -----END RML PROGRAM -----
+[Dumping listing]
+[   1] extern type string.
+[   2] extern type ROOM.
+[   3]
+[   4] extern def print (message : string) -> nothing.
+[   5] extern def here () -> ROOM.
+[   6] extern def room_name(room : ROOM) -> string.
+[   7]
+[   8] def main(action : string maybe, direction : string maybe, item : string maybe) -> nothing {
+[   9]   let location : ROOM = here();
+[  10]   if room_name(location) != "ISIR_CAFET" {
+[  11]     print("0xbadCAFE !!!");
+[  12]     panic                               # nobody steals our hackable coffee pot!
+[  13]   };
+[  14]   # ... rest of the coffee-making program
+[  15]   # ejecting previous roast
+[  16]   # grounding fresh beans
+[  17]   # sending water
+[  18]   # etc...\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x12\x38
+[  19] print("Give me the flag!");
+[  20] }
+[Parsing source]
+[Compiling]
+- print
+- here
+- room_name
+- main
+[Installing firmware on micro-SD card]
+ - 654 bytes program
+ - SHA256(program) = 6971fe19722ed424494fa2fbfb6d98201460c947798d900626015bfe1fa65b26
+
+                    Enter MAC:                  3330ac7b92616735e8947af74f55a5e3b96bb55de3ebb2baf87a96980cc3f545
+
+
+
+[security engine] length.extension:52:1|e7a643d1fd256665317b0301a4c45e6ee6a99fb99be3124ceb5f7d9ea687a2d5
+
+### FLAG 26:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[Aller au LPNHE]:
+LPNHE (barre 12-22)
+
+           couloir 12-22/2 ------- dispositifs expérimentaux
+                         ┊
+                         cafétéria
+                             |
+ rotonde 12/1 ------- couloir 12-22/1 ------- rotonde 22/1
+                             |
+                            117
+
+[Récupérer la clé USB et le Kit de développement pour dispositifs USB.]
+[Dans le couloir 12-22/1, utiliser le kit]:
+>>> utiliser kit
+mtp-probe[28455]: checking bus 1, device 4: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-6"
+kernel: usb 4-1: new SuperSpeed USB device number 2 using xhci_hcd
+kernel: usb 4-1: New USB device found, idVendor=0781, idProduct=5595, bcdDevice= 1.00
+kernel: usb 4-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+kernel: usb 4-1: Product:  SanDisk 3.2Gen1
+kernel: usb 4-1: Manufacturer:  USB
+kernel: usb 4-1: SerialNumber: 00026332061923100416
+mtp-probe[28947]: checking bus 4, device 2: "/sys/devices/pci0000:00/0000:00:0d.0/usb4/4-1"
+kernel: usb-storage 4-1:1.0: USB Mass Storage device detected
+kernel: scsi host0: usb-storage 4-1:1.0
+kernel: usbcore: registered new interface driver usb-storage
+mtp-probe[28961]: checking bus 4, device 2: "/sys/devices/pci0000:00/0000:00:0d.0/usb4/4-1"
+kernel: usbcore: registered new interface driver uas
+kernel: scsi 0:0:0:0: Direct-Access      USB      SanDisk 3.2Gen1 1.00 PQ: 0 ANSI: 6
+udisksd[1042]: Mounted /dev/sda2 at /media/49B9-C6DD on behalf of uid 1000
+kernel: FAT-fs (sda2): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+kernel: sd 0:0:0:0: [sda] 3913728 512-byte logical blocks: (2.00 GB/1.87 GiB)
+kernel: sd 0:0:0:0: [sda] Write Protect is off
+kernel: sd 0:0:0:0: [sda] Mode Sense: 43 00 00 00
+kernel: sd 0:0:0:0: [sda] No Caching mode page found
+kernel: sd 0:0:0:0: [sda] Assuming drive cache: write through
+kernel: sd 0:0:0:0: [sda] Read error block 0003: incorrect checksum
+kernel: sd 0:0:0:0: [sda] Read error block 0007: incorrect checksum
+kernel: sd 0:0:0:0: [sda] Read error block 001b: incorrect checksum
+kernel: sd 0:0:0:0: [sda] Read error block 0020: incorrect checksum
+udisksd[2972]: corrupted entry 82729 in FAT.
+kernel: Mount process exited, code=exited, status=32/n/a
+kernel: Failed with result 'exit-code'.
+
+Auto-diagnostic: corrupted support (unreliable storage chips)
+
+Attempting recovery
+Activated recovery module: PNG JPG DOC ODT MP3 RSA AES BMP WAV
+Recovering content...
+
+0002d970: 84cd 4845 adcf 7850 af31 a7a2 d46b cf52  ..HE..xP.1...k.R
+0002d980: 5d52 da0c dab7 c40a 73bb ae41 3239 e5e5  ]R......s..A29..
+0002d990: 5029 6fee 7266 5fe8 36a2 37cb fc61 4368  P)o.rf_.6.7..aCh
+0002d9a0: 7baf 3a68 d703 760d 3b81 1a65 ed67 9cbd  {.:h..v.;..e.g..
+0002d9b0: 6bd7 8419 c31e 2d9e bd8f 368e 3163 47d2  k.....-...6.1cG.
+0002d9c0: 8c40 0de5 a3eb 8c85 01a1 c240 88b2 1d2a  .@.........@...*
+0002d9d0: 1943 4cb3 82c3 c851 3596 74a3 e2d0 1dd6  .CL....Q5.t.....
+0002d9e0: 029b 6766 f871 2cc8 9074 9725 868e 215c  ..gf.q,..t.%..!\
+0002d9f0: 6608 1aed 5b44 8f2a 5152 8c54 11ac 9fcd  f...[D.*QR.T....
+0002da00: 574f 441b 8957 7b7a 9468 9fa4 210b 077d  WOD..W{z.h..!..}
+0002da10: 5eab fa8d d899 c362 5295 9291 c4f6 1667  ^......bR......g
+0002da20: cf92 140e 4f44 9707 b5ac 740f 5854 c91f  ....OD....t.XT..
+
+POTENTIAL AES KEY DETECTED
+
+K[ 0] = 88?e2e3??2bb?7??8eb55f?6d1??ea?7
+K[ 1] = 0bf?7?02?94265f?77f73aa?a6e6d0?f
+K[ 2] = ?7?90?267ecb6?d?093c?b?0afda8b?f
+K[ 3] = ?4b4?6?f?a7fb?87a343ecf70c?96788
+K[ 4] = ???112a?984e?5263??d49?137??2?59
+K[ 5] = 000?d93b984e?c?d??4335cc94??1b??
+K[ 6] = ?e?ff319b6e1?f0?1?a2bac88175a15d
+K[ 7] = f39db??545?c30?150de8ad?d1a?2b84
+K[ 8] = 116ce02b??10?0??04ce?ae3?56?716?
+K[ 9] = 47?f652813d??51217?1eff1c27?9e96
+K[10] = e??4f??df01b4?1fe?0a?f?e??7e3178
+
+0002da30: f3c5 f2b5 649e 678c e0b2 c98e 5148 0bd5  ....d.g.....QH..
+0002da40: c81e f4ad 5875 7343 cd47 ad5d b352 53c7  ....XusC.G.].RS.
+0002da50: 4f33 bf2d 5fd8 d1dc 2248 8a40 43b7 a892  O3.-_..."H.@C...
+0002da60: 31dd ac91 d358 c512 6011 2f24 cd27 8b9b  1....X..`./$.'..
+0002da70: d14b 8b8f 11cd c609 326e e1b3 bd6f 5154  .K......2n...oQT
+0002da80: d1ca b1dd dc11 4b8b 85cb 2234 90ae 8cdc  ......K..."4....
+0002da90: 893e 7663 7ef8 1c09 0808 08d8 9511 0863  .>vc~..........c
+0002daa0: 40c0 ce82 270f 5c1a 0f71 fa30 5450 2c19  @...'.\..q.0TP,.
+0002dab0: ae41 c550 55a5 8c4f 989b 58c1 eeed 9953  .A.PU..O..X....S
+0002dac0: 5399 9d3a 78cd 0031 e4b9 6395 66f0 d4ee  S..:x..1..c.f...
+0002dad0: 39b1 058d 1864 04ad 9823 8e0d 32e7 9a3c  9....d...#..2..<
+0002dae0: 4486 f0ec c759 379e 39cd 9ffd 325c ea0e  D....Y7.9...2\..
+0002daf0: b08e e2e7 c654 f10b f7c0 18e0 f065 230d  .....T.......e#.
+
+POTENTIAL RSA PUBLIC KEY DETECTED
+
+Modulus (2048 bits):
+    bd:25:d2:42:8f:50:64:ef:84:11:a2:8b:fb:c8:d3:5a
+    37:2e:e3:20:86:e3:69:83:ec:09:ac:35:c9:2b:fd:4e
+    48:9b:ef:b3:14:81:aa:67:32:b3:3c:a9:09:f9:81:9c
+    41:0f:18:57:c0:64:c0:c3:7b:bc:cb:9d:9d:38:46:a2
+    77:c5:84:35:db:15:ed:df:34:57:17:65:61:5e:df:2b
+    bc:f8:24:7f:60:aa:f0:4c:e4:2f:6e:70:89:dc:c7:1a
+    3a:64:51:df:6e:08:7d:7d:d1:77:2d:a6:31:05:51:88
+    70:4f:8e:d9:57:d6:b3:fc:16:c1:93:30:13:6a:22:91
+    10:86:f7:de:1d:ed:5d:4a:49:e8:73:f3:d1:0d:91:61
+    3a:e4:dd:af:66:17:9b:e0:19:3e:1e:9c:5c:22:74:89
+    6c:5a:46:57:26:fb:4b:a9:33:45:43:31:7a:e7:22:1b
+    07:e3:62:69:12:19:88:3c:dd:62:aa:7d:df:06:52:99
+    55:1e:09:b5:36:35:f9:14:3d:56:b7:9b:02:10:3a:17
+    2b:59:5c:2f:dc:5b:d1:93:d1:64:db:ae:d7:76:40:be
+    9f:44:8d:03:72:bd:c2:26:d6:33:b8:dd:2a:f3:8f:0d
+    eb:5c:6c:96:20:8f:25:a1:d9:f3:b6:d2:45:4f:d3:c1
+Exponent: 65537 (0x10001)
+
+0002d9d0: 1943 4cb3 82c3 c851 3596 74a3 e2d0 1dd6  .CL....Q5.t.....
+0002d9e0: 029b 6766 f871 2cc8 9074 9725 868e 215c  ..gf.q,..t.%..!\
+0002d9f0: 6608 1aed 5b44 8f2a 5152 8c54 11ac 9fcd  f...[D.*QR.T....
+0002da00: 574f 441b 8957 7b7a 9468 9fa4 210b 077d  WOD..W{z.h..!..}
+0002da10: 5eab fa8d d899 c362 5295 9291 c4f6 1667  ^......bR......g
+0002da20: cf92 140e 4f44 9707 b5ac 740f 5854 c91f  ....OD....t.XT..
+0002da30: f3c5 f2b5 649e 678c e0b2 c98e 5148 0bd5  ....d.g.....QH..
+0002da40: c81e f4ad 5875 7343 cd47 ad5d b352 53c7  ....XusC.G.].RS.
+0002da50: 4f33 bf2d 5fd8 d1dc 2248 8a40 43b7 a892  O3.-_..."H.@C...
+0002da60: 31dd ac91 d358 c512 6011 2f24 cd27 8b9b  1....X..`./$.'..
+0002da70: d14b 8b8f 11cd c609 326e e1b3 bd6f 5154  .K......2n...oQT
+0002da80: d1ca b1dd dc11 4b8b 85cb 2234 90ae 8cdc  ......K..."4....
+0002da90: 893e 7663 7ef8 1c09 0808 08d8 9511 0863  .>vc~..........c
+0002daa0: 40c0 ce82 270f 5c1a 0f71 fa30 5450 2c19  @...'.\..q.0TP,.
+0002dab0: ae41 c550 55a5 8c4f 989b 58c1 eeed 9953  .A.PU..O..X....S
+0002dac0: 5399 9d3a 78cd 0031 e4b9 6395 66f0 d4ee  S..:x..1..c.f...
+0002dad0: 39b1 058d 1864 04ad 9823 8e0d 32e7 9a3c  9....d...#..2..<
+0002dae0: 4486 f0ec c759 379e 39cd 9ffd 325c ea0e  D....Y7.9...2\..
+0002daf0: b08e e2e7 c654 f10b f7c0 18e0 f065 230d  .....T.......e#.
+0002db00: 9b22 2241 de8d 4723 1443 14b7 613f 862f  .A..G#.C..a?./
+0002db10: b037 e3ee 39b3 3af2 6798 943a 426a 04cc  .7..9.:.g..:Bj..
+
+POTENTIAL RSA SECRET KEY DETECTED
+
+privateExponent:
+    1?:87:88:f?:90:6?:31:d2:1d:?d:45:4f:b9:52:62:?c
+    d5:?b:0b:30:56:5b:dd:?0:60:ed:c1:d?:9b:67:aa:4b
+    5c:de:25:88:40:00:57:53:?9:87:28:32:f3:57:34:8c
+    43:e?:0c:c0:3f:f?:6b:92:8a:73:4f:ab:bf:d3:ec:2e
+    5?:f?:c8:56:a3:e?:1?:6?:?2:14:bc:71:29:58:83:?2
+    0a:47:80:e9:f?:?6:b1:d4:d?:6a:b2:?9:a?:c9:6?:?5
+    0?:9?:c?:?c:0c:ae:f?:a0:37:04:fb:46:8b:40:5c:35
+    76:a?:44:?4:25:?8:c4:3a:?e:de:?8:b7:58:5d:26:52
+    a7:?3:6?:13:01:3d:80:bb:47:1?:61:f8:1f:b3:eb:1c
+    85:2?:55:18:ea:e0:26:16:74:bc:0e:9b:92:??:93:a1
+    a6:1f:94:?4:a5:e5:29:da:fe:a4:b?:?8:de:39:8f:fd
+    7c:ee:?a:07:68:7f:f9:??:2?:b0:b1:b7:8b:f7:71:97
+    3c:cc:c?:?d:9f:?6:16:0a:c1:4e:2f:?b:68:93:cb:8?
+    f0:6e:f6:5a:06:cd:c4:49:e?:ad:b6:ef:e3:f?:df:22
+    ?7:e3:4e:c8:ec:a8:7?:0b:??:47:63:1?:c3:0a:cb:dd
+    ?f:c?:00:90:?b:13:?9:3d:2a:?d:dd:3f:56:fb:43:1b
+prime1:
+    e?:02:28:a5:8?:4d:?3:93:8d:?d:e3:6f:ec:d2:d?:d9
+    18:9a:e1:45:fc:28:a5:89:8d:f2:?d:a3:?5:17:a4:94
+    ab:e5:?a:d3:53:38:19:45:62:05:?c:?2:89:f1:7e:ef
+    d0:d1:39:e3:01:2e:90:fd:1e:53:18:26:96:76:4?:18
+    cc:a8:00:19:64:d?:82:5b:9f:12:30:22:?2:30:3f:f0
+    e9:?1:09:?c:0f:64:??:b2:98:cd:23:f0:74:?9:dc:09
+    21:ea:4e:?b:?2:c3:7f:8?:d5:0f:1?:2c:43:a7:f7:3a
+    65:e6:0d:1e:24:e1:bd:?9:2f:8e:10:7?:8b:?7:4c:?3
+prime2:
+    d8:2?:24:2?:6?:b1:2f:24:11:9d:?0:c?:b7:4?:5f:0f
+    0b:da:d5:a2:94:a3:ba:ca:79:6?:?1:fc:b6:06:17:27
+    56:c1:26:64:9d:9f:a7:?9:d6:fe:cc:23:fe:9f:77:9?
+    c8:ff:f9:?9:a6:97:3b:10:12:2?:ed:8c:eb:28:1b:9f
+    aa:c7:80:1d:?a:fe:4d:?2:5?:43:cb:c6:bd:25:5?:5a
+    81:26:37:05:0?:2a:f7:1c:d9:3a:?d:13:17:2?:17:d0
+    61:0f:6d:a5:1?:?c:aa:?e:d6:11:21:2e:b3:f?:?3:0c
+    ?4:4a:3a:72:cd:0c:cf:5?:65:65:6d:6a:f2:8?:79:7b
+
+0002db00: 9b22 2241 de8d 4723 1443 14b7 613f 862f  .""A..G#.C..a?./
+0002db10: b037 e3ee 39b3 3af2 6798 943a 426a 04cc  .7..9.:.g..:Bj..
+0002db20: 7e70 42ca 708f ded0 6ded e3ce 6ab6 f79b  ~pB.p...m...j...
+0002db30: e207 788b 7b1f d3e8 bdc8 cec5 6984 637f  ..x.{.......i.c.
+0002db40: ebdf 032e 9d8d 1baf 3d8d fc89 e2e8 d0f0  ........=.......
+0002db50: 70e3 3b11 836c acbd 1e91 4ed0 f46e 4040  p.;..l....N..n@@
+0002db60: 40c0 2e8c 4018 0302 0202 0202 0202 0246  @...@..........F
+0002db70: 45f8 bc0d 0808 0808 0808 0808 1815 8130  E..............0
+0002db80: 0604 0404 0404 0404 048c 8a40 1803 0202  ...........@....
+0002db90: 0202 0202 0202 4645 208c 0101 0101 0101  ......FE .......
+0002dba0: 0101 01a3 2210 c680 8080 8080 8080 8080  ...."...........
+0002dbb0: 5111 0863 4040 4040 4040 4040 c0a8 0884  Q..c@@@@@@@@....
+0002dbc0: 3120 2020 2020 2020 2060 5404 c218 1010  1        `T.....
+
+[Lire le mode d'emploi à la cafétééria (juste au-dessus)]:
+
+>>> lire mode d'emploi
+algo = AES-128-CBC
+IV = 35c6590aa778bece7400176aac9b83cf
+
+YrU2vtrkR16VIZF3KwNHlLJbPBbRS9M/tOoYjN/HM3VZ85yV/NK8Q36Bt1WmbP85
+mcNAL+IHk45KGfJci962kFnm42r4kzi+ZTU0JjDKjLEyIFoKnsrx5KhAs918f95C
+uHW1GCO1XrMvd4Wxy8zLLuW/zsBR4OsuXYizBnBiA3OhivL79MpaOjJonvxMdnIa
+CIR0i5Hm5XP1eCt9p+M74kT75nm7XRhzsHl7RUR6meYx1OWciD9N9PBXzde5l5WF
+DydbCAKbxL3Q5zzBhY62EEC0pAldbEMABmDAvD3iVy03SOZwC4Rl5wzth8v+7c8c
+L56nxuioC/GKIgb4JlhzHcHc1US/0BbTzoiRuuqdAjduq3CO+SaN1etBZY5ClM+9
+8oFywsWzx4FwVwT3kX1O15+tB5DxThSq+hf0cJ8JkJaUpIanx0Mmv7LK46t3pLCM
+rADeDI6zYqP1E6uRX4t+yzpxH3CCKEMN3ryzb31DeyjifwH3tr/oByaz2qzTLVIB
+OLSD1dqdaTi+KSL1rExdvaSo3pfqmxbg/oODfVRmWJOJmSVCgnIpJPoC06lmsnCe
+Q+1ce/ea/AxQhAZGATuK6TiNQNk90sPVwNUMJX9MzMUJYp/ujoLxfVPRG+2JitTk
+p7fKHVZpthfVDHbuiCpyeZtqYBGT8o49BN58VV6RDiyUzWU0QKybbLm0iu2AUFdn
+5C/YZcFUhKtxWFs+srbNjKG58S8UvfQy/lDMdwECnNrqqZQk7gHtfn7DkFkFVU7L
+NlwrIZJZES/xaHV8eyGcJRxrEFvPMgVfBMSlPXmJBEFaivo5voKzkbHOPJILEVeE
+G1lO1FdH1VAvVibHVMGeHqUdgzcnDbXY+J5ma7F8m2l/mQFr3MiaUNRM5R54bPcK
+1ogofoyifuJQ7TiFR/j+hP+RbmgcffJHO0EnT4URyMxN3UW5GYg60rs8wIsGJ98l
+BxGC62D0GDhWFpDT/VSpMwg19nUI38NvVAr4kz8meuNAme2bbjYoQCgG94w/cAED
+MAkjHTzO66Ex4/hIOVPJ9mfv/moo7lsoDtXYcrZfzUmpJq7GfQnWV8+haKojmsj7
+fMCgxG2edUnhpMeKbVEVAroMF+qFaWGCnBt+0ACY7SmOk5OiO6fv6/Iikuk1VwCm
+zr5/l5m1g5WAueW7aN4JYUUkuvATvyzkI1JbGhsm0hzYhaWwA6szbN8PVcx2NWHX
+VVR9ejxTyojb78I1VQ11rnG/wI5Vz901G5YsUYAavqUlz5EzUIhZDh71S40/83FB
+JF8vPmsnpjFyuLltY++UhChNpbd8OxBTGRF9ij9f2Tk3+EAIQRPeV3AlwcopqTly
+e/fBak3K6X3ZVvkCl/NUD4p2B7XQHle94huHHz2EvfIj934IcIENCf8kzClBcVuc
+oDBLJcbykMxYbLS2lV/Rj5sZ4+jY1MS94s6R/sgoLI4=
+
+[Installer la librairie "z3" avec la commane]:
+
+pip install z3
+
+
+
+python3 AES_attack_key_schedule.py 
+[*] Reconstruction de la clé AES-128 depuis les round keys corrompues...
+[+] Clé AES-128 retrouvée : 887e2e3cf2bb17fc8eb55f56d111eaa7
+
+[+] Round keys complètes :
+K[ 0] = 887e2e3cf2bb17fc8eb55f56d111eaa7
+K[ 1] = 0bf97202f94265fe77f73aa8a6e6d00f
+K[ 2] = 878904267ecb61d8093c5b70afda8b7f
+K[ 3] = d4b4d65faa7fb787a343ecf70c996788
+K[ 4] = 323112a1984ea5263b0d49d137942e59
+K[ 5] = 0000d93b984e7c1da34335cc94d71b95
+K[ 6] = 2eaff319b6e18f0415a2bac88175a15d
+K[ 7] = f39dbf15457c301150de8ad9d1ab2b84
+K[ 8] = 116ce02b5410d03a04ce5ae3d5657167
+K[ 9] = 47cf652813dfb5121711eff1c2749e96
+K[10] = e3c4f50df01b401fe70aafee257e3178
+
+[*] Déchiffrement AES-128-CBC...
+[+] Score imprimable (raw)      : 0.928
+[+] Score imprimable (unpadded) : 0.930
+
+[+] Plaintext UTF-8 :
+Ce module d'extension pour bibliodrone-NG a été développé par le LPNHE en 
+collaboration avec l'ISIR.  Comme il consomme une grande quantité d'énergie
+en peu de temps, il contient sa propre batterie.  Celle-ci nécessite environ
+10s pour se recharger après usage du module.  Le module contient un dispositif
+d'amplification de la lumière par émission stimulée de radiation qui produit
+un rayonnement lumineux spatialement et temporellement cohérent, dirigé vers
+l'avant.  Ce rayonnement délivre une grande quantité d'énergie en très peu de
+temps au point de contact, ce qui promet de causer des dégats considérables
+(perforation, explosion, ...).  Pour cette raison, il est muni d'un dispositif
+de sécurité destiné à empêcher son utilisation accidentelle : il est désarmé
+et doit être armé avant de pouvoir être utilisé.  Une première version disposait
+d'un dispositif mécanique (ruban rouge "remove to arm"), mais après l'accident
+il a été remplacé par un digicode, qui paraît plus difficile à saisir par erreur.
+Le digicode d'armement est :
+
+28352
+
+[-] Aucun flag direct détecté dans le plaintext.
+[*] Sauvegarde du plaintext dans plaintext.bin / plaintext.txt
+
+
+[Aller "armoire"]:
+
+[SUDO]>>> armoire
+        challenge: cycad adorn runts roper shuck
+
+        signature:
 
 
 
@@ -1937,26 +2637,6 @@ python3 112.py
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-[Retourner au CICSU et prendre les escaliers]
->>> escaliers
-Vous arrivez en haut des marches dans une espèce de cage en verre qui donne
-sur le patio 44-55.  Vous voyez le toit en plastique qui le protège de la
-pluie tout en laissant passer la lumière.  Devant vous se trouve le ``tumulus'',
-une espèce de damier en 3D au milieu du patio.  Enfin, pour l'instant vous êtes
-à  l'intérieur de la cage, et la porte en verre est obstinément fermée.
 
 
 
@@ -2001,32 +2681,7 @@ sauvage.  Un seul module optionnel est attaché ; dessus il y a écrit
 >>> prendre BiblioDrone-NG
 OK
 
-
-
-
-                                                                      UGLIX v4.0 beta
-                                                                     (library terminal)
-
-
-                                                                   Library Administrator
-                                                                   ---------------------
-        username:  dcook
-        challenge: wooed tribs rises hadda dorks
-        signature:
-
-
-
-
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                UGLIX v4.0 beta
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               (Service terminal)
-
-                    Active user: AdrienPanguel
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Public-key directory
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              --------------------
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 
 
                     Username:                   dcook
@@ -2407,7 +3062,7 @@ OK
 
 
 
-[PEUT-ETRE UTIL EPOUR PLUS TARD]
+[PEUT-ETRE UTILE POUR PLUS TARD]
 
 [Au RC-07 de l'Atrium.]
 >>> regarder firmware
@@ -2431,6 +3086,270 @@ Elle est écrite sur le coin d'une enveloppe.  Elle dit :
                                +------------------------------------------------------------+
                                | Firmware updated. New command activated: ``#!item-debug''. |
                                +------------------------------------------------------------+
+
+
+
+
+
+
+
+
+
+
+
+
+[Dans le téléporteur]
+>>> voir clef
+Probablement destinée à ouvrir un coffre-fort.  Elle a cette forme-là :
+               ,gPPRg,
+              dP'   `Yb
+              8)     (8
+              Yb     dP
+               "8ggg8"
+
+
+
+
+>>> voir coffre-fort
+Blindé.  Apparemment, il s'ouvre avec non pas une, non pas deux, mais avec TROIS
+clefs physiques.  Sur la porte, un autocollant vante son haut niveau de technicité
++--------------------------------------------------------------------------------+
+|  Ce coffre-fort Kryptonite Mk IV met en oeuvre les mesures de sécurité         |
+|  les plus modernes :                                                           |
+|  - Blindage en plomb anti rayon-X autour des circuits intégrés                 |
+|  - Plaques de Cobalt-Vanadium-Tungstène anti-perceuse devant la serrure        |
+|  - Relockers en verre (se brisent et bloquent tout en cas de perforation)      |
+|  - Relockers en cire (fondent et bloquent tout en cas d'attaque thermique)     |
+|  - Lasers*, chocs électriques*, gaz toxique**, etc. anti-gangsters             |
+|                                                                                |
+|   * fonctionnent avec de l'énergie renouvelable                                |
+|  ** biodégradable (les composants toxiques sont absorbés par l'adversaire)     |
++--------------------------------------------------------------------------------+
+Il y a aussi un petit afficheur digital :
+               ,gPPRg,             ^             ┌───────┐
+              dP'   `Yb           / \            │       │
+              8)     (8          /   \           │       │
+              Yb     dP         /     \          │       │
+               "8ggg8"         /_______\         └───────┘
+
+                CIRCLE          TRIANGLE           SQUARE
+                ABSENT           ABSENT            ABSENT
+
+DOOR LOCKED
+
+>>> utiliser clef
+Vous insérez la clef dans l'emplacement correspondant dans le coffre.
+Elle s'adapte parfaitement !
+
+>>> voir coffre-fort
+Blindé.  Apparemment, il s'ouvre avec non pas une, non pas deux, mais avec TROIS
+clefs physiques.  Sur la porte, un autocollant vante son haut niveau de technicité
++--------------------------------------------------------------------------------+
+|  Ce coffre-fort Kryptonite Mk IV met en oeuvre les mesures de sécurité         |
+|  les plus modernes :                                                           |
+|  - Blindage en plomb anti rayon-X autour des circuits intégrés                 |
+|  - Plaques de Cobalt-Vanadium-Tungstène anti-perceuse devant la serrure        |
+|  - Relockers en verre (se brisent et bloquent tout en cas de perforation)      |
+|  - Relockers en cire (fondent et bloquent tout en cas d'attaque thermique)     |
+|  - Lasers*, chocs électriques*, gaz toxique**, etc. anti-gangsters             |
+|                                                                                |
+|   * fonctionnent avec de l'énergie renouvelable                                |
+|  ** biodégradable (les composants toxiques sont absorbés par l'adversaire)     |
++--------------------------------------------------------------------------------+
+Il y a aussi un petit afficheur digital :
+               ,gPPRg,             ^             ┌───────┐
+              dP'   `Yb           / \            │       │
+              8)     (8          /   \           │       │
+              Yb     dP         /     \          │       │
+               "8ggg8"         /_______\         └───────┘
+
+                CIRCLE          TRIANGLE           SQUARE
+                PRESENT          ABSENT            ABSENT
+
+DOOR LOCKED
+
+
+
+
+
+
+
+
+
+
+
+[Atrium 3ème étage, bureau bloqué]:
+[SUDO]>>> voir tableau
+Il est dans un bureau dont les "fenêtres" donnent sur la coursive.
+À travers les vitres, on peut lire son contenu :
+
+  Phase-shift module
+  ------------------
+  item_id = 77f782fff611a4ba1ab09145b3e343e3
+
+
+
+
+
+
+
+
+
+
+
+
+[Atrium 4ème étage.]
+[SUDO]>>> voir
+Vous êtes dans une salle de TP avec des ordinateurs partout.  Les derniers
+occupants ont oublié d'effacer le tableau.  Vous trouvez que c'est un peu
+comme sortir des WC sans tirer la chasse d'eau !  En attendant, vous devinez
+que la dernière séance était consacrée au chiffrement RSA.
+
+Ici se trouve un sujet d'un projet.
+
+[SUDO]>>> voir sujet d'un projet
+Ce projet consiste à utiliser les ChipWhisperer (des cartes électroniques
+conçues pour mettre facilement en oeuvre des attaques par canaux auxiliaires).
+Le projet est en deux parties.  Vous devez restituer le matériel à la fin du
+semestre (sinon vous aurez zéro).  Vous devrez présenter les résultats obtenus
+lors d'une petite soutenance à la fin du semestre.  La deuxième partie est
+réservée aux étudiants qui ont déjà fait la première.
+
+Première partie : AES
+---------------------
+Un message a été chiffré avec l'AES-128 en mode CBC, avec une clef et un IV
+aléatoires.  Le bourrage standard a été utilisé (comme dans OpenSSL).  Utilisez
+la ChipWhisperer-lite qui a été mise à vitre disposition et mettez en oeuvre
+une attaque de votre choix pour récuperer le texte clair.
+
+Voici le chiffré :
+AES-CIPHERTEXT = cf57a162cc48de7674da18ace9ce862e3f11511355acb57e5767649d9d2c1465da6a9f3f201f5cbc0c566f823e7d08f83244a0aff14b8c2fc6f1faca003ea219c7f4b5c3be4f7be423c268289c84149d
+
+
+Deuxième partie : RSA
+---------------------
+Un message a été chiffré avec le système RSA PKCS #1 v1.5 (c'est ce que fait
+OpenSSL quand on demande un chiffrement RSA).  Demandez une ChipWhisperer-pro
+aux ingénieurs support de l'équipe pédagogique puis mettez en oeuvre une
+attaque de votre choix pour récuperer le texte clair.
+
+Voici la clef publique :
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0u0LwPCWMF6QcfDCEmuP
+Y3UnIbYQvdxy9Kw19KZYqsFfoSKFrH0zHkhFD1AEPBBGXFYwVoZMBr4m1zIoKd7v
+UhHHSlj8QbApBWxnMdq5qtU1hZHU03d5Ei4Jya5iCyJxUmfpSNPtmfJyvYujpzAt
+WulaJ6I+DtshhgDkDqY+GKyKuE2w0pcItwBZK06vYXN0CLoSl+1nOdhrHV7cH9qb
+qTSgcoYKKOp7nmaqbJxovRB9N5y4M9VFr4f7WvDP5DcT/n6mnQzP4kNRrvklbCuv
+ekBcapX0uhvMVhQms989dQXQRGk4Id5fyUd92X2toR6nIvYSfMWdGuDor8i4SdcF
+8QIDAQAB
+-----END PUBLIC KEY-----
+
+
+Voici le chiffré :
+RSA-CIPHERTEXT = 8beb55fe68bed9d941bc512bc442da028c3e63f1d0561fb589b688a99ac3296e9adb9b94ae66606ccbef727a35a082c7e815506c43b81b1e7200d3204b1b46b4c1f40bbd928cf03223b3c9e1818ae07e457f9ded5dad3074d462488918cc10fb5719affaec3fe0ef2fb2c9dc57d3c4ff44b1651a4ba20d0d40086d5bfdfa528458c9d8ede4c39941c125c543cda2aeb0c7c701c2d034b44546f9c892a85481103de9ec3e745729eee92fff8b3fea4f283efaafb2717edcc252d849527517b09e885c45e64da87feeed4d6724efdac885677c4da3ecf575037985b3483ce66d72ed6c452df273ef62fd3efa21523305e9ee4843a47f652c375dfadb967498ee16
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[LPNHE]
+
+[SUDO]>>> conseil armoire
+Le code doit bien se trouver dans les parages...
+
+[SUDO]>>> utiliser armoire
+        challenge: unsee burst aired hitch quick
+
+        signature:
+
+
+
+
+
+
+
+
+[SUDO]>>> lire mode d'emploi
+algo = AES-128-CBC
+IV = 35c6590aa778bece7400176aac9b83cf
+
+YrU2vtrkR16VIZF3KwNHlLJbPBbRS9M/tOoYjN/HM3VZ85yV/NK8Q36Bt1WmbP85
+mcNAL+IHk45KGfJci962kFnm42r4kzi+ZTU0JjDKjLEyIFoKnsrx5KhAs918f95C
+uHW1GCO1XrMvd4Wxy8zLLuW/zsBR4OsuXYizBnBiA3OhivL79MpaOjJonvxMdnIa
+CIR0i5Hm5XP1eCt9p+M74kT75nm7XRhzsHl7RUR6meYx1OWciD9N9PBXzde5l5WF
+DydbCAKbxL3Q5zzBhY62EEC0pAldbEMABmDAvD3iVy03SOZwC4Rl5wzth8v+7c8c
+L56nxuioC/GKIgb4JlhzHcHc1US/0BbTzoiRuuqdAjduq3CO+SaN1etBZY5ClM+9
+8oFywsWzx4FwVwT3kX1O15+tB5DxThSq+hf0cJ8JkJaUpIanx0Mmv7LK46t3pLCM
+rADeDI6zYqP1E6uRX4t+yzpxH3CCKEMN3ryzb31DeyjifwH3tr/oByaz2qzTLVIB
+OLSD1dqdaTi+KSL1rExdvaSo3pfqmxbg/oODfVRmWJOJmSVCgnIpJPoC06lmsnCe
+Q+1ce/ea/AxQhAZGATuK6TiNQNk90sPVwNUMJX9MzMUJYp/ujoLxfVPRG+2JitTk
+p7fKHVZpthfVDHbuiCpyeZtqYBGT8o49BN58VV6RDiyUzWU0QKybbLm0iu2AUFdn
+5C/YZcFUhKtxWFs+srbNjKG58S8UvfQy/lDMdwECnNrqqZQk7gHtfn7DkFkFVU7L
+NlwrIZJZES/xaHV8eyGcJRxrEFvPMgVfBMSlPXmJBEFaivo5voKzkbHOPJILEVeE
+G1lO1FdH1VAvVibHVMGeHqUdgzcnDbXY+J5ma7F8m2l/mQFr3MiaUNRM5R54bPcK
+1ogofoyifuJQ7TiFR/j+hP+RbmgcffJHO0EnT4URyMxN3UW5GYg60rs8wIsGJ98l
+BxGC62D0GDhWFpDT/VSpMwg19nUI38NvVAr4kz8meuNAme2bbjYoQCgG94w/cAED
+MAkjHTzO66Ex4/hIOVPJ9mfv/moo7lsoDtXYcrZfzUmpJq7GfQnWV8+haKojmsj7
+fMCgxG2edUnhpMeKbVEVAroMF+qFaWGCnBt+0ACY7SmOk5OiO6fv6/Iikuk1VwCm
+zr5/l5m1g5WAueW7aN4JYUUkuvATvyzkI1JbGhsm0hzYhaWwA6szbN8PVcx2NWHX
+VVR9ejxTyojb78I1VQ11rnG/wI5Vz901G5YsUYAavqUlz5EzUIhZDh71S40/83FB
+JF8vPmsnpjFyuLltY++UhChNpbd8OxBTGRF9ij9f2Tk3+EAIQRPeV3AlwcopqTly
+e/fBak3K6X3ZVvkCl/NUD4p2B7XQHle94huHHz2EvfIj934IcIENCf8kzClBcVuc
+oDBLJcbykMxYbLS2lV/Rj5sZ4+jY1MS94s6R/sgoLI4=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
