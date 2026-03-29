@@ -1,6 +1,6 @@
 import json
 from hashlib import sha256
-from lamport_sign import LamportPrivateKey
+from lamport_core import LamportPrivateKey
 
 def load_signatures_from_file(filename):
     with open(filename, "r", encoding="utf-8") as f:

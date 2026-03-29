@@ -132,7 +132,7 @@ breve falls ovate disks bwana
 [TAPPER "1" dans le terminal ouvert.]
 
 >>> terminal
-[security engine] register:52:1|b644c1e209b41a83e9ed72be2f7878f8eb9c34fde9a06f0e9701f5448840e16a      [PREMIER FLAG !!!]
+[security engine] register:52:1|b644c1e209b41a83e9ed72be2f7878f8eb9c34fde9a06f0e9701f5448840e16a      [1er Flag !!!]
 
 ### FLAG 2: Chiffrement asymétrique (RSA)
 
@@ -239,7 +239,7 @@ cat ./Hexa/msg_pki_tutorial.hex
 
 [Le tutoriel est terminé.]
 
-[security engine] pki.tutorial:52:1|8d3a204ece50cdea3d35d5c16bca71d7961841a01f1071dbafd6dc5a441da049      [DEUXIEME FLAG !!!]
+[security engine] pki.tutorial:52:1|8d3a204ece50cdea3d35d5c16bca71d7961841a01f1071dbafd6dc5a441da049      [2e flag !!!]
 
 ### FLAG 3: Générer ma paire de clé RSA publique/privée
 
@@ -257,7 +257,7 @@ openssl pkey -in ./Keys/PrivateKeys/my_sk.pem -pubout -out ./Keys/PublicKeys/my_
 
 [En revenant à "1. Upload public-key", copier-coller cette clé publique]:
 
-[security engine] pki.upload:52:1|a75e2154fd95ebaefb63cb2d469d9d40062e3e32dce8c339b154f634d8f0eeb1        [TROISIEME FLAG !!!]
+[security engine] pki.upload:52:1|a75e2154fd95ebaefb63cb2d469d9d40062e3e32dce8c339b154f634d8f0eeb1        [3e flag !!!]
 
 ### FLAG 4: Signer un message avec ma clé privée
 
@@ -286,7 +286,7 @@ cat ./Hexa/sign_challenge1.hex
                                                     | VALID SIGNATURE --- AUTHORIZATION GRANTED |
                                                     +-------------------------------------------+
 
-[security engine] power.on:52:1|10405faceec8e4e858c1de99d079861bebece22f18a1dfbeaf38819bc16a4891      [QUATRIEME FLAG !!!]
+[security engine] power.on:52:1|10405faceec8e4e858c1de99d079861bebece22f18a1dfbeaf38819bc16a4891      [4e flag !!!]
 
 ### FLAG 5: Attaque de dictionnaire avec un test naïf de clés
 
@@ -562,7 +562,7 @@ FOUND PASSWORD: tautologically
 [Le mdp du compte de "emmalyn87" est "tautologically".]
 [Retourner au laboratoire dans la salle RC-13 pour dévérouiller l'ordinateur avec comme id "emmalyn87" et comme mdp "tautologically".]
 
-[security engine] dict.atk:52:1|8afef7978c20be4f9e3061892df1b4cc4bb0b4ab9b9456110cfd18f1f907ebff        [CINQUIEME FLAG !!!]
+[security engine] dict.atk:52:1|8afef7978c20be4f9e3061892df1b4cc4bb0b4ab9b9456110cfd18f1f907ebff        [5e flag !!!]
 
 ### FLAG 6: Générateur de clé RSA
 
@@ -672,7 +672,7 @@ cat ./Hexa/sign_challenge_atrium.hex
 
 [Signer le challenge de l'atrium avec ce retour.]
 
-[security engine] rsa.keygen:52:1|2f5271e051f27f3fe91081d084796a47f4bb2af80b87e88f6197f7add482fe94      [SIXIEME FLAG !!!]
+[security engine] rsa.keygen:52:1|2f5271e051f27f3fe91081d084796a47f4bb2af80b87e88f6197f7add482fe94      [6e flag !!!]
 
 ### FLAG 7: Connexion CHAP
 
@@ -709,7 +709,7 @@ amply troll morph buffs manta
                                                     | Successful login |
                                                     +------------------+
 
-[security engine] chap.login:52:1|879e8a07b5658f7995eec82d86342dcf245d013441a1b4346d03e5171f7e894a    [SEPTIEME FLAG !!!]
+[security engine] chap.login:52:1|879e8a07b5658f7995eec82d86342dcf245d013441a1b4346d03e5171f7e894a    [7e flag !!!]
 
 ### FLAG 8: Connexion PK
 
@@ -760,7 +760,7 @@ xxd -p ./Binary/sign_challenge_PK.bin | tr -d '\n' > ./Hexa/sign_challenge_PK.he
                                                               | Successful login |
                                                               +------------------+
 
-[security engine] pk.login:52:1|464830fac0d902b1e193a8045a68fef6bdd8222a7e32cf7163a2912ed63eb867        [HUITIEME FLAG !!!]
+[security engine] pk.login:52:1|464830fac0d902b1e193a8045a68fef6bdd8222a7e32cf7163a2912ed63eb867        [8e flag !!!]
 
 ### FLAG 9: Certificat
 
@@ -782,7 +782,7 @@ openssl req -new -key ./Keys/PrivateKeys/sk_atrium.pem -batch -subj '/CN=AdrienP
 
 [Revenir au CICSV et badger la carte]:
 
-[security engine] pki.cert:52:1|8fe700cd09c6930261a71d3f75981625b83f3bcd5391b161e280bbbfd4078350        [NEUVIEME FLAG !!!]
+[security engine] pki.cert:52:1|8fe700cd09c6930261a71d3f75981625b83f3bcd5391b161e280bbbfd4078350        [9e flag !!!]
 
 ### FLAG 10: Chiffrement hybride & Broadcast
 
@@ -835,7 +835,7 @@ U2FsdGVkX19jqtLBLFRzg9ioEkZ7jL5MQcr4dfQsVoE=
 
 [Faire un broadcast dans le terminal de RC-13 en collant le contenu du fichier out.json précédent dans le message.]
 
-[security engine] hybrid:52:1|ba7c7348d96337ca34e197eea20f768c094e604ceb34844d6e9759d3bf0de937          [DIXIEME FLAG !!!]
+[security engine] hybrid:52:1|ba7c7348d96337ca34e197eea20f768c094e604ceb34844d6e9759d3bf0de937          [10e flag !!!]
 
 ### FLAG 11: Signature collective
 
@@ -908,7 +908,7 @@ cat ./Hexa/sign_friend2.hex
                                                         +-----------------------------------+
 [Faire exactement le même broadcast qu'avant.]
 
-[security engine] web.of.trust:52:1|f314e4db3ff276736a12d4109325c66c5aab06318dce9fb8eea4ddfa36b2adb5    [ONZIEME FLAG !!!]
+[security engine] web.of.trust:52:1|f314e4db3ff276736a12d4109325c66c5aab06318dce9fb8eea4ddfa36b2adb5    [11e flag !!!]
 
 ### FLAG 12: Shared modulus Attack (RSA) avec fuite de  Private Key
 
@@ -999,7 +999,7 @@ cat ./Hexa/sign_challenge_atrium2.hex
 
         signature:  90c351145951d04c4d1f82f9a1ce3f50193be8ab4199b2f0be5591446f82955bd751e4005696277306d7c625a9e7ecf6ddab942e502547822ae067349512a9f12633fe9c97a1f0f7708173f0084eb2c1941389932e606070c4a43a5fb1d2d4425c76ebd1c51c684e57c996c5e29f60238ad3e42b2b24b0545eb3b2facd3e53735a185928f5e3b422c06185b00941fa32db32018c5e1a9f70daca099d4ba46d33720037498dfae9ce7de5d1ebac9f9d4155915cdb963ec2d4bf8c667842e5fbb54efe34b56e3d371790d8a2fa420c94353bfbfd018b676b322f03df859d9e6ec5ba321c5c2087d4ff47570730ea6ce6d5245c77a942efe2ff098b43c7ee840812
 
-[security engine] rsa.reduction:52:1|4ddb32dbdce721e235de3062ab0c652671c08fd6a26524eb8359b2c9472971a3           [DOUZIEME FLAG !!!]
+[security engine] rsa.reduction:52:1|4ddb32dbdce721e235de3062ab0c652671c08fd6a26524eb8359b2c9472971a3           [12e flag !!!]
 
 ### FLAG 13: Shared modulus Attack (RSA) (Double encryption)
 
@@ -1091,7 +1091,7 @@ DIGICODE = c4b844a35ba8ecb20d40026a7c8903d0
 
         CODE: :        c4b844a35ba8ecb20d40026a7c8903d0
 
-[security engine] rsa.shared:52:1|6a2190aa0779831e8f3a87a922a01c3c05bc55fe94f22b99b6cf9c8b22d2a148      [TREIZIEME FLAG !!!]
+[security engine] rsa.shared:52:1|6a2190aa0779831e8f3a87a922a01c3c05bc55fe94f22b99b6cf9c8b22d2a148      [13e flag !!!]
 
 ### FLAG 14: Attaque par recherche exhaustive sur une seed trop petite
 
@@ -1295,7 +1295,7 @@ Cahier de manipulation
 
         CODE: :         3f478ea5e21e3b82c68d2fc33ce50587 
 
-[security engine] secure.vault:52:1|b0839215cb365aed8c7c033ef9e056202b3d847a5cbbd9db7ac9c8f0ad851aff    [QUATORZIEME FLAG !!!]
+[security engine] secure.vault:52:1|b0839215cb365aed8c7c033ef9e056202b3d847a5cbbd9db7ac9c8f0ad851aff    [14e flag !!!]
 
 ### FLAG 15: Théorème des restes chinois (Small public exponent)
 
@@ -1398,7 +1398,7 @@ CHOOSE YOUR PRODUCT:
 |  (bientôt en burn-out)                                                       |
 +------------------------------------------------------------------------------+
 
-[security engine] rsa.crt:52:1|4296c6ee787bac7de665521d490c63dc61ae9c81de6688266a0577c72448a498         [QUINZIEME FLAG !!!]
+[security engine] rsa.crt:52:1|4296c6ee787bac7de665521d490c63dc61ae9c81de6688266a0577c72448a498         [15e flag !!!]
 
 ### FLAG 16: RSA blinding
 
@@ -1520,7 +1520,7 @@ Ensuite, bien sûr, vous pourrez l'emprunter.
                                                           | Acknowledged |
                                                           +--------------+
 
-[security engine] rsa.malleable:52:1|420d66ffc695a390bcc41c89dd521f355bf8a1ce8bc62b0180671b53d2e891a8           [SEIXIEME FLAG !!!]
+[security engine] rsa.malleable:52:1|420d66ffc695a390bcc41c89dd521f355bf8a1ce8bc62b0180671b53d2e891a8       [16e flag !!!]
 
 ### FLAG 17: Interpolation polynomiale
 
@@ -1552,7 +1552,7 @@ Il manque 16 point(s) pour T(0)
                                                  | Firmware updated. New command activated: ``#!sudo''. |
                                                  +------------------------------------------------------+
 
-[DIX-SEPTIEME FLAG !!! (Directement dans le terminal du RC-25 de l'Atrium).]
+                                                                                                                [17e flag !!! (Directement dans le terminal du RC-25 de l'Atrium).]
 
 [Désormais, on peut taper "#!sudo#, un terminal ">>>" s'ouvre, et on peut aller dans n'importe quelle tour (tour 26 contient tout) avec un ascenseur et taper]:
 
@@ -1665,7 +1665,7 @@ q= ddcf292ef95a5501e9ea8d1a03dbb9014bfe595627fe7f34f976a32c9701ba79
                                                           | Bonne réponse |
                                                           +---------------+
 
-[security engine] tme.generator:52:1|49192d579149fb449a6a2efece855bde4a28d1a0e474f6ce4e19607fee1d9347 [DIX-HUITIEME FLAG !!!]
+[security engine] tme.generator:52:1|49192d579149fb449a6a2efece855bde4a28d1a0e474f6ce4e19607fee1d9347            [18e flag !!!]
 
 ### FLAG 19: Generator TME (poste informatique #2)
 
@@ -1726,7 +1726,7 @@ Format pour (p-1) // q : x1, x2, ..., xn
                                                           | Bonne réponse |
                                                           +---------------+
 
-[security engine] tme.primitive:52:1|ac80f74782bef561be0ef58d966e4a890a7420a05ded4f4661eac620bb887165   [DIX-NEUVIEME FLAG !!!]
+[security engine] tme.primitive:52:1|ac80f74782bef561be0ef58d966e4a890a7420a05ded4f4661eac620bb887165   [19e flag !!!]
 
 ### FLAG 20: Generator TME (poste informatique #4)
 
@@ -1791,7 +1791,7 @@ Format : dictionnaire JSON
                                                           | Bonne réponse |
                                                           +---------------+
 
-[security engine] tme.pratt:52:1|5911d3fed5bb49921a530f3c2f944e5443b66e021349663136c0b93a192f6445       [VINGTIEME FLAG !!!]
+[security engine] tme.pratt:52:1|5911d3fed5bb49921a530f3c2f944e5443b66e021349663136c0b93a192f6445       [20e flag !!!]
 
 ### FLAG 21: Secure/Recovery Mode
 
@@ -1893,7 +1893,7 @@ python3 112.py
 
 [Taper 1.Print RPC & Kerberos documentation.]
 
-[security engine] crc64.preimage:52:1|5c8a3d95af15454ea3f56eada71c4a950c9dd622e4b94f50f420c4ae17880901  [VINGT-ET-UNIEME FLAG !!!]
+[security engine] crc64.preimage:52:1|5c8a3d95af15454ea3f56eada71c4a950c9dd622e4b94f50f420c4ae17880901           [21e flag !!!]
 
 ### FLAG 22: Multi collision attack
 
@@ -2014,7 +2014,7 @@ Enter your 4 security keys:
                                                                             | Access granted |
                                                                             +----------------+
 
-[security engine] multicollision:52:1|aa31c1dea2791f7b1bc8eb6356ce9dc59d16d0ea9d14e72448f9745c09932884     [VINGT-DEUXIEME FLAG !!!]
+[security engine] multicollision:52:1|aa31c1dea2791f7b1bc8eb6356ce9dc59d16d0ea9d14e72448f9745c09932884             [22e flag !!!]
 
 ### FLAG 23: Fraude bancaire
 
@@ -2047,7 +2047,7 @@ What transaction is valid?
                                                                            | CORRECT. Bravo! |
                                                                            +-----------------+
 
-[security engine] credit.fraud:52:1|a289058a258e416aa9847fcf200fce39431fc9b69bf835a3ad956274d0aa95c5     [VINGT-TROISIEME FLAG !!!]
+[security engine] credit.fraud:52:1|a289058a258e416aa9847fcf200fce39431fc9b69bf835a3ad956274d0aa95c5          [23e flag !!!]
 
 ### FLAG 24: Lamport signature
 
@@ -2065,7 +2065,7 @@ What transaction is valid?
         challenge: agent lobby gofer denim rodeo
         signature:
 [Voici le challenge à signer avec Lamport.]
-[Lancer le code "lamport_sign.py" avec la commande suivante]:
+[Lancer le code "lamport_sign.py" (qui appelle "lamport_core.py") avec la commande suivante]:
 
 python3 lamport_sign.py
 
@@ -2085,16 +2085,14 @@ Signature Lamport du challenge :
 
 Le verrou se désengage et vous pénetrez dans la bibliothèque.
 
-Vous êtes maintenant à l'intérieur de la bibliothèque déserte.  C'est
-parfaitement silencieux.  D'ici vous pouvez aller dans l'aile Est ou bien
-dans l'aile Ouest.
+Vous êtes maintenant à l'intérieur de la bibliothèque déserte.  C'est parfaitement silencieux.  D'ici vous pouvez aller dans l'aile Est ou bien dans l'aile Ouest.
 
-[security engine] multi.lamport:52:1|c8ef4b69021b534ba8bb6e0c85efdd4d77947289ca6c632601d950b164acf904   [VINGT-QUATRIEME FLAG !!!]
+[security engine] multi.lamport:52:1|c8ef4b69021b534ba8bb6e0c85efdd4d77947289ca6c632601d950b164acf904         [24e flag !!!]
 
 ### FLAG 25: 
 
-                                                                                                             UGLIX v4.0 beta
-                                                                                                       (experimental RML compiler)
+                                                             UGLIX v4.0 beta
+                                                       (experimental RML compiler)
 
                     This program has been made in the hope that it will be useful,Active user: AdrienPanguel
                     but WITHOUT ANY WARRANTY; By using this program you implicitly agree
@@ -2169,64 +2167,6 @@ This line is ignored.  No (\n is added at the end of the previous line).
 
 
 
-INPUT PROGRAM:
-(Any line that contains ``-----BEGIN RML PROGRAM -----'' is ignored.
-Input stops on any line that contains ``-----END RML PROGRAM -----''.
-This line is ignored.  No (\n is added at the end of the previous line).
->>> -----BEGIN RML PROGRAM -----
->>> extern type string.
->>> extern type ROOM.
->>>
->>> extern def print (message : string) -> nothing.
->>> extern def here () -> ROOM.
->>> extern def room_name(room : ROOM) -> string.
->>>
->>> def main(action : string maybe, direction : string maybe, item : string maybe) -> nothing {
->>>   let location : ROOM = here();
->>>   if room_name(location) != "ISIR_CAFET" {
->>>     print("0xbadCAFE !!!");
->>>     panic                               # nobody steals our hackable coffee pot!
->>>   };
->>>   # ... rest of the coffee-making program
->>>   # ejecting previous roast
->>>   # grounding fresh beans
->>>   # sending water
->>>   # etc...\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x12\x38
->>> print("Give me the flag!");
->>> }
->>> -----END RML PROGRAM -----
-[Dumping listing]
-[   1] extern type string.
-[   2] extern type ROOM.
-[   3]
-[   4] extern def print (message : string) -> nothing.
-[   5] extern def here () -> ROOM.
-[   6] extern def room_name(room : ROOM) -> string.
-[   7]
-[   8] def main(action : string maybe, direction : string maybe, item : string maybe) -> nothing {
-[   9]   let location : ROOM = here();
-[  10]   if room_name(location) != "ISIR_CAFET" {
-[  11]     print("0xbadCAFE !!!");
-[  12]     panic                               # nobody steals our hackable coffee pot!
-[  13]   };
-[  14]   # ... rest of the coffee-making program
-[  15]   # ejecting previous roast
-[  16]   # grounding fresh beans
-[  17]   # sending water
-[  18]   # etc...\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x12\x38
-[  19] print("Give me the flag!");
-[  20] }
-[Parsing source]
-[Compiling]
-- print
-- here
-- room_name
-- main
-[Installing firmware on micro-SD card]
- - 654 bytes program
- - SHA256(program) = 6971fe19722ed424494fa2fbfb6d98201460c947798d900626015bfe1fa65b26
-
-                    Enter MAC:
 
 
 
@@ -2237,7 +2177,8 @@ This line is ignored.  No (\n is added at the end of the previous line).
 
 
 
-
+[Copier-coller le retour de la commande "" et entrer le MAC]:
+"""
 INPUT PROGRAM:
 (Any line that contains ``-----BEGIN RML PROGRAM -----'' is ignored.
 Input stops on any line that contains ``-----END RML PROGRAM -----''.
@@ -2297,13 +2238,163 @@ This line is ignored.  No (\n is added at the end of the previous line).
 
                     Enter MAC:                  3330ac7b92616735e8947af74f55a5e3b96bb55de3ebb2baf87a96980cc3f545
 
-
-
-[security engine] length.extension:52:1|e7a643d1fd256665317b0301a4c45e6ee6a99fb99be3124ceb5f7d9ea687a2d5
+[security engine] length.extension:52:1|e7a643d1fd256665317b0301a4c45e6ee6a99fb99be3124ceb5f7d9ea687a2d5        [25e flag !!!]
 
 ### FLAG 26:
 
+[Nous pouvons obtenir la denrière firmware key avec les 25 premeirs flags.]
+[Lancer le code "firmwares.py" avec la commande suivante]:
 
+python3 firmwares.py
+
+[Retour de la commande]:
+
+Points uniques : 25
+R(0) = 3227412088583349083
+hex(R(0)) = 0x2cca1231ebcfe35b
+S(0) = 5120953362034886927
+hex(S(0)) = 0x471147f3676e890f
+T(0) = 2261492315977216760
+hex(T(0)) = 0x1f626f478c18f2f8
+
+
+
+
+                                                                                                             UGLIX v4.0 beta
+                                                                                                        (Firmware Update Station)
+
+                    Active user: AdrienPanguel
+
+
+                    Firmware update key:        1f626f478c18f2f8
+
+[Affichage]:
+Ooops, il y a eu un gros problème pendant l'utilisation de cet objet.
+Les administrateurs sont prévenus automatiquement.
+On continue quand même...
+
+
+
+
+
+
+
+
+
+
+
+[ITEM DEBUG]>>> utiliser clef
+Le mot CLEF est ambigü. Cela pourrait être :
+ - clef USB
+ - clef de sécurité ronde (rouge)
+ - clef de sécurité carrée (violette)
+ - clef de sécurité triangulaire (verte)
+
+[ITEM DEBUG]>>> utiliser clef ronde
+Vous insérez la clef dans l'emplacement correspondant dans le coffre.
+Elle s'adapte parfaitement !
+[debug] protagonist.location(world_id='5828ebe2fecee7f5ae04ca384786775a')
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_SAFE')
+[debug] item.location(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4')
+[debug] item.set-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='circle', value=True)
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_CIRCLE_KEY')
+[debug] item.move(world_id='5828ebe2fecee7f5ae04ca384786775a', item='d86c5d6a10233a5c443e3d3ba02c9f8e', room='7f17cda8ac75806deba331ba99db5194')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='circle')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='square')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='triangle')
+>>>
+[ITEM DEBUG]>>> utiliser clef carrée
+Vous insérez la clef dans l'emplacement correspondant dans le coffre.
+Elle s'adapte parfaitement !
+[debug] protagonist.location(world_id='5828ebe2fecee7f5ae04ca384786775a')
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_SAFE')
+[debug] item.location(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4')
+[debug] item.set-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='square', value=True)
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_SQUARE_KEY')
+[debug] item.move(world_id='5828ebe2fecee7f5ae04ca384786775a', item='02bfeaf046dbdaf224beff4aee0c845e', room='7f17cda8ac75806deba331ba99db5194')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='circle')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='square')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='triangle')
+>>>
+[ITEM DEBUG]>>> utiliser clef triangulaire
+Vous insérez la clef dans l'emplacement correspondant dans le coffre.
+Elle s'adapte parfaitement !
+
+Vous entendez un déclic et la porte du coffre-fort s'ouvre,
+révélant ainsi son contenu.
+[debug] protagonist.location(world_id='5828ebe2fecee7f5ae04ca384786775a')
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_SAFE')
+[debug] item.location(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4')
+[debug] item.set-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='triangle', value=True)
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LPNHE_TRIANGLE_KEY')
+[debug] item.move(world_id='5828ebe2fecee7f5ae04ca384786775a', item='efa1530dc2c45c3e0cdda320a3a30866', room='7f17cda8ac75806deba331ba99db5194')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='circle')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='square')
+[debug] item.get-attribute(world_id='5828ebe2fecee7f5ae04ca384786775a', item='7d76bd2bf7689d7f1fb66f8cc3308aa4', attr='triangle')
+[debug] item.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='GEOLOCATOR')
+[debug] item.move(world_id='5828ebe2fecee7f5ae04ca384786775a', item='b3a7f2217aad512fe2bc364a0284babf', room='7f9c2f16451ee5b7423cd5f1f02ba503')
+>>>
+[ITEM DEBUG]>>> utiliser coffre-fort
+Vous n'allez pas essayer de l'ouvrir avec vos ongles.
+
+[ITEM DEBUG]>>> vor coffre-fort
+Vous n'allez pas essayer de l'ouvrir avec vos ongles.
+
+[ITEM DEBUG]>>> voir coffre-fort
+Blindé.  Apparemment, il s'ouvre avec non pas une, non pas deux, mais avec TROIS
+clefs physiques.  Sur la porte, un autocollant vante son haut niveau de technicité
++--------------------------------------------------------------------------------+
+|  Ce coffre-fort Kryptonite Mk IV met en oeuvre les mesures de sécurité         |
+|  les plus modernes :                                                           |
+|  - Blindage en plomb anti rayon-X autour des circuits intégrés                 |
+|  - Plaques de Cobalt-Vanadium-Tungstène anti-perceuse devant la serrure        |
+|  - Relockers en verre (se brisent et bloquent tout en cas de perforation)      |
+|  - Relockers en cire (fondent et bloquent tout en cas d'attaque thermique)     |
+|  - Lasers*, chocs électriques*, gaz toxique**, etc. anti-gangsters             |
+|                                                                                |
+|   * fonctionnent avec de l'énergie renouvelable                                |
+|  ** biodégradable (les composants toxiques sont absorbés par l'adversaire)     |
++--------------------------------------------------------------------------------+
+Il y a aussi un petit afficheur digital :
+               ,gPPRg,             ^             ┌───────┐
+              dP'   `Yb           / \            │       │
+              8)     (8          /   \           │       │
+              Yb     dP         /     \          │       │
+               "8ggg8"         /_______\         └───────┘
+
+                CIRCLE          TRIANGLE           SQUARE
+                PRESENT          PRESENT          PRESENT
+
+DOOR UNLOCKED
+
+[ITEM DEBUG]>>>
+Merci de vous exprimer clairement et de fournir un complément d'objet direct (valide).
+
+[ITEM DEBUG]>>> prendre coffre-fort
+Il pèse plusieurs centaines de kilos. En plus vous ne savez pas trop
+Ce qui pourrait se passer si vous essayiez de le déplacer...
+
+
+[ITEM DEBUG]>>> ouvrir coffre-fort
+Vous n'allez pas essayer de l'ouvrir avec vos ongles.
+
+
+[ITEM DEBUG]>>> RC-14
+Vous êtes dans un local de stockage, presque une sorte de débarras.  Le personnel
+du nettoyage y range aussi ses fournitures.
+
+Ici se trouve un coffre-fort.
+Ici se trouve un terminal de service.
+Ici se trouve un GeoLocator.
+
+[ITEM DEBUG]>>> prendre Geolocator
+OK
+
+[ITEM DEBUG]>>> consiel Geolocator
+Le petit écran LCD de l'appareil affiche :
+room_handle = 42b63e696db91dee99aae026fce1a285
+Vous vous demandez ce que cela peut bien signifier.
+[debug] room.find-by-name(world_id='5828ebe2fecee7f5ae04ca384786775a', name='LIP6_26_00_412')
 
 
 
